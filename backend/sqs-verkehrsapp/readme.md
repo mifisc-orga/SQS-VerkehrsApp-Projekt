@@ -36,6 +36,6 @@ Liefert Verkehrsdaten für alle gespeicherten Straßen des angemeldeten Benutzer
 # Angelegter Testuser:
 
 username: testuser
-password: password
+password: test123
 
 hinterlegteAutobahnen: A3, A92
