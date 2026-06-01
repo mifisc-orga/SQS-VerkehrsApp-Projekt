@@ -1,5 +1,7 @@
 package de.th_ro.sqs_verkehrsapp.adapter.out.persistence;
 
+import de.th_ro.sqs_verkehrsapp.adapter.out.persistence.entity.CachedRoadEventEntity;
+import de.th_ro.sqs_verkehrsapp.adapter.out.persistence.repository.CachedRoadEventRepository;
 import de.th_ro.sqs_verkehrsapp.application.port.out.RoadEventCachePort;
 import de.th_ro.sqs_verkehrsapp.domain.model.Coordinate;
 import de.th_ro.sqs_verkehrsapp.domain.model.RoadEvent;

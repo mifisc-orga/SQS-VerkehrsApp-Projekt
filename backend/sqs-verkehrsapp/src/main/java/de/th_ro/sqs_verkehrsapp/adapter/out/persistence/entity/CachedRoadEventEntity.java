@@ -1,4 +1,4 @@
-package de.th_ro.sqs_verkehrsapp.adapter.out.persistence;
+package de.th_ro.sqs_verkehrsapp.adapter.out.persistence.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
