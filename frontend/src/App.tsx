@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { AutobahnSelector } from './components/AutobahnSelector';
 import { IncidentMap, type TrafficEvent } from './components/IncidentMap';
 import { RiskBadge } from './components/RiskBadge';
+import { Dashboard } from './components/Dashboard';
 import { fetchTrafficEvents, login, saveFavourite } from './services/trafficService';
 
 function App() {
@@ -90,6 +91,8 @@ function App() {
       {savedMessage && (
         <div data-testid="favourite-saved-message">Favourit gespeichert!</div>
       )}
+
+      {token && <Dashboard token={token} />}
 
       <IncidentMap events={events} />
 

@@ -57,3 +57,24 @@ export async function deleteFavourite(token: string, roadId: string): Promise<vo
     throw new Error('Favorit konnte nicht entfernt werden');
   }
 }
+
+export async function fetchSavedRoads(token: string): Promise<string[]> {
+  const response = await fetch(`${API_BASE}/saved-roads`, {
+    headers: { 'Authorization': `Bearer ${token}` },
+  });
+  if (!response.ok) {
+    throw new Error('Gespeicherte Straßen konnten nicht geladen werden');
+  }
+  return response.json();
+}
+
+export async function fetchDashboardTraffic(token: string): Promise<TrafficEvent[]> {
+  const response = await fetch(`${API_BASE}/dashboard/saved-road-traffic`, {
+    headers: { 'Authorization': `Bearer ${token}` },
+  });
+  if (!response.ok) {
+    throw new Error('Dashboard-Daten konnten nicht geladen werden');
+  }
+  const data = await response.json();
+  return data.events ?? [];
+}
