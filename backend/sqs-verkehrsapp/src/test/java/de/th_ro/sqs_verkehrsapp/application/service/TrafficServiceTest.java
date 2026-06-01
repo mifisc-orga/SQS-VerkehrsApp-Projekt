@@ -38,7 +38,8 @@ class TrafficServiceTest {
         TrafficEventsResult expectedResult = new TrafficEventsResult(
                 expectedEvents,
                 true,
-                LocalDateTime.of(2026, 5, 9, 14, 30)
+                LocalDateTime.of(2026, 5, 9, 14, 30),
+                0
         );
 
         when(autobahnApiPort.getTrafficEvents(roadId))
@@ -50,6 +51,7 @@ class TrafficServiceTest {
         assertThat(result.live()).isTrue();
         assertThat(result.cachedAt())
                 .isEqualTo(LocalDateTime.of(2026, 5, 9, 14, 30));
+        assertThat(result.riskScore()).isEqualTo(57);
         verify(autobahnApiPort).getTrafficEvents(roadId);
     }
 
@@ -60,7 +62,8 @@ class TrafficServiceTest {
         TrafficEventsResult emptyResult = new TrafficEventsResult(
                 List.of(),
                 false,
-                null
+                null,
+                0
         );
 
         when(autobahnApiPort.getTrafficEvents(roadId))
@@ -71,6 +74,7 @@ class TrafficServiceTest {
         assertThat(result.events()).isEmpty();
         assertThat(result.live()).isFalse();
         assertThat(result.cachedAt()).isNull();
+        assertThat(result.riskScore()).isEqualTo(0);
 
         verify(autobahnApiPort).getTrafficEvents(roadId);
     }

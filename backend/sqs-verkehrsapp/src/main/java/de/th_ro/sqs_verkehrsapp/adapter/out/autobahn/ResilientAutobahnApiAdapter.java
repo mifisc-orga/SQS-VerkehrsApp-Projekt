@@ -39,7 +39,8 @@ public class ResilientAutobahnApiAdapter implements AutobahnApiPort {
         return new TrafficEventsResult(
                 events,
                 true,
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                0
         );
     }
 
@@ -57,7 +58,8 @@ public class ResilientAutobahnApiAdapter implements AutobahnApiPort {
             return new TrafficEventsResult(
                     cachedResult.events(),
                     false,
-                    cachedResult.cachedAt()
+                    cachedResult.cachedAt(),
+                    0
             );
         }
 

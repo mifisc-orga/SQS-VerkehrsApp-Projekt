@@ -39,7 +39,8 @@ public class ResilientAutobahnApiAdapterIntegrationTest {
         TrafficEventsResult cachedResult = new TrafficEventsResult(
                 List.of(cachedEvent),
                 false,
-                LocalDateTime.of(2026, 5, 9, 14, 30)
+                LocalDateTime.of(2026, 5, 9, 14, 30),
+                0
         );
         List<RoadEvent> cachedEvents = List.of(cachedEvent);
 
@@ -56,6 +57,7 @@ public class ResilientAutobahnApiAdapterIntegrationTest {
         assertThat(result.events()).containsExactly(cachedEvent);
         assertThat(result.cachedAt())
                 .isEqualTo(LocalDateTime.of(2026, 5, 9, 14, 30));
+        assertThat(result.riskScore()).isEqualTo(0);
         verify(autobahnApiClient, atLeastOnce()).fetchTrafficEvents(roadId);
         verify(cachePort).findByRoadId(roadId);
         verify(cachePort, never()).save(anyString(), anyList());

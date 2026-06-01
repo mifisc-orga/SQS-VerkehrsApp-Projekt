@@ -62,7 +62,7 @@ class TrafficControllerTest {
         TrafficEventsResult result = new TrafficEventsResult(
                 List.of(event),
                 true,
-                LocalDateTime.of(2026, 5, 9, 14, 30)
+                LocalDateTime.of(2026, 5, 9, 14, 30), 20
         );
 
 
@@ -84,7 +84,8 @@ class TrafficControllerTest {
                 .andExpect(jsonPath("$.events[0].type").value("WARNING"))
                 .andExpect(jsonPath("$.events[0].latitude").value(50.123))
                 .andExpect(jsonPath("$.events[0].longitude").value(8.456))
-                .andExpect(jsonPath("$.events[0].riskLevel").value("MEDIUM"));
+                .andExpect(jsonPath("$.events[0].riskLevel").value("MEDIUM"))
+                .andExpect(jsonPath("$.riskScore").value(20));
 
         verify(trafficQueryUseCase).getTrafficEvents("A1");
     }
@@ -94,7 +95,7 @@ class TrafficControllerTest {
         TrafficEventsResult result = new TrafficEventsResult(
                 List.of(),
                 false,
-                null
+                null, 0
         );
 
         when(trafficQueryUseCase.getTrafficEvents("A2"))
@@ -151,7 +152,8 @@ class TrafficControllerTest {
         TrafficEventsResult result = new TrafficEventsResult(
                 List.of(eventA1, eventA8),
                 true,
-                LocalDateTime.of(2026, 5, 9, 15, 0)
+                LocalDateTime.of(2026, 5, 9, 15, 0),
+                75
         );
 
         when(trafficQueryUseCase.getAllTrafficEvents())
@@ -178,7 +180,8 @@ class TrafficControllerTest {
                 .andExpect(jsonPath("$.events[1].type").value("CLOSURE"))
                 .andExpect(jsonPath("$.events[1].latitude").value(51.123))
                 .andExpect(jsonPath("$.events[1].longitude").value(9.456))
-                .andExpect(jsonPath("$.events[1].riskLevel").value("HIGH"));
+                .andExpect(jsonPath("$.events[1].riskLevel").value("HIGH"))
+                .andExpect(jsonPath("$.riskScore").value(75));
 
         verify(trafficQueryUseCase).getAllTrafficEvents();
     }
@@ -188,7 +191,8 @@ class TrafficControllerTest {
         TrafficEventsResult result = new TrafficEventsResult(
                 List.of(),
                 false,
-                null
+                null,
+                0
         );
 
         when(trafficQueryUseCase.getAllTrafficEvents())

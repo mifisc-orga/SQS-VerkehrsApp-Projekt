@@ -50,7 +50,8 @@ public class TrafficControllerIntegrationTest {
         TrafficEventsResult result = new TrafficEventsResult(
                 events,
                 true,
-                LocalDateTime.of(2026, 5, 9, 14, 30)
+                LocalDateTime.of(2026, 5, 9, 14, 30),
+                57
         );
 
         when(trafficQueryUseCase.getTrafficEvents("A1"))
@@ -64,7 +65,8 @@ public class TrafficControllerIntegrationTest {
                 .andExpect(jsonPath("$.events.length()").value(3))
                 .andExpect(jsonPath("$.events[0].id").value("w1"))
                 .andExpect(jsonPath("$.events[1].id").value("r1"))
-                .andExpect(jsonPath("$.events[2].id").value("c1"));
+                .andExpect(jsonPath("$.events[2].id").value("c1"))
+                .andExpect(jsonPath("$.riskScore").value(57));
     }
 
     @Test
@@ -78,7 +80,8 @@ public class TrafficControllerIntegrationTest {
         TrafficEventsResult result = new TrafficEventsResult(
                 events,
                 true,
-                LocalDateTime.of(2026, 5, 9, 15, 0)
+                LocalDateTime.of(2026, 5, 9, 15, 0),
+                45
         );
 
         when(trafficQueryUseCase.getAllTrafficEvents())
@@ -94,7 +97,8 @@ public class TrafficControllerIntegrationTest {
                 .andExpect(jsonPath("$.events[1].id").value("r1"))
                 .andExpect(jsonPath("$.events[1].roadId").value("A3"))
                 .andExpect(jsonPath("$.events[2].id").value("c1"))
-                .andExpect(jsonPath("$.events[2].roadId").value("A8"));
+                .andExpect(jsonPath("$.events[2].roadId").value("A8"))
+                .andExpect(jsonPath("$.riskScore").value(45));
     }
 
     private RoadEvent event(String id, String roadId, RoadEventType type, RiskLevel riskLevel) {

@@ -36,7 +36,8 @@ public class TrafficController {
         return new TrafficResponse(
                 result.live(),
                 result.cachedAt(),
-                events
+                events,
+                result.riskScore()
         );
     }
 
@@ -54,7 +55,8 @@ public class TrafficController {
         return new TrafficResponse(
                 result.live(),
                 result.cachedAt(),
-                events
+                events,
+                result.riskScore()
         );
     }
 

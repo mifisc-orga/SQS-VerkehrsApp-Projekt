@@ -52,6 +52,7 @@ class ResilientAutobahnApiAdapterTest {
         assertThat(result.events()).containsExactly(event);
         assertThat(result.live()).isTrue();
         assertThat(result.cachedAt()).isNotNull();
+        assertThat(result.riskScore()).isEqualTo(0);
 
         verify(cachePort).save("A1", List.of(event));
     }
@@ -72,7 +73,8 @@ class ResilientAutobahnApiAdapterTest {
         TrafficEventsResult cachedResult = new TrafficEventsResult(
                 List.of(cachedEvent),
                 false,
-                LocalDateTime.of(2026, 5, 9, 14, 30)
+                LocalDateTime.of(2026, 5, 9, 14, 30),
+                0
         );
 
         when(cachePort.findByRoadId("A1"))
@@ -84,6 +86,7 @@ class ResilientAutobahnApiAdapterTest {
         assertThat(result).isEqualTo(cachedResult);
         assertThat(result.live()).isFalse();
         assertThat(result.events()).containsExactly(cachedEvent);
+        assertThat(result.riskScore()).isEqualTo(0);
 
         verify(cachePort).findByRoadId("A1");
         verifyNoInteractions(autobahnApiClient);

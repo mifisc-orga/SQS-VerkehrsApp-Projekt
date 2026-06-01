@@ -47,10 +47,10 @@ public class DashboardTrafficServiceTest {
                 .build();
 
         TrafficEventsResult a8Result =
-                new TrafficEventsResult(List.of(), true, LocalDateTime.now());
+                new TrafficEventsResult(List.of(), true, LocalDateTime.now(),0);
 
         TrafficEventsResult a3Result =
-                new TrafficEventsResult(List.of(), true, LocalDateTime.now());
+                new TrafficEventsResult(List.of(), true, LocalDateTime.now(),0);
 
         when(savedRoadPort.findByUserId(userId))
                 .thenReturn(List.of(a8, a3));

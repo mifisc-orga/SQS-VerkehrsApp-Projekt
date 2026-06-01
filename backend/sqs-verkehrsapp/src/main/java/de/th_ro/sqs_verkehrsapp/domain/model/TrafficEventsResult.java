@@ -5,5 +5,5 @@ import java.util.List;
 
 public record TrafficEventsResult(List<RoadEvent> events,
                                   boolean live,
-                                  LocalDateTime cachedAt) {
+                                  LocalDateTime cachedAt, int riskScore) {
 }

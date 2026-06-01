@@ -34,7 +34,8 @@ public class PublicTrafficEndpointIntegrationTest {
                 .thenReturn(new TrafficEventsResult(
                         List.of(),
                         true,
-                        LocalDateTime.now()
+                        LocalDateTime.now(),
+                        0
                 ));
 
         mockMvc.perform(get("/api/traffic/A8"))

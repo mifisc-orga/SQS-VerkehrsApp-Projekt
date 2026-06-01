@@ -95,14 +95,16 @@ public class AuthSavedRoadIntegrationTest {
                 .thenReturn(new TrafficEventsResult(
                         List.of(),
                         true,
-                        LocalDateTime.now()
+                        LocalDateTime.now(),
+                        0
                 ));
 
         mockMvc.perform(get("/api/dashboard/saved-road-traffic")
                         .header("Authorization", "Bearer " + token))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].roadId").value("A8"))
-                .andExpect(jsonPath("$[0].trafficEvents").exists());
+                .andExpect(jsonPath("$[0].trafficEvents").exists())
+                .andExpect(jsonPath("$[0].trafficEvents.riskScore").value(0));
 
         verify(autobahnApiPort).getTrafficEvents("A8");
     }

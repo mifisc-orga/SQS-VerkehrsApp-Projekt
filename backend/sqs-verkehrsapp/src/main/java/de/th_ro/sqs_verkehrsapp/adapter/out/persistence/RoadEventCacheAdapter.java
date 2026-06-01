@@ -53,7 +53,8 @@ public class RoadEventCacheAdapter implements RoadEventCachePort {
             return new TrafficEventsResult(
                     List.of(),
                     false,
-                    null
+                    null,
+                    0
             );
         }
 
@@ -75,7 +76,8 @@ public class RoadEventCacheAdapter implements RoadEventCachePort {
         return new TrafficEventsResult(
                 events,
                 false,
-                cachedAt
+                cachedAt,
+                0
         );
     }
 }

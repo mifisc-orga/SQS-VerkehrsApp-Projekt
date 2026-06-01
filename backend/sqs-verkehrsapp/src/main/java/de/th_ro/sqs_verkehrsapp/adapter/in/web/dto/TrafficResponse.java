@@ -5,5 +5,6 @@ import java.util.List;
 
 public record TrafficResponse(boolean live,
                               LocalDateTime cachedAt,
-                              List<TrafficResponseDto> events) {
+                              List<TrafficResponseDto> events,
+                              int riskScore) {
 }
