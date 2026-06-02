@@ -2,23 +2,16 @@ import {useEffect, useRef, useState} from 'react';
 import {fetchAvailableRoads} from '../services/trafficService';
 
 interface AutobahnSelectorProps {
+  selected: string[];
   onSelect: (roadIds: string[]) => void;
   max?: number;
-  defaultSelected?: string[];
 }
 
-export function AutobahnSelector({ onSelect, max = 5, defaultSelected = [] }: AutobahnSelectorProps) {
+export function AutobahnSelector({ selected, onSelect, max = 5 }: AutobahnSelectorProps) {
   const [roads, setRoads] = useState<string[]>([]);
-  const [selected, setSelected] = useState<string[]>(defaultSelected);
   const [isOpen, setIsOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (defaultSelected.length > 0 && selected.length === 0) {
-      setSelected(defaultSelected);
-    }
-  }, [defaultSelected]);
 
   useEffect(() => {
     fetchAvailableRoads()
@@ -45,14 +38,11 @@ export function AutobahnSelector({ onSelect, max = 5, defaultSelected = [] }: Au
     } else {
       return;
     }
-    setSelected(next);
     onSelect(next);
   }
 
   function remove(road: string) {
-    const next = selected.filter((r) => r !== road);
-    setSelected(next);
-    onSelect(next);
+    onSelect(selected.filter((r) => r !== road));
   }
 
   if (error) return <p>{error}</p>;
