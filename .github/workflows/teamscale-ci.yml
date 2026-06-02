@@ -68,8 +68,9 @@ jobs:
         run: |
           npm ci
           npm run lint
-          npm run coverage
           npm run build
+          npx playwright test
+          npx nyc report --reporter=lcov
 
       - name: Upload frontend LCOV to second Teamscale project
         uses: cqse/teamscale-upload-action@v2.9.14
@@ -80,5 +81,5 @@ jobs:
           accesskey: ${{ secrets.TEAMSCALE_ACCESSKEY }}
           partition: GitHub Actions LCOV
           format: LCOV
-          revision: ${{ github.sha }}
+          revision: ${{ env.TEAMSCALE_REVISION }}
           files: frontend/coverage/lcov.info
