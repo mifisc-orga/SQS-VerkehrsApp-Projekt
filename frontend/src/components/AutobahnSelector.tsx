@@ -15,6 +15,12 @@ export function AutobahnSelector({ onSelect, max = 5, defaultSelected = [] }: Au
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (defaultSelected.length > 0 && selected.length === 0) {
+      setSelected(defaultSelected);
+    }
+  }, [defaultSelected]);
+
+  useEffect(() => {
     fetchAvailableRoads()
       .then(setRoads)
       .catch(() => setError('Autobahnen konnten nicht geladen werden.'));
