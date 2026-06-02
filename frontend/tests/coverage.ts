@@ -4,6 +4,9 @@ import {expect, test as base} from '@playwright/test';
 import fs from 'fs';
 import path from 'path';
 
+/**
+ * Erweiterte Playwright-Testinstanz mit automatischer Coverage-Erfassung.
+ */
 export const test = base.extend({
     page: async ({ page }, runTest) => {
         await runTest(page);
