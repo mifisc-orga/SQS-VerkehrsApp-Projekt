@@ -84,3 +84,12 @@ jobs:
           format: LCOV
           revision: ${{ env.TEAMSCALE_REVISION }}
           files: frontend/coverage/lcov.info
+
+      - name: Run tests with Teamscale Testwise Coverage
+        working-directory: backend/sqs-verkehrsapp
+        env:
+          TEAMSCALE_URL: ${{ secrets.TEAMSCALE_SERVER  }}
+          TEAMSCALE_PROJECT: ${{ secrets.TEAMSCALE_BACKEND }}
+          TEAMSCALE_USER: ${{ secrets.TEAMSCALE_USER }}
+          TEAMSCALE_ACCESS_TOKEN: ${{ secrets.TEAMSCALE_ACCESSKEY }}
+        run: ./mvnw -B clean verify -Dtia

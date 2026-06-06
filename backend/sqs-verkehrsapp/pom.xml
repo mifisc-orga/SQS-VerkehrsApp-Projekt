@@ -100,12 +100,12 @@
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
-<!--		<dependency>-->
-<!--			<groupId>com.teamscale</groupId>-->
-<!--			<artifactId>impacted-test-engine</artifactId>-->
-<!--			<version>36.5.2</version>-->
-<!--			<scope>test</scope>-->
-<!--		</dependency>-->
+		<dependency>
+			<groupId>com.teamscale</groupId>
+			<artifactId>impacted-test-engine</artifactId>
+			<version>36.5.2</version>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
@@ -235,36 +235,91 @@
                     </execution>
                 </executions>
             </plugin>
-			<plugin>
-				<groupId>org.jacoco</groupId>
-				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.8.14</version>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.14</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>com.teamscale</groupId>
+                <artifactId>teamscale-maven-plugin</artifactId>
+                <version>36.5.2</version>
 				<executions>
 					<execution>
 						<goals>
-							<goal>prepare-agent</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>report</id>
-						<phase>test</phase>
-						<goals>
-							<goal>report</goal>
+							<goal>prepare-tia-unit-test</goal>
+							<goal>prepare-tia-integration-test</goal>
+							<goal>testwise-coverage-report</goal>
+							<goal>upload-coverage</goal>
 						</goals>
 					</execution>
 				</executions>
-			</plugin>
+                <configuration>
+                    <teamscaleUrl>${env.TEAMSCALE_SERVER}</teamscaleUrl>
+                    <projectId>${env.TEAMSCALE_BACKEND}</projectId>
+					<username>${env.TEAMSCALE_USER}</username>
+					<accessToken>${env.TEAMSCALE_ACCESSKEY}</accessToken>
 
+					<unitTestPartition>Unit Tests</unitTestPartition>
+					<integrationTestPartition>Integration Tests</integrationTestPartition>
+
+					<includes>
+						<include>*de.th_ro.sqs_verkehrsapp.*</include>
+					</includes>
+				</configuration>
+            </plugin>
+			<!-- Unit Tests: *Test.java, aber nicht *IntegrationTest.java -->
 			<plugin>
-				<groupId>com.teamscale</groupId>
-				<artifactId>teamscale-maven-plugin</artifactId>
-				<version>36.5.2</version>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
-					<teamscaleUrl>${env.TEAMSCALE_SERVER}</teamscaleUrl>
-					<projectId>${env.TEAMSCALE_BACKEND}</projectId>
+					<forkCount>1</forkCount>
+					<reuseForks>true</reuseForks>
+					<parallel>none</parallel>
+					<includes>
+						<include>**/*Test.java</include>
+					</includes>
+					<excludes>
+						<exclude>**/*IntegrationTest.java</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+			<!-- Integration Tests: *IntegrationTest.java -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>integration-test</goal>
+							<goal>verify</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<forkCount>1</forkCount>
+					<reuseForks>true</reuseForks>
+					<parallel>none</parallel>
+					<includes>
+						<include>**/*IntegrationTest.java</include>
+					</includes>
 				</configuration>
 			</plugin>
         </plugins>
     </build>
-
 </project>
