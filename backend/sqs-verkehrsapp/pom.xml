@@ -268,11 +268,6 @@
 					</execution>
 				</executions>
                 <configuration>
-                    <teamscaleUrl>${env.TEAMSCALE_SERVER}</teamscaleUrl>
-                    <projectId>${env.TEAMSCALE_BACKEND}</projectId>
-					<username>${env.TEAMSCALE_USER}</username>
-					<accessToken>${env.TEAMSCALE_ACCESSKEY}</accessToken>
-
 					<runImpacted>false</runImpacted>
 					<runAllTests>true</runAllTests>
 
