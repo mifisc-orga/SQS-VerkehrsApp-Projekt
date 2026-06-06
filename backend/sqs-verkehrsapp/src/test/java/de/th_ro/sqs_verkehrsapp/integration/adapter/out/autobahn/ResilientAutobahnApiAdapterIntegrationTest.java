@@ -1,7 +1,9 @@
 package de.th_ro.sqs_verkehrsapp.integration.adapter.out.autobahn;
 
 import de.th_ro.sqs_verkehrsapp.adapter.out.autobahn.AutobahnApiClient;
+import de.th_ro.sqs_verkehrsapp.adapter.out.autobahn.AutobahnCacheWriter;
 import de.th_ro.sqs_verkehrsapp.adapter.out.autobahn.ResilientAutobahnApiAdapter;
+import de.th_ro.sqs_verkehrsapp.application.port.out.AvailableRoadCachePort;
 import de.th_ro.sqs_verkehrsapp.application.port.out.RoadEventCachePort;
 import de.th_ro.sqs_verkehrsapp.domain.model.RoadEvent;
 import de.th_ro.sqs_verkehrsapp.domain.model.TrafficEventsResult;
@@ -27,6 +29,12 @@ public class ResilientAutobahnApiAdapterIntegrationTest {
     @MockitoBean
     private RoadEventCachePort cachePort;
 
+    @MockitoBean
+    private AvailableRoadCachePort availableRoadCachePort;
+
+    @MockitoBean
+    private AutobahnCacheWriter autobahnCacheWriter;
+
     @Autowired
     private ResilientAutobahnApiAdapter adapter;
 
@@ -42,7 +50,6 @@ public class ResilientAutobahnApiAdapterIntegrationTest {
                 LocalDateTime.of(2026, 5, 9, 14, 30),
                 0
         );
-        List<RoadEvent> cachedEvents = List.of(cachedEvent);
 
         when(autobahnApiClient.fetchTrafficEvents(roadId))
                 .thenThrow(new RuntimeException("API down"));
@@ -60,6 +67,6 @@ public class ResilientAutobahnApiAdapterIntegrationTest {
         assertThat(result.riskScore()).isEqualTo(0);
         verify(autobahnApiClient, atLeastOnce()).fetchTrafficEvents(roadId);
         verify(cachePort).findByRoadId(roadId);
-        verify(cachePort, never()).save(anyString(), anyList());
+        verify(autobahnCacheWriter, never()).saveTrafficEvents(anyString(), anyList());
     }
 }
