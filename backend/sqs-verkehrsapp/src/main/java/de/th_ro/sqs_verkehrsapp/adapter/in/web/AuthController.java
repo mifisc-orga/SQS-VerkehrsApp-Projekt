@@ -39,6 +39,12 @@ public class AuthController {
         return new AuthResponse(jwtService.generateToken(user));
     }
 
+    @PostMapping("/logout")
+    public void logout() {
+        // JWT ist stateless:
+        // Frontend löscht den Token.
+    }
+
     public record AuthRequest(
             String username,
             String password
