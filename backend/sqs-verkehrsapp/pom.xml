@@ -100,12 +100,12 @@
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
-<!--		<dependency>-->
-<!--			<groupId>com.teamscale</groupId>-->
-<!--			<artifactId>impacted-test-engine</artifactId>-->
-<!--			<version>36.5.2</version>-->
-<!--			<scope>test</scope>-->
-<!--		</dependency>-->
+		<dependency>
+			<groupId>com.teamscale</groupId>
+			<artifactId>impacted-test-engine</artifactId>
+			<version>36.5.2</version>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
@@ -262,6 +262,8 @@
 				<executions>
 					<execution>
 						<goals>
+							<goal>prepare-tia-unit-test</goal>
+							<goal>prepare-tia-integration-test</goal>
 							<goal>testwise-coverage-report</goal>
 							<goal>upload-coverage</goal>
 						</goals>
@@ -278,9 +280,9 @@
 					<unitTestPartition>Unit Tests</unitTestPartition>
 					<integrationTestPartition>Integration Tests</integrationTestPartition>
 
-					<includes>
-						<include>de.th_ro.sqs_verkehrsapp.*</include>
-					</includes>
+<!--					<includes>-->
+<!--						<include>de.th_ro.sqs_verkehrsapp.*</include>-->
+<!--					</includes>-->
 				</configuration>
             </plugin>
 			<!-- Unit Tests: *Test.java, aber nicht *IntegrationTest.java -->

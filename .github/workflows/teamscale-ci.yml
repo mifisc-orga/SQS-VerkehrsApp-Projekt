@@ -51,8 +51,8 @@ jobs:
       - name: Run tests with Teamscale Testwise Coverage
         working-directory: backend/sqs-verkehrsapp
         env:
-          TEAMSCALE_URL: ${{ secrets.TEAMSCALE_SERVER  }}
-          TEAMSCALE_PROJECT: ${{ secrets.TEAMSCALE_BACKEND }}
+          TEAMSCALE_SERVER: ${{ secrets.TEAMSCALE_SERVER  }}
+          TEAMSCALE_BACKEND: ${{ secrets.TEAMSCALE_BACKEND }}
           TEAMSCALE_USER: ${{ secrets.TEAMSCALE_USER }}
           TEAMSCALE_ACCESSKEY: ${{ secrets.TEAMSCALE_ACCESSKEY }}
         run: ./mvnw -B clean verify -Dtia -Dteamscale.revision=${{ env.TEAMSCALE_REVISION }}
