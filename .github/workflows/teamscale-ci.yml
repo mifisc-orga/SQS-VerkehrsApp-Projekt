@@ -55,7 +55,26 @@ jobs:
           TEAMSCALE_BACKEND: ${{ secrets.TEAMSCALE_BACKEND }}
           TEAMSCALE_USER: ${{ secrets.TEAMSCALE_USER }}
           TEAMSCALE_ACCESSKEY: ${{ secrets.TEAMSCALE_ACCESSKEY }}
-        run: ./mvnw -B clean verify -Dtia -Dteamscale.revision=${{ env.TEAMSCALE_REVISION }}
+        run: ./mvnw -B clean verify -Pteamscale-tia -Dteamscale.revision=${{ env.TEAMSCALE_REVISION }}
+
+      - name: Java JaCoCo Coverage upload to Teamscale
+        working-directory: backend/sqs-verkehrsapp
+        env:
+          TEAMSCALE_SERVER: ${{ secrets.TEAMSCALE_SERVER }}
+          TEAMSCALE_BACKEND: ${{ secrets.TEAMSCALE_BACKEND }}
+          TEAMSCALE_USER: ${{ secrets.TEAMSCALE_USER }}
+          TEAMSCALE_ACCESSKEY: ${{ secrets.TEAMSCALE_ACCESSKEY }}
+        run: |
+          ./mvnw -B clean verify -Pjacoco \
+            com.teamscale:teamscale-maven-plugin:36.5.2:upload-coverage \
+            -DteamscaleUrl=${{ secrets.TEAMSCALE_SERVER }} \
+            -DprojectId=${{ secrets.TEAMSCALE_BACKEND }} \
+            -Dusername=${{ secrets.TEAMSCALE_USER }} \
+            -DaccessToken=${{ secrets.TEAMSCALE_ACCESSKEY }} \
+            -Dteamscale.revision=${{ env.TEAMSCALE_REVISION }} \
+            -DcoverageFormats=JACOCO \
+            -DcoverageFiles=target/site/jacoco/jacoco.xml \
+            -Dpartition="GitHub Actions JaCoCo"
 
 #      - name: Java JaCoCo Coverage upload to Teamscale
 #        working-directory: backend/sqs-verkehrsapp
