@@ -1,0 +1,86 @@
+name: Teamscale analysis
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: read
+
+env:
+  TEAMSCALE_SERVER: ${{ secrets.TEAMSCALE_SERVER }}
+  TEAMSCALE_BACKEND: ${{ secrets.TEAMSCALE_BACKEND }}
+  TEAMSCALE_REVISION: ${{ github.event.pull_request.head.sha || github.sha }}
+
+jobs:
+  teamscale:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Check Teamscale secrets
+        run: |
+          test -n "${{ secrets.TEAMSCALE_SERVER }}" || (echo "TEAMSCALE_SERVER is missing" && exit 1)
+          test -n "${{ secrets.TEAMSCALE_USER }}" || (echo "TEAMSCALE_USER is missing" && exit 1)
+          test -n "${{ secrets.TEAMSCALE_ACCESSKEY }}" || (echo "TEAMSCALE_ACCESSKEY is missing" && exit 1)
+          test -n "${{ secrets.TEAMSCALE_BACKEND }}" || (echo "TEAMSCALE_BACKEND is missing" && exit 1)
+
+      - name: Debug revision
+        run: |
+          echo "REVISION=${{ github.sha }}"
+
+      - name: Java JaCoCo Coverage upload to Teamscale
+        working-directory: backend/sqs-verkehrsapp
+        run: |
+          ./mvnw -B clean test org.jacoco:jacoco-maven-plugin:report \
+            com.teamscale:teamscale-maven-plugin:upload-coverage \
+            -DteamscaleUrl=${{ secrets.TEAMSCALE_SERVER }} \
+            -DprojectId=${{ secrets.TEAMSCALE_BACKEND }} \
+            -Dteamscale.username=${{ secrets.TEAMSCALE_USER }} \
+            -Dteamscale.accessToken=${{ secrets.TEAMSCALE_ACCESSKEY }} \
+            -Dteamscale.revision=${{ env.TEAMSCALE_REVISION }} \
+            -DclassDirectories=target/classes \
+            -DcoverageFormats=JACOCO \
+            -DcoverageFiles=target/site/jacoco/jacoco.xml \
+            -Dpartition="GitHub Actions JaCoCo"
+
+      - name: Frontend build with coverage
+        working-directory: frontend
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+          npm run lint
+          npm run build
+          npx playwright test
+          npx nyc report --reporter=lcov
+
+      - name: Upload frontend LCOV to second Teamscale project
+        uses: cqse/teamscale-upload-action@v2.9.14
+        with:
+          server: ${{ secrets.TEAMSCALE_SERVER }}
+          project: ${{ secrets.TEAMSCALE_FRONTEND }}
+          user: ${{ secrets.TEAMSCALE_USER }}
+          accesskey: ${{ secrets.TEAMSCALE_ACCESSKEY }}
+          partition: GitHub Actions LCOV
+          format: LCOV
+          revision: ${{ env.TEAMSCALE_REVISION }}
+          files: frontend/coverage/lcov.info

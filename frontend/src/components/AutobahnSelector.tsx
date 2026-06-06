@@ -1,15 +1,37 @@
-import { useEffect, useState, useRef } from 'react';
-import { fetchAvailableRoads } from '../services/trafficService';
+import {useEffect, useRef, useState} from 'react';
+import {fetchAvailableRoads} from '../services/trafficService';
 
+/**
+ * Eigenschaften für den AutobahnSelector.
+ */
 interface AutobahnSelectorProps {
+
+  /**
+   * Aktuell ausgewählte Autobahnen.
+   */
+  selected: string[];
+
+  /**
+   * Callback zum Aktualisieren der Auswahl.
+   */
   onSelect: (roadIds: string[]) => void;
+
+  /**
+   * Maximale Anzahl auswählbarer Autobahnen.
+   * Standardwert: 5.
+   */
   max?: number;
-  defaultSelected?: string[];
 }
 
-export function AutobahnSelector({ onSelect, max = 5, defaultSelected = [] }: AutobahnSelectorProps) {
+/**
+ * Dropdown-Komponente zur Auswahl mehrerer Autobahnen.
+ */
+export function AutobahnSelector({
+                                   selected,
+                                   onSelect,
+                                   max = 5,
+                                 }: AutobahnSelectorProps) {
   const [roads, setRoads] = useState<string[]>([]);
-  const [selected, setSelected] = useState<string[]>(defaultSelected);
   const [isOpen, setIsOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -19,12 +41,6 @@ export function AutobahnSelector({ onSelect, max = 5, defaultSelected = [] }: Au
       .then(setRoads)
       .catch(() => setError('Autobahnen konnten nicht geladen werden.'));
   }, []);
-
-  useEffect(() => {
-    if (defaultSelected.length > 0 && selected.length === 0) {
-      setSelected(defaultSelected);
-    }
-  }, [defaultSelected]);
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -45,14 +61,11 @@ export function AutobahnSelector({ onSelect, max = 5, defaultSelected = [] }: Au
     } else {
       return;
     }
-    setSelected(next);
     onSelect(next);
   }
 
   function remove(road: string) {
-    const next = selected.filter((r) => r !== road);
-    setSelected(next);
-    onSelect(next);
+    onSelect(selected.filter((r) => r !== road));
   }
 
   if (error) return <p>{error}</p>;

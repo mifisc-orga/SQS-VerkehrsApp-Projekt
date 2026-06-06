@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
-import { AutobahnSelector } from './components/AutobahnSelector';
-import { IncidentMap, type TrafficEvent } from './components/IncidentMap';
-import { RiskBadge } from './components/RiskBadge';
-import { Dashboard } from './components/Dashboard';
-import { fetchTrafficEvents, login, saveFavourite } from './services/trafficService';
+import {useEffect, useState} from 'react';
+import {AutobahnSelector} from './components/AutobahnSelector';
+import {IncidentMap, type TrafficEvent} from './components/IncidentMap';
+import {RiskBadge} from './components/RiskBadge';
+import {Dashboard} from './components/Dashboard';
+import {fetchTrafficEvents, login, saveFavourite} from './services/trafficService';
 
 function App() {
   const [allEvents, setAllEvents] = useState<TrafficEvent[]>([]);
@@ -171,7 +171,7 @@ function App() {
         {/* ── Autobahn selector ── */}
         <div className="card">
           <div className="section-title">Autobahn auswählen</div>
-          <AutobahnSelector onSelect={handleRoadSelect} max={5} defaultSelected={selectedRoads} />
+          <AutobahnSelector selected={selectedRoads} onSelect={handleRoadSelect} max={5} />
           {token && selectedRoads.length > 0 && (
             <button
               className="btn btn-success"
