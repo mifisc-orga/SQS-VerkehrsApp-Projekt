@@ -57,24 +57,22 @@ jobs:
           TEAMSCALE_ACCESSKEY: ${{ secrets.TEAMSCALE_ACCESSKEY }}
         run: ./mvnw -B clean verify -Pteamscale-tia -Dteamscale.revision=${{ env.TEAMSCALE_REVISION }}
 
-      - name: Java JaCoCo Coverage upload to Teamscale
+      - name: Generate Java JaCoCo report
         working-directory: backend/sqs-verkehrsapp
-        env:
-          TEAMSCALE_SERVER: ${{ secrets.TEAMSCALE_SERVER }}
-          TEAMSCALE_BACKEND: ${{ secrets.TEAMSCALE_BACKEND }}
-          TEAMSCALE_USER: ${{ secrets.TEAMSCALE_USER }}
-          TEAMSCALE_ACCESSKEY: ${{ secrets.TEAMSCALE_ACCESSKEY }}
         run: |
-          ./mvnw -B clean verify -Pjacoco \
-            com.teamscale:teamscale-maven-plugin:36.5.2:upload-coverage \
-            -Dteamscale.url=${{ secrets.TEAMSCALE_SERVER }} \
-            -Dteamscale.project=${{ secrets.TEAMSCALE_BACKEND }} \
-            -Dteamscale.username=${{ secrets.TEAMSCALE_USER }} \
-            -Dteamscale.accessToken=${{ secrets.TEAMSCALE_ACCESSKEY }} \
-            -Dteamscale.revision=${{ env.TEAMSCALE_REVISION }} \
-            -DcoverageFormats=JACOCO \
-            -DcoverageFiles=target/site/jacoco/jacoco.xml \
-            -Dpartition="GitHub Actions JaCoCo"
+          ./mvnw -B clean verify -Pjacoco
+
+      - name: Upload Java JaCoCo to Teamscale
+        uses: cqse/teamscale-upload-action@v2.9.14
+        with:
+          server: ${{ secrets.TEAMSCALE_SERVER }}
+          project: ${{ secrets.TEAMSCALE_BACKEND }}
+          user: ${{ secrets.TEAMSCALE_USER }}
+          accesskey: ${{ secrets.TEAMSCALE_ACCESSKEY }}
+          partition: GitHub Actions JaCoCo
+          format: JACOCO
+          revision: ${{ env.TEAMSCALE_REVISION }}
+          files: backend/sqs-verkehrsapp/target/site/jacoco/jacoco.xml
 
 #      - name: Java JaCoCo Coverage upload to Teamscale
 #        working-directory: backend/sqs-verkehrsapp
