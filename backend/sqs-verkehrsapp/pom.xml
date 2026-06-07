@@ -28,6 +28,8 @@
 	</scm>
 	<properties>
 		<java.version>21</java.version>
+		<teamscale.plugin.version>36.5.2</teamscale.plugin.version>
+		<jacoco.version>0.8.13</jacoco.version>
 	</properties>
 	<dependencies>
         <dependency>
@@ -98,6 +100,12 @@
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>com.teamscale</groupId>-->
+<!--			<artifactId>impacted-test-engine</artifactId>-->
+<!--			<version>36.5.2</version>-->
+<!--			<scope>test</scope>-->
+<!--		</dependency>-->
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
@@ -227,6 +235,35 @@
                     </execution>
                 </executions>
             </plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.14</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>report</id>
+						<phase>test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>com.teamscale</groupId>
+				<artifactId>teamscale-maven-plugin</artifactId>
+				<version>36.5.2</version>
+				<configuration>
+					<teamscaleUrl>${env.TEAMSCALE_SERVER}</teamscaleUrl>
+					<projectId>${env.TEAMSCALE_BACKEND}</projectId>
+				</configuration>
+			</plugin>
         </plugins>
     </build>
 
