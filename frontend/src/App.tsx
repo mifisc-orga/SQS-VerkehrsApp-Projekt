@@ -17,13 +17,14 @@ function App() {
   const [passwordInput, setPasswordInput] = useState('');
   const [showLogin, setShowLogin] = useState(false);
   const [savedMessage, setSavedMessage] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
     fetchTrafficEvents().then((result) => {
       setAllEvents(result.events);
       setIsLive(result.live);
       setCachedAt(result.cachedAt);
-      // Дефолтний вибір: перші 3 доступні автобани
+      // Standardauswahl: die ersten 3 verfügbaren Autobahnen
       const available = [...new Set(result.events.map((e) => e.roadId))].sort();
       const defaults = available.slice(0, 3);
       setSelectedRoads(defaults);
@@ -58,6 +59,7 @@ function App() {
     try {
       await Promise.all(selectedRoads.map((road) => saveFavourite(token, road)));
       setSavedMessage(true);
+      setRefreshKey((prev) => prev + 1);
       setTimeout(() => setSavedMessage(false), 3000);
     } catch {
       alert('Fehler beim Speichern');
@@ -191,7 +193,7 @@ function App() {
         </div>
 
         {/* ── Dashboard ── */}
-        {token && <Dashboard token={token} />}
+        {token && <Dashboard token={token} refreshKey={refreshKey} />}
 
         {/* ── Map + Events ── */}
         <div className="map-events-layout">

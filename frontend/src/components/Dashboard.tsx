@@ -5,16 +5,17 @@ import type { TrafficEvent } from './IncidentMap';
 
 interface DashboardProps {
   token: string;
+  refreshKey: number;
 }
 
-export function Dashboard({ token }: DashboardProps) {
+export function Dashboard({ token, refreshKey }: DashboardProps) {
   const [savedRoads, setSavedRoads] = useState<string[]>([]);
   const [trafficEvents, setTrafficEvents] = useState<TrafficEvent[]>([]);
 
   useEffect(() => {
     fetchSavedRoads(token).then(setSavedRoads).catch(console.error);
     fetchDashboardTraffic(token).then(setTrafficEvents).catch(console.error);
-  }, [token]);
+  }, [token, refreshKey]);
 
   async function handleDelete(roadId: string) {
     try {

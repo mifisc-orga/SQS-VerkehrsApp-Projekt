@@ -75,7 +75,8 @@ export async function fetchSavedRoads(token: string): Promise<string[]> {
   if (!response.ok) {
     throw new Error('Gespeicherte Straßen konnten nicht geladen werden');
   }
-  return response.json();
+  const data = await response.json();
+  return data.map((item: { roadId: string }) => item.roadId);
 }
 
 export async function fetchDashboardTraffic(token: string): Promise<TrafficEvent[]> {
