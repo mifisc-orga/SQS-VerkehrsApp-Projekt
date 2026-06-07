@@ -32,6 +32,9 @@ class ResilientAutobahnApiAdapterTest {
     @Mock
     private AvailableRoadCachePort availableRoadCachePort;
 
+    @Mock
+    private AutobahnCacheWriter autobahnCacheWriter;
+
     @InjectMocks
     private ResilientAutobahnApiAdapter adapter;
 
@@ -58,7 +61,7 @@ class ResilientAutobahnApiAdapterTest {
         assertThat(result.cachedAt()).isNotNull();
         assertThat(result.riskScore()).isEqualTo(0);
 
-        verify(cachePort).save("A1", List.of(event));
+        verify(autobahnCacheWriter).saveTrafficEvents("A1", List.of(event));
     }
 
     @Test
@@ -124,7 +127,7 @@ class ResilientAutobahnApiAdapterTest {
         assertThat(result).containsExactly("A1", "A3", "A8");
 
         verify(autobahnApiClient).getAvailableRoadIds();
-        verify(availableRoadCachePort).saveAll(roadIds);
+        verify(autobahnCacheWriter).saveAvailableRoadIds(roadIds);
         verifyNoInteractions(cachePort);
     }
 
@@ -218,10 +221,10 @@ class ResilientAutobahnApiAdapterTest {
         assertThat(result.cachedAt()).isNotNull();
         assertThat(result.riskScore()).isEqualTo(0);
 
-        verify(availableRoadCachePort).saveAll(List.of("A1", "A3"));
-        verify(cachePort).save("A1", List.of(eventA1));
-        verify(cachePort).save("A3", List.of(eventA3));
-        verify(cachePort).save("ALL", List.of(eventA1, eventA3));
+        verify(autobahnCacheWriter).saveAvailableRoadIds(List.of("A1", "A3"));
+        verify(autobahnCacheWriter).saveTrafficEvents("A1", List.of(eventA1));
+        verify(autobahnCacheWriter).saveTrafficEvents("A3", List.of(eventA3));
+        verify(autobahnCacheWriter).saveTrafficEvents("ALL", List.of(eventA1, eventA3));
     }
 
     @Test

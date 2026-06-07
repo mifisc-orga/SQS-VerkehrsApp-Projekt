@@ -21,17 +21,20 @@ public class ResilientAutobahnApiAdapter implements AutobahnApiPort {
     private final AutobahnApiClient autobahnApiClient;
     private final RoadEventCachePort cachePort;
     private final AvailableRoadCachePort availableRoadCachePort;
+    private final AutobahnCacheWriter autobahnCacheWriter;
 
     private static final String ALL_ROADS_CACHE_KEY = "ALL";
 
     public ResilientAutobahnApiAdapter(
             AutobahnApiClient autobahnApiClient,
             RoadEventCachePort cachePort,
-            AvailableRoadCachePort availableRoadCachePort
+            AvailableRoadCachePort availableRoadCachePort,
+            AutobahnCacheWriter autobahnCacheWriter
     ) {
         this.autobahnApiClient = autobahnApiClient;
         this.cachePort = cachePort;
         this.availableRoadCachePort = availableRoadCachePort;
+        this.autobahnCacheWriter = autobahnCacheWriter;
     }
 
     @Override
@@ -40,7 +43,7 @@ public class ResilientAutobahnApiAdapter implements AutobahnApiPort {
     public TrafficEventsResult getTrafficEvents(String roadId) {
         List<RoadEvent> events = autobahnApiClient.fetchTrafficEvents(roadId);
 
-        cachePort.save(roadId, events);
+        autobahnCacheWriter.saveTrafficEvents(roadId, events);
 
         return new TrafficEventsResult(
                 events,
@@ -57,7 +60,7 @@ public class ResilientAutobahnApiAdapter implements AutobahnApiPort {
         List<String> roadIds = autobahnApiClient.getAvailableRoadIds();
 
         if (roadIds != null && !roadIds.isEmpty()) {
-            availableRoadCachePort.saveAll(roadIds);
+            autobahnCacheWriter.saveAvailableRoadIds(roadIds);
         }
 
         return roadIds;
@@ -73,7 +76,7 @@ public class ResilientAutobahnApiAdapter implements AutobahnApiPort {
                 .flatMap(roadId -> getTrafficEvents(roadId).events().stream())
                 .toList();
 
-        cachePort.save(ALL_ROADS_CACHE_KEY, events);
+        autobahnCacheWriter.saveTrafficEvents(ALL_ROADS_CACHE_KEY, events);
 
         return new TrafficEventsResult(
                 events,
