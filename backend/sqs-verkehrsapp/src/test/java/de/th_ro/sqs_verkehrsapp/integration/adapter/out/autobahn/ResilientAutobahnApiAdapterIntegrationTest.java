@@ -69,4 +69,18 @@ public class ResilientAutobahnApiAdapterIntegrationTest {
         verify(cachePort).findByRoadId(roadId);
         verify(autobahnCacheWriter, never()).saveTrafficEvents(anyString(), anyList());
     }
+
+    @Test
+    void shouldUseCachedRoadIdsWhenApiFails() {
+        when(autobahnApiClient.getAvailableRoadIds())
+                .thenThrow(new RuntimeException("API unavailable"));
+
+        when(availableRoadCachePort.findAll())
+                .thenReturn(List.of("A3", "A8"));
+
+        List<String> result = adapter.getAvailableRoadIds();
+
+        assertThat(result).containsExactly("A3", "A8");
+        verify(availableRoadCachePort).findAll();
+    }
 }
