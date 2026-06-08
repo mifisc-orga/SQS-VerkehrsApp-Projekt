@@ -438,6 +438,15 @@ body {
   margin-bottom: 0.5rem;
 }
 
+.dashboard-card--clickable {
+  cursor: pointer;
+  transition: box-shadow 0.15s ease;
+}
+
+.dashboard-card--clickable:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
 .event-type-badge {
   font-size: 0.75rem;
   background: var(--color-bg-subtle);

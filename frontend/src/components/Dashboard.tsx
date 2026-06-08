@@ -7,6 +7,7 @@ import type { RiskLevel } from './RiskBadge';
 interface DashboardProps {
   token: string;
   refreshKey: number;
+  onRoadSelect: (roadId: string) => void;
 }
 
 function getMaxRiskLevel(events: DashboardRoadData['events']): RiskLevel | 'NONE' {
@@ -25,7 +26,7 @@ function getEventTypeLabel(type: string): string {
   }
 }
 
-export function Dashboard({ token, refreshKey }: DashboardProps) {
+export function Dashboard({ token, refreshKey, onRoadSelect }: DashboardProps) {
   const [roadData, setRoadData] = useState<DashboardRoadData[]>([]);
 
   useEffect(() => {
@@ -55,7 +56,7 @@ export function Dashboard({ token, refreshKey }: DashboardProps) {
           const uniqueTypes = [...new Set(events.map((e) => e.type))];
 
           return (
-            <div key={roadId} className="dashboard-card" data-testid={`dashboard-road-${roadId}`}>
+            <div key={roadId} className="dashboard-card dashboard-card--clickable" data-testid={`dashboard-road-${roadId}`} onClick={() => onRoadSelect(roadId)}>
               <div className="dashboard-card__header">
                 <span className="dashboard-card__title">🛣️ {roadId}</span>
                 {maxRisk !== 'NONE' && <RiskBadge riskLevel={maxRisk} />}

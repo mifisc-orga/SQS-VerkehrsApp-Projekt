@@ -206,7 +206,7 @@ function App() {
         </div>
 
         {/* ── Dashboard ── */}
-        {token && <Dashboard token={token} refreshKey={refreshKey} />}
+        {token && <Dashboard token={token} refreshKey={refreshKey} onRoadSelect={(roadId) => handleRoadSelect([roadId])} />}
 
         {/* ── Map + Events ── */}
         <div className="map-events-layout">
