@@ -1,4 +1,4 @@
-type RiskLevel = 'LOW' | 'MEDIUM' | 'HIGH';
+export type RiskLevel = 'LOW' | 'MEDIUM' | 'HIGH';
 
 interface RiskBadgeProps {
   riskLevel: RiskLevel;

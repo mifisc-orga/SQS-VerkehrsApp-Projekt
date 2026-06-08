@@ -79,14 +79,21 @@ test('Gespeicherter Favourit wird im Dashboard angezeigt', async ({ page }) => {
   let saved = false;
 
   await page.route('/api/saved-roads', async (route) => {
-    if (route.request().method() === 'GET') {
-      await route.fulfill({ 
-        json: saved ? [{ id: '1', userId: '1', roadId: 'A1' }] : [] 
-      });
-    } else if (route.request().method() === 'POST') {
+    if (route.request().method() === 'POST') {
       saved = true;
       await route.fulfill({ status: 200, json: {} });
+    } else {
+      await route.fulfill({ json: [] });
     }
+  });
+
+  await page.route('/api/dashboard/saved-road-traffic', async (route) => {
+    await route.fulfill({
+      json: saved ? [{
+        roadId: 'A1',
+        trafficEvents: { events: [], live: true, cachedAt: null, riskScore: 0 },
+      }] : [],
+    });
   });
 
   await page.goto('/');

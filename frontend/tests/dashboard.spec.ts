@@ -60,7 +60,28 @@ test.beforeEach(async ({ page }) => {
     await route.fulfill({ status: 200, json: {} });
   });
   await page.route('/api/dashboard/saved-road-traffic', async (route) => {
-    await route.fulfill({ json: mockTrafficData });
+    await route.fulfill({
+      json: [
+        {
+          roadId: 'A3',
+          trafficEvents: {
+            events: mockTrafficData.events.filter((e: { roadId: string }) => e.roadId === 'A3'),
+            live: true,
+            cachedAt: null,
+            riskScore: 2,
+          },
+        },
+        {
+          roadId: 'A92',
+          trafficEvents: {
+            events: mockTrafficData.events.filter((e: { roadId: string }) => e.roadId === 'A92'),
+            live: true,
+            cachedAt: null,
+            riskScore: 1,
+          },
+        },
+      ],
+    });
   });
 });
 

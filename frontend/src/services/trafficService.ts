@@ -18,6 +18,7 @@ export interface TrafficResult {
   cachedAt: string | null;
 }
 
+
 export async function fetchTrafficEvents(roadId?: string): Promise<TrafficResult> {
   const url = roadId ? `${API_BASE}/traffic/${roadId}` : `${API_BASE}/traffic`;
   const response = await fetch(url);
@@ -79,7 +80,14 @@ export async function fetchSavedRoads(token: string): Promise<string[]> {
   return data.map((item: { roadId: string }) => item.roadId);
 }
 
-export async function fetchDashboardTraffic(token: string): Promise<TrafficEvent[]> {
+
+export interface DashboardRoadData {
+  roadId: string;
+  events: TrafficEvent[];
+  riskScore: number;
+}
+
+export async function fetchDashboardTraffic(token: string): Promise<DashboardRoadData[]> {
   const response = await fetch(`${API_BASE}/dashboard/saved-road-traffic`, {
     headers: { 'Authorization': `Bearer ${token}` },
   });
@@ -87,5 +95,9 @@ export async function fetchDashboardTraffic(token: string): Promise<TrafficEvent
     throw new Error('Dashboard-Daten konnten nicht geladen werden');
   }
   const data = await response.json();
-  return data.events ?? [];
+  return data.map((item: { roadId: string; trafficEvents: { events: TrafficEvent[]; riskScore: number } }) => ({
+    roadId: item.roadId,
+    events: item.trafficEvents.events ?? [],
+    riskScore: item.trafficEvents.riskScore ?? 0,
+  }));
 }

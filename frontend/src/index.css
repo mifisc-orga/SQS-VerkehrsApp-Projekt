@@ -416,6 +416,44 @@ body {
   font-style: italic;
 }
 
+
+
+.dashboard-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.dashboard-card__stats {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin-bottom: 0.4rem;
+}
+
+.dashboard-card__types {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-bottom: 0.5rem;
+}
+
+.event-type-badge {
+  font-size: 0.75rem;
+  background: var(--color-bg-subtle);
+  border-radius: var(--radius-sm);
+  padding: 0.2rem 0.5rem;
+}
+
+.badge-ok {
+  font-size: 0.75rem;
+  background: #dcfce7;
+  color: #166534;
+  border-radius: var(--radius-sm);
+  padding: 0.2rem 0.5rem;
+  font-weight: 600;
+}
+
 /* ─────────────────────────────────────────
    Map
 ───────────────────────────────────────── */
