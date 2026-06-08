@@ -117,5 +117,7 @@ test('Nutzer kann Favorit aus Dashboard löschen', async ({ page }) => {
   await page.getByTestId('submit-login').click();
   await expect(page.getByTestId('dashboard-road-A3')).toBeVisible();
   await page.getByTestId('delete-favourite-A3').click();
+  await expect(page.getByTestId('confirm-modal')).toBeVisible();
+  await page.getByTestId('confirm-ok').click();
   await expect(page.getByTestId('dashboard-road-A3')).not.toBeVisible();
 });

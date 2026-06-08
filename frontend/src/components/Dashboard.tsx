@@ -3,6 +3,7 @@ import { fetchDashboardTraffic, deleteFavourite } from '../services/trafficServi
 import type { DashboardRoadData } from '../services/trafficService';
 import { RiskBadge } from './RiskBadge';
 import type { RiskLevel } from './RiskBadge';
+import { ConfirmModal } from './ConfirmModal';
 
 interface DashboardProps {
   token: string;
@@ -28,17 +29,25 @@ function getEventTypeLabel(type: string): string {
 
 export function Dashboard({ token, refreshKey, onRoadSelect }: DashboardProps) {
   const [roadData, setRoadData] = useState<DashboardRoadData[]>([]);
+  const [confirmDeleteRoadId, setConfirmDeleteRoadId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchDashboardTraffic(token).then(setRoadData).catch(console.error);
   }, [token, refreshKey]);
 
-  async function handleDelete(roadId: string) {
+  function handleDeleteRequest(roadId: string) {
+    setConfirmDeleteRoadId(roadId);
+  }
+
+  async function handleDeleteConfirm() {
+    if (!confirmDeleteRoadId) return;
     try {
-      await deleteFavourite(token, roadId);
-      setRoadData((prev) => prev.filter((r) => r.roadId !== roadId));
+      await deleteFavourite(token, confirmDeleteRoadId);
+      setRoadData((prev) => prev.filter((r) => r.roadId !== confirmDeleteRoadId));
     } catch {
       alert('Fehler beim Löschen');
+    } finally {
+      setConfirmDeleteRoadId(null);
     }
   }
 
@@ -86,14 +95,25 @@ export function Dashboard({ token, refreshKey, onRoadSelect }: DashboardProps) {
               <button
                 className="btn btn-danger"
                 data-testid={`delete-favourite-${roadId}`}
-                onClick={() => handleDelete(roadId)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDeleteRequest(roadId);
+                }}
               >
                 ✕ Entfernen
               </button>
+
             </div>
           );
         })}
       </div>
+      {confirmDeleteRoadId && (
+        <ConfirmModal
+        message={`Möchtest du ${confirmDeleteRoadId} wirklich aus deinen Favouriten entfernen?`}
+        onConfirm={handleDeleteConfirm}
+        onCancel={() => setConfirmDeleteRoadId(null)}
+        />
+      )}
     </div>
   );
 }
