@@ -34,30 +34,54 @@ const mockLoginResponse = {
   username: 'testuser',
 };
 
-const mockSavedRoads = ['A3', 'A92'];
+const mockSavedRoads = [
+  { id: '1', userId: '1', roadId: 'A3' },
+  { id: '2', userId: '1', roadId: 'A92' },
+];
 
 test.beforeEach(async ({ page }) => {
-  await page.route('/api/traffic', async (route) => {
+  await page.route('/api/traffic', async route => {
     await route.fulfill({ json: mockTrafficData });
   });
-  await page.route('/api/traffic/**', async (route) => {
+  await page.route('/api/traffic/**', async route => {
     await route.fulfill({ json: mockTrafficData });
   });
-  await page.route('/api/auth/login', async (route) => {
+  await page.route('/api/auth/login', async route => {
     await route.fulfill({ json: mockLoginResponse });
   });
-  await page.route('/api/saved-roads', async (route) => {
+  await page.route('/api/saved-roads', async route => {
     if (route.request().method() === 'GET') {
       await route.fulfill({ json: mockSavedRoads });
     } else if (route.request().method() === 'POST') {
       await route.fulfill({ status: 200, json: {} });
     }
   });
-  await page.route('/api/saved-roads/**', async (route) => {
+  await page.route('/api/saved-roads/**', async route => {
     await route.fulfill({ status: 200, json: {} });
   });
-  await page.route('/api/dashboard/saved-road-traffic', async (route) => {
-    await route.fulfill({ json: mockTrafficData });
+  await page.route('/api/dashboard/saved-road-traffic', async route => {
+    await route.fulfill({
+      json: [
+        {
+          roadId: 'A3',
+          trafficEvents: {
+            events: mockTrafficData.events.filter((e: { roadId: string }) => e.roadId === 'A3'),
+            live: true,
+            cachedAt: null,
+            riskScore: 2,
+          },
+        },
+        {
+          roadId: 'A92',
+          trafficEvents: {
+            events: mockTrafficData.events.filter((e: { roadId: string }) => e.roadId === 'A92'),
+            live: true,
+            cachedAt: null,
+            riskScore: 1,
+          },
+        },
+      ],
+    });
   });
 });
 
@@ -93,5 +117,7 @@ test('Nutzer kann Favorit aus Dashboard löschen', async ({ page }) => {
   await page.getByTestId('submit-login').click();
   await expect(page.getByTestId('dashboard-road-A3')).toBeVisible();
   await page.getByTestId('delete-favourite-A3').click();
+  await expect(page.getByTestId('confirm-modal')).toBeVisible();
+  await page.getByTestId('confirm-ok').click();
   await expect(page.getByTestId('dashboard-road-A3')).not.toBeVisible();
 });
