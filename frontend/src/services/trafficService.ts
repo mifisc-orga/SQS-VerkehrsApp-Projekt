@@ -2,6 +2,7 @@ import type { TrafficEvent } from '../components/IncidentMap';
 
 const API_BASE = '/api';
 
+/** Lädt alle verfügbaren Autobahnen vom Server */
 export async function fetchAvailableRoads(): Promise<string[]> {
   const response = await fetch(`${API_BASE}/traffic`);
   if (!response.ok) {
@@ -12,13 +13,17 @@ export async function fetchAvailableRoads(): Promise<string[]> {
   return roads.sort();
 }
 
+/** Ergebnis einer Verkehrsdaten-Anfrage */
 export interface TrafficResult {
+  /** Liste der Verkehrsereignisse */
   events: TrafficEvent[];
+  /** true, wenn die Daten live vom Server kommen */
   live: boolean;
+  /** Zeitstempel des Caches, oder null wenn live */
   cachedAt: string | null;
 }
 
-
+/** Lädt Verkehrsereignisse, optional gefiltert nach Autobahn */
 export async function fetchTrafficEvents(roadId?: string): Promise<TrafficResult> {
   const url = roadId ? `${API_BASE}/traffic/${roadId}` : `${API_BASE}/traffic`;
   const response = await fetch(url);
@@ -33,6 +38,7 @@ export async function fetchTrafficEvents(roadId?: string): Promise<TrafficResult
   };
 }
 
+/** Meldet den Nutzer an und gibt Token und Benutzernamen zurück */
 export async function login(username: string, password: string): Promise<{ token: string; username: string }> {
   const response = await fetch(`${API_BASE}/auth/login`, {
     method: 'POST',
@@ -45,6 +51,7 @@ export async function login(username: string, password: string): Promise<{ token
   return response.json();
 }
 
+/** Speichert eine Autobahn als Favorit des eingeloggten Nutzers */
 export async function saveFavourite(token: string, roadId: string): Promise<void> {
   const response = await fetch(`${API_BASE}/saved-roads`, {
     method: 'POST',
@@ -59,6 +66,7 @@ export async function saveFavourite(token: string, roadId: string): Promise<void
   }
 }
 
+/** Entfernt eine Autobahn aus den Favoriten des eingeloggten Nutzers */
 export async function deleteFavourite(token: string, roadId: string): Promise<void> {
   const response = await fetch(`${API_BASE}/saved-roads/${roadId}`, {
     method: 'DELETE',
@@ -69,6 +77,7 @@ export async function deleteFavourite(token: string, roadId: string): Promise<vo
   }
 }
 
+/** Lädt alle gespeicherten Autobahnen des eingeloggten Nutzers */
 export async function fetchSavedRoads(token: string): Promise<string[]> {
   const response = await fetch(`${API_BASE}/saved-roads`, {
     headers: { 'Authorization': `Bearer ${token}` },
@@ -80,13 +89,17 @@ export async function fetchSavedRoads(token: string): Promise<string[]> {
   return data.map((item: { roadId: string }) => item.roadId);
 }
 
-
+/** Verkehrsdaten einer gespeicherten Autobahn für das Dashboard */
 export interface DashboardRoadData {
+  /** ID der Autobahn, z. B. "A3" */
   roadId: string;
+  /** Liste der aktuellen Verkehrsereignisse */
   events: TrafficEvent[];
+  /** Berechneter Risikowert der Autobahn */
   riskScore: number;
 }
 
+/** Lädt Dashboard-Daten für alle gespeicherten Autobahnen des Nutzers */
 export async function fetchDashboardTraffic(token: string): Promise<DashboardRoadData[]> {
   const response = await fetch(`${API_BASE}/dashboard/saved-road-traffic`, {
     headers: { 'Authorization': `Bearer ${token}` },

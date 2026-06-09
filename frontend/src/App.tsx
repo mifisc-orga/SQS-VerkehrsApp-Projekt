@@ -57,10 +57,10 @@ function App() {
     if (!token || selectedRoads.length === 0) return;
 
     const results = await Promise.allSettled(
-      selectedRoads.map((road) => saveFavourite(token, road))
+      selectedRoads.map(road => saveFavourite(token, road))
     );
 
-    const saved = results.filter((r) => r.status === 'fulfilled').length;
+    const saved = results.filter(r => r.status === 'fulfilled').length;
     const alreadyExisted = results.length - saved;
 
     if (saved > 0 && alreadyExisted === 0) {
@@ -71,7 +71,7 @@ function App() {
       setSavedMessage('Alle Autobahnen sind bereits in deinen Favouriten.');
     }
 
-    setRefreshKey((prev) => prev + 1);
+    setRefreshKey(prev => prev + 1);
     setTimeout(() => setSavedMessage(null), 4000);
   }
 

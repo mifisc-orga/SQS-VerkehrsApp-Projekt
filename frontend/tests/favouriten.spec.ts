@@ -78,7 +78,7 @@ test('Autobahn kann als Favourit gespeichert werden', async ({ page }) => {
 test('Gespeicherter Favourit wird im Dashboard angezeigt', async ({ page }) => {
   let saved = false;
 
-  await page.route('/api/saved-roads', async (route) => {
+  await page.route('/api/saved-roads', async route => {
     if (route.request().method() === 'POST') {
       saved = true;
       await route.fulfill({ status: 200, json: {} });
@@ -87,7 +87,7 @@ test('Gespeicherter Favourit wird im Dashboard angezeigt', async ({ page }) => {
     }
   });
 
-  await page.route('/api/dashboard/saved-road-traffic', async (route) => {
+  await page.route('/api/dashboard/saved-road-traffic', async route => {
     await route.fulfill({
       json: saved ? [{
         roadId: 'A1',
@@ -108,7 +108,7 @@ test('Gespeicherter Favourit wird im Dashboard angezeigt', async ({ page }) => {
 });
 
 test('Hinweis wenn alle Autobahnen bereits gespeichert sind', async ({ page }) => {
-  await page.route('/api/saved-roads', async (route) => {
+  await page.route('/api/saved-roads', async route => {
     if (route.request().method() === 'POST') {
       await route.fulfill({ status: 403, json: {} });
     } else {
