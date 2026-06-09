@@ -1,3 +1,4 @@
+/** Props für den Bestätigungsdialog */
 interface ConfirmModalProps {
   /** Nachricht, die im Bestätigungsdialog angezeigt wird */
   message: string;
