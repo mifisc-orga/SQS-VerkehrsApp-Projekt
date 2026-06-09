@@ -8,6 +8,7 @@ interface ConfirmModalProps {
   onCancel: () => void;
 }
 
+/** Bestätigungsdialog mit Abbrechen- und Entfernen-Button */
 export function ConfirmModal({ message, onConfirm, onCancel }: ConfirmModalProps) {
   return (
     <div
