@@ -5,7 +5,6 @@ import de.th_ro.sqs_verkehrsapp.adapter.out.persistence.repository.UserRepositor
 import de.th_ro.sqs_verkehrsapp.application.port.out.UserPort;
 import de.th_ro.sqs_verkehrsapp.domain.model.AppUser;
 import java.util.Optional;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -36,12 +35,6 @@ public class UserAdapter implements UserPort {
     @Override
     public Optional<AppUser> findByUsername(String username) {
         return repository.findByUsername(username)
-                .map(this::mapToDomain);
-    }
-
-    @Override
-    public Optional<AppUser> findById(UUID id) {
-        return repository.findById(id)
                 .map(this::mapToDomain);
     }
 
