@@ -6,28 +6,28 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * Repository für den Zugriff auf Anwendungsbenutzer.
+ * Repository for accessing application users.
  * <p>
- * Stellt CRUD-Operationen sowie benutzerspezifische Suchfunktionen
- * für die Authentifizierung und Benutzerverwaltung bereit.
+ * Provides CRUD operations as well as user-specific lookup functionality
+ * for authentication and user management.
  */
 public interface UserRepository extends JpaRepository<UserEntity, UUID> {
 
     /**
-     * Sucht einen Benutzer anhand seines Benutzernamens.
+     * Finds a user by their username.
      *
-     * @param username Benutzername
-     * @return den gefundenen Benutzer oder ein leeres {@link Optional},
-     *         falls kein Benutzer existiert
+     * @param username the username
+     * @return the found user or an empty {@link Optional}
+     *         if no user exists
      */
     Optional<UserEntity> findByUsername(String username);
 
     /**
-     * Prüft, ob ein Benutzer mit dem angegebenen Benutzernamen existiert.
+     * Checks whether a user with the specified username exists.
      *
-     * @param username Benutzername
-     * @return {@code true}, wenn ein Benutzer existiert,
-     *         andernfalls {@code false}
+     * @param username the username
+     * @return {@code true} if a user exists,
+     *         {@code false} otherwise
      */
     boolean existsByUsername(String username);
 }

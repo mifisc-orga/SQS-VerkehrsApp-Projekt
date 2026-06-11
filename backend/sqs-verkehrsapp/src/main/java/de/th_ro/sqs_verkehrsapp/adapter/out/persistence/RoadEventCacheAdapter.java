@@ -13,11 +13,11 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 /**
- * Persistence-Adapter für den Cache von Verkehrsereignissen.
+ * Persistence adapter for the traffic event cache.
  * <p>
- * Implementiert {@link RoadEventCachePort} und speichert bzw. lädt
- * Verkehrsereignisse aus der Datenbank. Die Domain-Objekte werden dabei
- * in Persistenz-Entitäten umgewandelt und umgekehrt.
+ * Implements {@link RoadEventCachePort} and stores as well as retrieves
+ * traffic events from the database. Domain objects are converted to
+ * persistence entities and vice versa.
  */
 @Component
 public class RoadEventCacheAdapter implements RoadEventCachePort {
@@ -25,20 +25,20 @@ public class RoadEventCacheAdapter implements RoadEventCachePort {
     private final CachedRoadEventRepository repository;
 
     /**
-     * Erstellt einen neuen Adapter für den Zugriff auf den Ereignis-Cache.
+     * Creates a new adapter for accessing the traffic event cache.
      *
-     * @param repository Repository für zwischengespeicherte Verkehrsereignisse
+     * @param repository repository for cached traffic events
      */
     public RoadEventCacheAdapter(CachedRoadEventRepository repository) {
         this.repository = repository;
     }
 
     /**
-     * Speichert die Verkehrsereignisse einer Autobahn im Cache.
-     * Bereits vorhandene Cache-Einträge für die Autobahn werden zuvor entfernt.
+     * Stores the traffic events of a motorway in the cache.
+     * Existing cache entries for the motorway are removed beforehand.
      *
-     * @param roadId Kennung der Autobahn
-     * @param events zu speichernde Verkehrsereignisse
+     * @param roadId the motorway identifier
+     * @param events the traffic events to be cached
      */
     @Override
     @Transactional
@@ -64,11 +64,11 @@ public class RoadEventCacheAdapter implements RoadEventCachePort {
     }
 
     /**
-     * Lädt die zwischengespeicherten Verkehrsereignisse einer Autobahn.
+     * Retrieves the cached traffic events for a motorway.
      *
-     * @param roadId Kennung der Autobahn
-     * @return das Ergebnisobjekt mit den geladenen Ereignissen und
-     *         den zugehörigen Cache-Informationen
+     * @param roadId the motorway identifier
+     * @return the result object containing the cached events and
+     *         associated cache information
      */
     @Override
     public TrafficEventsResult findByRoadId(String roadId) {

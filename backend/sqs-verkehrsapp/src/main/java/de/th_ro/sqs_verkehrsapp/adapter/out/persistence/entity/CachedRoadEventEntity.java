@@ -10,11 +10,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * JPA-Entität zur Persistierung von Verkehrsereignissen im lokalen Cache.
+ * JPA entity for persisting traffic events in the local cache.
  * <p>
- * Die Entität speichert die von der Autobahn-API abgerufenen Ereignisse
- * zusammen mit dem Zeitpunkt der Zwischenspeicherung, um bei Ausfällen
- * der API auf bereits geladene Daten zurückgreifen zu können.
+ * The entity stores traffic events retrieved from the Autobahn API
+ * together with the timestamp of caching, allowing previously loaded
+ * data to be used when the API is unavailable.
  */
 @Getter
 @Setter
@@ -36,7 +36,7 @@ public class CachedRoadEventEntity {
     private LocalDateTime cachedAt;
 
     /**
-     * Erstellt eine neue Cache-Entität für ein Verkehrsereignis.
+     * Creates a new cache entity for a traffic event.
      */
     public CachedRoadEventEntity(
             String roadId,

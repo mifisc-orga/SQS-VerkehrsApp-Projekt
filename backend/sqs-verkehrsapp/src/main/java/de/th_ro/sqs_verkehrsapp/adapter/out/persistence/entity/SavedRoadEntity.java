@@ -6,11 +6,11 @@ import java.util.UUID;
 import lombok.*;
 
 /**
- * JPA-Entität für vom Benutzer gespeicherte Autobahnen.
+ * JPA entity for motorways saved by a user.
  * <p>
- * Jede Instanz verknüpft einen Benutzer mit einer Autobahn, die er
- * als Favorit gespeichert hat. Durch den Unique Constraint kann eine
- * Autobahn pro Benutzer nur einmal gespeichert werden.
+ * Each instance associates a user with a motorway that has been saved
+ * as a favorite. The unique constraint ensures that a motorway can only
+ * be saved once per user.
  */
 @Entity
 @Table(

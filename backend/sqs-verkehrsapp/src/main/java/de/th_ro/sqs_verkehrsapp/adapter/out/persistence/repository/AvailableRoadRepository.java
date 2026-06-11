@@ -4,10 +4,10 @@ import de.th_ro.sqs_verkehrsapp.adapter.out.persistence.entity.AvailableRoadEnti
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * Repository für den Zugriff auf gespeicherte verfügbare Autobahnen.
+ * Repository for accessing cached available motorways.
  * <p>
- * Stellt CRUD-Operationen für {@link AvailableRoadEntity} über
- * Spring Data JPA bereit.
+ * Provides CRUD operations for {@link AvailableRoadEntity}
+ * using Spring Data JPA.
  */
 public interface AvailableRoadRepository extends JpaRepository<AvailableRoadEntity, String> {
 }

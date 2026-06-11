@@ -9,10 +9,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
- * JPA-Entität zur Persistierung verfügbarer Autobahnen.
+ * JPA entity for persisting available motorways.
  * <p>
- * Jede Instanz repräsentiert eine Autobahnkennung (z. B. A3, A8),
- * die aus der Autobahn-API geladen und lokal gespeichert wird.
+ * Each instance represents a motorway identifier (e.g. A3, A8)
+ * that is retrieved from the Autobahn API and stored locally.
  */
 @Getter
 @NoArgsConstructor

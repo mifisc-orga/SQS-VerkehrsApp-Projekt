@@ -9,11 +9,10 @@ import java.util.UUID;
 import lombok.*;
 
 /**
- * JPA-Entität zur Persistierung von Anwendungsbenutzern.
+ * JPA entity for persisting application users.
  * <p>
- * Die Entität speichert die für die Authentifizierung erforderlichen
- * Benutzerdaten. Passwörter werden ausschließlich als Hashwert
- * gespeichert und niemals im Klartext abgelegt.
+ * The entity stores the user data required for authentication.
+ * Passwords are stored exclusively as hashed values and never in plain text.
  */
 @Entity
 @Table(name = "app_users")

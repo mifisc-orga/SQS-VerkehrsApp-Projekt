@@ -10,10 +10,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 /**
- * Persistence-Adapter für Anwendungsbenutzer.
+ * Persistence adapter for application users.
  * <p>
- * Implementiert {@link UserPort} mittels Spring Data JPA und übernimmt
- * das Mapping zwischen Domain-Modellen und Persistenz-Entitäten.
+ * Implements {@link UserPort} using Spring Data JPA and is responsible
+ * for mapping between domain models and persistence entities.
  */
 @Component
 @RequiredArgsConstructor
@@ -51,10 +51,10 @@ public class UserAdapter implements UserPort {
     }
 
     /**
-     * Wandelt eine Benutzer-Entität in das entsprechende Domain-Modell um.
+     * Converts a user entity into the corresponding domain model.
      *
-     * @param entity Persistenz-Entität
-     * @return Domain-Modell
+     * @param entity the persistence entity
+     * @return the domain model
      */
     private AppUser mapToDomain(UserEntity entity) {
         return AppUser.builder()

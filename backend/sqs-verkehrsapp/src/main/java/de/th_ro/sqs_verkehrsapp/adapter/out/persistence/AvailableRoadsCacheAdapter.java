@@ -7,10 +7,10 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 /**
- * Persistence-Adapter für den Cache verfügbarer Autobahnen.
+ * Persistence adapter for the cache of available motorways.
  * <p>
- * Implementiert {@link AvailableRoadCachePort} und speichert die von der
- * Autobahn-API bereitgestellten Autobahnkennungen in der Datenbank.
+ * Implements {@link AvailableRoadCachePort} and stores motorway identifiers
+ * provided by the Autobahn API in the database.
  */
 @Component
 public class AvailableRoadsCacheAdapter implements AvailableRoadCachePort {
@@ -22,10 +22,10 @@ public class AvailableRoadsCacheAdapter implements AvailableRoadCachePort {
     }
 
     /**
-     * Speichert die übergebenen Autobahnkennungen im Cache.
-     * Bereits vorhandene Einträge werden zuvor entfernt.
+     * Stores the provided motorway identifiers in the cache.
+     * Existing entries are removed beforehand.
      *
-     * @param roadIds zu speichernde Autobahnkennungen
+     * @param roadIds the motorway identifiers to be cached
      */
     @Override
     public void saveAll(List<String> roadIds) {
@@ -39,9 +39,9 @@ public class AvailableRoadsCacheAdapter implements AvailableRoadCachePort {
     }
 
     /**
-     * Lädt alle im Cache gespeicherten Autobahnkennungen.
+     * Retrieves all motorway identifiers stored in the cache.
      *
-     * @return Liste der verfügbaren Autobahnkennungen
+     * @return a list of available motorway identifiers
      */
     @Override
     public List<String> findAll() {

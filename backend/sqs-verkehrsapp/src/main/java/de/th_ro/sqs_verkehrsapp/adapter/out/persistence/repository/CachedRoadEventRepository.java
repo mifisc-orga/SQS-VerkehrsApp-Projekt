@@ -5,27 +5,25 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * Repository für den Zugriff auf zwischengespeicherte Verkehrsereignisse.
+ * Repository for accessing cached traffic events.
  * <p>
- * Stellt CRUD-Operationen sowie Such- und Löschfunktionen für
- * cachebare Verkehrsereignisse bereit.
+ * Provides CRUD operations as well as search and deletion functionality
+ * for cached traffic events.
  */
 public interface CachedRoadEventRepository extends JpaRepository<CachedRoadEventEntity, Long> {
 
     /**
-     * Ermittelt alle zwischengespeicherten Verkehrsereignisse
-     * einer bestimmten Autobahn.
+     * Retrieves all cached traffic events for a specific motorway.
      *
-     * @param roadId Kennung der Autobahn
-     * @return alle zugehörigen Verkehrsereignisse
+     * @param roadId the motorway identifier
+     * @return all associated traffic events
      */
     List<CachedRoadEventEntity> findByRoadId(String roadId);
 
     /**
-     * Entfernt alle zwischengespeicherten Verkehrsereignisse
-     * einer bestimmten Autobahn.
+     * Removes all cached traffic events for a specific motorway.
      *
-     * @param roadId Kennung der Autobahn
+     * @param roadId the motorway identifier
      */
     void deleteByRoadId(String roadId);
 }

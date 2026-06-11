@@ -10,10 +10,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 /**
- * Persistence-Adapter für gespeicherte Autobahnen eines Benutzers.
+ * Persistence adapter for motorways saved by a user.
  * <p>
- * Implementiert {@link SavedRoadPort} und übernimmt die Persistierung
- * sowie das Mapping zwischen Domain-Modellen und JPA-Entitäten.
+ * Implements {@link SavedRoadPort} and is responsible for persistence
+ * as well as mapping between domain models and JPA entities.
  */
 @Component
 @RequiredArgsConstructor
@@ -52,10 +52,10 @@ public class SavedRoadAdapter implements SavedRoadPort {
     }
 
     /**
-     * Wandelt eine Persistenz-Entität in das zugehörige Domain-Modell um.
+     * Converts a persistence entity into the corresponding domain model.
      *
-     * @param entity Persistenz-Entität
-     * @return Domain-Modell
+     * @param entity the persistence entity
+     * @return the domain model
      */
     private SavedRoad mapToDomain(SavedRoadEntity entity) {
         return SavedRoad.builder()
