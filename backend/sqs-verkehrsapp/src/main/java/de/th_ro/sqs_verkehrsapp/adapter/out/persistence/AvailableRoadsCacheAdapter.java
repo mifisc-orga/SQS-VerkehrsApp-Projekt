@@ -17,6 +17,11 @@ public class AvailableRoadsCacheAdapter implements AvailableRoadCachePort {
 
     private final AvailableRoadRepository repository;
 
+    /**
+     * Creates a new adapter for accessing the available roads cache.
+     *
+     * @param repository repository for available motorway identifiers
+     */
     public AvailableRoadsCacheAdapter(AvailableRoadRepository repository) {
         this.repository = repository;
     }

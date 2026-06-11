@@ -5,12 +5,11 @@ import de.th_ro.sqs_verkehrsapp.adapter.in.web.dto.TrafficResponseDto;
 import de.th_ro.sqs_verkehrsapp.application.port.in.TrafficQueryUseCase;
 import de.th_ro.sqs_verkehrsapp.domain.model.RoadEvent;
 import de.th_ro.sqs_verkehrsapp.domain.model.TrafficEventsResult;
+import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 /**
  * REST controller providing traffic information for roads.
@@ -22,6 +21,11 @@ public class TrafficController {
 
     private final TrafficQueryUseCase trafficQueryUseCase;
 
+    /**
+     * Creates a new traffic controller.
+     *
+     * @param trafficQueryUseCase use case for retrieving traffic information
+     */
     public TrafficController(TrafficQueryUseCase trafficQueryUseCase) {
         this.trafficQueryUseCase = trafficQueryUseCase;
     }
