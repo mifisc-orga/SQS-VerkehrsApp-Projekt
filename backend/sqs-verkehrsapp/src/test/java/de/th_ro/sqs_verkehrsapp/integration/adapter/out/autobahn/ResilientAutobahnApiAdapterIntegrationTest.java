@@ -17,11 +17,17 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.anyList;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @ActiveProfiles("test")
-public class ResilientAutobahnApiAdapterIntegrationTest {
+class ResilientAutobahnApiAdapterIntegrationTest {
 
     @MockitoBean
     private AutobahnApiClient autobahnApiClient;
@@ -35,11 +41,15 @@ public class ResilientAutobahnApiAdapterIntegrationTest {
     @MockitoBean
     private AutobahnCacheWriter autobahnCacheWriter;
 
+    private final ResilientAutobahnApiAdapter adapter;
+
     @Autowired
-    private ResilientAutobahnApiAdapter adapter;
+    ResilientAutobahnApiAdapterIntegrationTest(ResilientAutobahnApiAdapter adapter) {
+        this.adapter = adapter;
+    }
 
     @Test
-    void getTrafficEvents_whenApiFails_shouldUseFallbackFromCache() {
+    void getTrafficEventsWhenApiFailsShouldUseFallbackFromCache() {
         String roadId = "A1";
 
         RoadEvent cachedEvent = mock(RoadEvent.class);

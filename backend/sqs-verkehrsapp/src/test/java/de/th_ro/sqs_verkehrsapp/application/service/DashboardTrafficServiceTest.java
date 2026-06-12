@@ -19,7 +19,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class DashboardTrafficServiceTest {
+class DashboardTrafficServiceTest {
 
     @Mock
     private SavedRoadPort savedRoadPort;
@@ -31,7 +31,7 @@ public class DashboardTrafficServiceTest {
     private DashboardTrafficService dashboardTrafficService;
 
     @Test
-    public void shouldGetTrafficForSavedRoads() {
+    void shouldGetTrafficForSavedRoads() {
         UUID userId = UUID.randomUUID();
 
         SavedRoad a8 = SavedRoad.builder()

@@ -2,7 +2,7 @@ package de.th_ro.sqs_verkehrsapp.integration.adapter.out.persistence;
 
 import de.th_ro.sqs_verkehrsapp.adapter.out.persistence.entity.SavedRoadEntity;
 import de.th_ro.sqs_verkehrsapp.adapter.out.persistence.repository.SavedRoadRepository;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 
@@ -12,13 +12,17 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-public class SavedRoadRepositoryIntegrationTest {
+class SavedRoadRepositoryIntegrationTest {
+
+    private final SavedRoadRepository repository;
 
     @Autowired
-    private SavedRoadRepository repository;
+    SavedRoadRepositoryIntegrationTest(SavedRoadRepository repository) {
+        this.repository = repository;
+    }
 
     @Test
-    public void shouldSaveAndFindRoadsByUserId() {
+    void shouldSaveAndFindRoadsByUserId() {
         UUID userId = UUID.randomUUID();
 
         repository.save(SavedRoadEntity.builder()
@@ -42,7 +46,7 @@ public class SavedRoadRepositoryIntegrationTest {
     }
 
     @Test
-    public void shouldDetectExistingRoadForUser() {
+    void shouldDetectExistingRoadForUser() {
         UUID userId = UUID.randomUUID();
 
         repository.save(SavedRoadEntity.builder()

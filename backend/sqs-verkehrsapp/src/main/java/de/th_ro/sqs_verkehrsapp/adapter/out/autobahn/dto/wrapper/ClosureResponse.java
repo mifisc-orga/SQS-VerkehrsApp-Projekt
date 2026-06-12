@@ -1,16 +1,23 @@
 package de.th_ro.sqs_verkehrsapp.adapter.out.autobahn.dto.wrapper;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import de.th_ro.sqs_verkehrsapp.adapter.out.autobahn.dto.ClosureDto;
+import de.th_ro.sqs_verkehrsapp.adapter.out.autobahn.dto.AutobahnEventDto;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
 
+/**
+ * Response wrapper containing road closure events returned by the
+ * Autobahn API.
+ */
 @Getter
 @Setter
 public class ClosureResponse {
 
+    /**
+     * List of road closure events.
+     */
     @JsonProperty("closure")
-    private List<ClosureDto> closures;
+    private List<AutobahnEventDto> closures;
 }

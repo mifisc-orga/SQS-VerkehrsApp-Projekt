@@ -5,10 +5,20 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.UUID;
 
+/**
+ * JPA entity for persisting application users.
+ * <p>
+ * The entity stores the user data required for authentication.
+ * Passwords are stored exclusively as hashed values and never in plain text.
+ */
 @Entity
 @Table(name = "app_users")
 @Getter

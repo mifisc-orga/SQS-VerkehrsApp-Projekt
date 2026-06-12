@@ -2,7 +2,11 @@ package de.th_ro.sqs_verkehrsapp.integration.adapter.in.web;
 
 import de.th_ro.sqs_verkehrsapp.adapter.in.web.TrafficController;
 import de.th_ro.sqs_verkehrsapp.application.port.in.TrafficQueryUseCase;
-import de.th_ro.sqs_verkehrsapp.domain.model.*;
+import de.th_ro.sqs_verkehrsapp.domain.model.Coordinate;
+import de.th_ro.sqs_verkehrsapp.domain.model.RiskLevel;
+import de.th_ro.sqs_verkehrsapp.domain.model.RoadEvent;
+import de.th_ro.sqs_verkehrsapp.domain.model.RoadEventType;
+import de.th_ro.sqs_verkehrsapp.domain.model.TrafficEventsResult;
 import de.th_ro.sqs_verkehrsapp.security.JwtAuthenticationFilter;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,14 +35,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         )
 )
 @AutoConfigureMockMvc(addFilters = false)
-public class TrafficControllerIntegrationTest {
+class TrafficControllerIntegrationTest {
 
-
-    @Autowired
-    private MockMvc mockMvc;
+    private final MockMvc mockMvc;
 
     @MockitoBean
     private TrafficQueryUseCase trafficQueryUseCase;
+
+    @Autowired
+    TrafficControllerIntegrationTest(MockMvc mockMvc) {
+        this.mockMvc = mockMvc;
+    }
 
     @Test
     void shouldReturnTrafficEvents() throws Exception {
@@ -54,8 +61,7 @@ public class TrafficControllerIntegrationTest {
                 57
         );
 
-        when(trafficQueryUseCase.getTrafficEvents("A1"))
-                .thenReturn(result);;
+        when(trafficQueryUseCase.getTrafficEvents("A1")).thenReturn(result);
 
         mockMvc.perform(get("/api/traffic/A1"))
                 .andExpect(status().isOk())
@@ -84,8 +90,7 @@ public class TrafficControllerIntegrationTest {
                 45
         );
 
-        when(trafficQueryUseCase.getAllTrafficEvents())
-                .thenReturn(result);
+        when(trafficQueryUseCase.getAllTrafficEvents()).thenReturn(result);
 
         mockMvc.perform(get("/api/traffic"))
                 .andExpect(status().isOk())

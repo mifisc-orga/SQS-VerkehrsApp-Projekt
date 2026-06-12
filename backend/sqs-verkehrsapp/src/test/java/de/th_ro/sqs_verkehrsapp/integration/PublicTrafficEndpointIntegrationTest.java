@@ -2,10 +2,11 @@ package de.th_ro.sqs_verkehrsapp.integration;
 
 import de.th_ro.sqs_verkehrsapp.application.port.out.AutobahnApiPort;
 import de.th_ro.sqs_verkehrsapp.domain.model.TrafficEventsResult;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -17,18 +18,23 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
+@ActiveProfiles("test")
 @SpringBootTest
 @AutoConfigureMockMvc
-public class PublicTrafficEndpointIntegrationTest {
-    @Autowired
-    private MockMvc mockMvc;
+class PublicTrafficEndpointIntegrationTest {
+
+    private final MockMvc mockMvc;
 
     @MockitoBean
     private AutobahnApiPort autobahnApiPort;
 
+    @Autowired
+    PublicTrafficEndpointIntegrationTest(MockMvc mockMvc) {
+        this.mockMvc = mockMvc;
+    }
+
     @Test
-    public void shouldAllowTrafficEndpointWithoutLogin() throws Exception {
+    void shouldAllowTrafficEndpointWithoutLogin() throws Exception {
 
         when(autobahnApiPort.getTrafficEvents("A8"))
                 .thenReturn(new TrafficEventsResult(

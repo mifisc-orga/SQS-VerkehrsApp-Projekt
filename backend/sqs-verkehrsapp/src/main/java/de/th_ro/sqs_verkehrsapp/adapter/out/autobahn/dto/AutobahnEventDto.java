@@ -5,9 +5,13 @@ import lombok.Setter;
 
 import java.util.List;
 
+/**
+ * Represents a traffic event returned by the Autobahn API.
+ * Contains the common fields shared by warnings, roadworks and closures.
+ */
 @Getter
 @Setter
-public abstract class BaseAutobahnDto {
+public class AutobahnEventDto {
     private String identifier;
     private String title;
     private String subtitle;

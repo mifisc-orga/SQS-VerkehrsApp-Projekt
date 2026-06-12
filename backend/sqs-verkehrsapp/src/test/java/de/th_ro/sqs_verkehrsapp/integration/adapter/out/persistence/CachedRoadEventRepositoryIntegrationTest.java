@@ -13,36 +13,19 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
-public class CachedRoadEventRepositoryIntegrationTest {
+class CachedRoadEventRepositoryIntegrationTest {
 
-    @Autowired
     private CachedRoadEventRepository repository;
 
+    @Autowired
+    CachedRoadEventRepositoryIntegrationTest(CachedRoadEventRepository repository) {
+        this.repository = repository;
+    }
+
     @Test
-    void findByRoadId_shouldReturnOnlyEventsForGivenRoadId() {
-        CachedRoadEventEntity eventA1 = new CachedRoadEventEntity(
-                "A1",
-                "event-1",
-                "Stau",
-                "5 km",
-                "WARNING",
-                52.1,
-                13.4,
-                LocalDateTime.now()
-        );
+    void findByRoadIdShouldReturnOnlyEventsForGivenRoadId() {
 
-        CachedRoadEventEntity eventA2 = new CachedRoadEventEntity(
-                "A2",
-                "event-2",
-                "Baustelle",
-                "gesperrt",
-                "ROADWORK",
-                53.1,
-                14.4,
-                LocalDateTime.now()
-        );
-
-        repository.saveAll(List.of(eventA1, eventA2));
+        repository.saveAll(createTestEntities());
 
         List<CachedRoadEventEntity> result = repository.findByRoadId("A1");
 
@@ -52,33 +35,37 @@ public class CachedRoadEventRepositoryIntegrationTest {
     }
 
     @Test
-    void deleteByRoadId_shouldDeleteOnlyEventsForGivenRoadId() {
-        repository.saveAll(List.of(
-                new CachedRoadEventEntity(
-                        "A1",
-                        "event-1",
-                        "Stau",
-                        "5 km",
-                        "WARNING",
-                        52.1,
-                        13.4,
-                        LocalDateTime.now()
-                ),
-                new CachedRoadEventEntity(
-                        "A2",
-                        "event-2",
-                        "Baustelle",
-                        "gesperrt",
-                        "ROADWORK",
-                        53.1,
-                        14.4,
-                        LocalDateTime.now()
-                )
-        ));
+    void deleteByRoadIdShouldDeleteOnlyEventsForGivenRoadId() {
+        repository.saveAll(createTestEntities());
 
         repository.deleteByRoadId("A1");
 
         assertTrue(repository.findByRoadId("A1").isEmpty());
         assertEquals(1, repository.findByRoadId("A2").size());
+    }
+
+    List<CachedRoadEventEntity> createTestEntities() {
+        CachedRoadEventEntity eventA1 = CachedRoadEventEntity.builder()
+                .roadId("A1")
+                .eventId("event-1")
+                .title("Stau")
+                .subtitle("5 km")
+                .type("WARNING")
+                .latitude(52.1)
+                .longitude(13.4)
+                .cachedAt(LocalDateTime.now())
+                .build();
+
+        CachedRoadEventEntity eventA2 = CachedRoadEventEntity.builder()
+                .roadId("A2")
+                .eventId("event-2")
+                .title("Baustelle")
+                .subtitle("gesperrt")
+                .type("ROADWORK")
+                .latitude(53.1)
+                .longitude(14.4)
+                .cachedAt(LocalDateTime.now())
+                .build();
+        return List.of(eventA1, eventA2);
     }
 }

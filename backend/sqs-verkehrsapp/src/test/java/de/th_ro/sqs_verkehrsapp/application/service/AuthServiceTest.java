@@ -1,8 +1,9 @@
 package de.th_ro.sqs_verkehrsapp.application.service;
 
 import de.th_ro.sqs_verkehrsapp.application.port.out.UserPort;
+import de.th_ro.sqs_verkehrsapp.domain.exception.UserAlreadyExistsException;
 import de.th_ro.sqs_verkehrsapp.domain.model.AppUser;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -15,10 +16,12 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class AuthServiceTest {
+class AuthServiceTest {
 
     @Mock
     private UserPort userPort;
@@ -30,7 +33,7 @@ public class AuthServiceTest {
     private AuthService authService;
 
     @Test
-    public void shouldRegisterUser() {
+    void shouldRegisterUser() {
         when(userPort.existsByUsername("testuser"))
                 .thenReturn(false);
 
@@ -50,19 +53,19 @@ public class AuthServiceTest {
     }
 
     @Test
-    public void shouldNotRegisterExistingUsername() {
+    void shouldNotRegisterExistingUsername() {
         when(userPort.existsByUsername("testuser"))
                 .thenReturn(true);
 
         assertThatThrownBy(() -> authService.register("testuser", "test123"))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(UserAlreadyExistsException.class)
                 .hasMessageContaining("bereits vergeben");
 
         verify(userPort, never()).save(any());
     }
 
     @Test
-    public void shouldLoginUser() {
+    void shouldLoginUser() {
         AppUser user = AppUser.builder()
                 .id(UUID.randomUUID())
                 .username("testuser")
@@ -81,7 +84,7 @@ public class AuthServiceTest {
     }
 
     @Test
-    public void shouldRejectWrongPassword() {
+    void shouldRejectWrongPassword() {
         AppUser user = AppUser.builder()
                 .id(UUID.randomUUID())
                 .username("testuser")
