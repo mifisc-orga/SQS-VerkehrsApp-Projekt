@@ -1,12 +1,17 @@
 package de.th_ro.sqs_verkehrsapp.domain.model;
 
 
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.util.UUID;
-
+/**
+ * Domain model representing an application user.
+ * <p>
+ * Contains the user information required for authentication
+ * and user management within the application.
+ */
 @Getter
 @Builder
 @AllArgsConstructor

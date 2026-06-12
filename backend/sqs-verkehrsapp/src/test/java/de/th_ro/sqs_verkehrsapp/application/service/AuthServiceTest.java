@@ -2,7 +2,7 @@ package de.th_ro.sqs_verkehrsapp.application.service;
 
 import de.th_ro.sqs_verkehrsapp.application.port.out.UserPort;
 import de.th_ro.sqs_verkehrsapp.domain.model.AppUser;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -18,7 +18,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class AuthServiceTest {
+class AuthServiceTest {
 
     @Mock
     private UserPort userPort;
@@ -30,7 +30,7 @@ public class AuthServiceTest {
     private AuthService authService;
 
     @Test
-    public void shouldRegisterUser() {
+    void shouldRegisterUser() {
         when(userPort.existsByUsername("testuser"))
                 .thenReturn(false);
 
@@ -50,7 +50,7 @@ public class AuthServiceTest {
     }
 
     @Test
-    public void shouldNotRegisterExistingUsername() {
+    void shouldNotRegisterExistingUsername() {
         when(userPort.existsByUsername("testuser"))
                 .thenReturn(true);
 
@@ -62,7 +62,7 @@ public class AuthServiceTest {
     }
 
     @Test
-    public void shouldLoginUser() {
+    void shouldLoginUser() {
         AppUser user = AppUser.builder()
                 .id(UUID.randomUUID())
                 .username("testuser")
@@ -81,7 +81,7 @@ public class AuthServiceTest {
     }
 
     @Test
-    public void shouldRejectWrongPassword() {
+    void shouldRejectWrongPassword() {
         AppUser user = AppUser.builder()
                 .id(UUID.randomUUID())
                 .username("testuser")

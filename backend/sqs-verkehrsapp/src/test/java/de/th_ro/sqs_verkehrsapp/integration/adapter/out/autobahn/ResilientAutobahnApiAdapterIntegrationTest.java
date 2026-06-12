@@ -21,7 +21,7 @@ import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
-public class ResilientAutobahnApiAdapterIntegrationTest {
+class ResilientAutobahnApiAdapterIntegrationTest {
 
     @MockitoBean
     private AutobahnApiClient autobahnApiClient;

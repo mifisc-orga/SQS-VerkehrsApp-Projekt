@@ -1,16 +1,23 @@
 package de.th_ro.sqs_verkehrsapp.adapter.out.autobahn.dto.wrapper;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import de.th_ro.sqs_verkehrsapp.adapter.out.autobahn.dto.WarningDto;
+import de.th_ro.sqs_verkehrsapp.adapter.out.autobahn.dto.AutobahnEventDto;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
 
+/**
+ * Response wrapper containing road warning events returned by the
+ * Autobahn API.
+ */
 @Getter
 @Setter
 public class WarningResponse {
 
+    /**
+     * List of road warning events.
+     */
     @JsonProperty("warning")
-    private List<WarningDto> warnings;
+    private List<AutobahnEventDto> warnings;
 }

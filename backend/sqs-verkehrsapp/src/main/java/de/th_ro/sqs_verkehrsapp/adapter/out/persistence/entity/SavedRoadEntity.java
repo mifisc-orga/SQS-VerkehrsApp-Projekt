@@ -2,10 +2,16 @@ package de.th_ro.sqs_verkehrsapp.adapter.out.persistence.entity;
 
 
 import jakarta.persistence.*;
+import java.util.UUID;
 import lombok.*;
 
-import java.util.UUID;
-
+/**
+ * JPA entity for motorways saved by a user.
+ * <p>
+ * Each instance associates a user with a motorway that has been saved
+ * as a favorite. The unique constraint ensures that a motorway can only
+ * be saved once per user.
+ */
 @Entity
 @Table(
         name = "saved_roads",

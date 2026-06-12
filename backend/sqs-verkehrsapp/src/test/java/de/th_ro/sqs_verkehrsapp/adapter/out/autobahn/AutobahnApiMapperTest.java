@@ -1,9 +1,7 @@
 package de.th_ro.sqs_verkehrsapp.adapter.out.autobahn;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
-import de.th_ro.sqs_verkehrsapp.adapter.out.autobahn.dto.*;
+import de.th_ro.sqs_verkehrsapp.adapter.out.autobahn.dto.AutobahnEventDto;
+import de.th_ro.sqs_verkehrsapp.adapter.out.autobahn.dto.CoordinateDto;
 import de.th_ro.sqs_verkehrsapp.adapter.out.autobahn.dto.wrapper.ClosureResponse;
 import de.th_ro.sqs_verkehrsapp.adapter.out.autobahn.dto.wrapper.RoadworksResponse;
 import de.th_ro.sqs_verkehrsapp.adapter.out.autobahn.dto.wrapper.WarningResponse;
@@ -11,8 +9,12 @@ import de.th_ro.sqs_verkehrsapp.domain.logic.RiskScoreCalculator;
 import de.th_ro.sqs_verkehrsapp.domain.model.RiskLevel;
 import de.th_ro.sqs_verkehrsapp.domain.model.RoadEvent;
 import de.th_ro.sqs_verkehrsapp.domain.model.RoadEventType;
-import java.util.List;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class AutobahnApiMapperTest {
 
@@ -21,7 +23,7 @@ class AutobahnApiMapperTest {
 
     @Test
     void shouldMapWarnings() {
-        WarningDto dto = new WarningDto();
+        AutobahnEventDto dto = new AutobahnEventDto();
         dto.setIdentifier("w1");
         dto.setTitle("Warning title");
         dto.setSubtitle("Warning subtitle");
@@ -50,7 +52,7 @@ class AutobahnApiMapperTest {
 
     @Test
     void shouldMapRoadworks() {
-        RoadworkDto dto = new RoadworkDto();
+        AutobahnEventDto dto = new AutobahnEventDto();
         dto.setIdentifier("r1");
         dto.setTitle("Roadwork title");
         dto.setSubtitle("Roadwork subtitle");
@@ -74,7 +76,7 @@ class AutobahnApiMapperTest {
 
     @Test
     void shouldMapClosures() {
-        ClosureDto dto = new ClosureDto();
+        AutobahnEventDto dto = new AutobahnEventDto();
         dto.setIdentifier("c1");
         dto.setTitle("Closure title");
         dto.setSubtitle("Closure subtitle");
@@ -111,7 +113,7 @@ class AutobahnApiMapperTest {
 
     @Test
     void shouldUseZeroCoordinateWhenCoordinateIsNull() {
-        WarningDto dto = new WarningDto();
+        AutobahnEventDto dto = new AutobahnEventDto();
         dto.setIdentifier("w1");
         dto.setDescription(List.of());
 
@@ -126,7 +128,7 @@ class AutobahnApiMapperTest {
 
     @Test
     void shouldMapNullDescriptionToEmptyString() {
-        WarningDto dto = new WarningDto();
+        AutobahnEventDto dto = new AutobahnEventDto();
         dto.setIdentifier("w1");
         dto.setCoordinate(coordinate("50.0", "8.0"));
 
@@ -140,7 +142,7 @@ class AutobahnApiMapperTest {
 
     @Test
     void shouldThrowExceptionWhenCoordinateValuesAreInvalid() {
-        WarningDto dto = new WarningDto();
+        AutobahnEventDto dto = new AutobahnEventDto();
         dto.setIdentifier("w1");
         dto.setTitle("Warning title");
         dto.setSubtitle("Warning subtitle");
