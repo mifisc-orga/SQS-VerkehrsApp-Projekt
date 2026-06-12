@@ -7,6 +7,7 @@ import de.th_ro.sqs_verkehrsapp.domain.model.Coordinate;
 import de.th_ro.sqs_verkehrsapp.domain.model.RoadEvent;
 import de.th_ro.sqs_verkehrsapp.domain.model.RoadEventType;
 import de.th_ro.sqs_verkehrsapp.domain.model.TrafficEventsResult;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -187,6 +188,32 @@ class ResilientAutobahnApiAdapterTest {
 
     @Test
     void getAllTrafficEventsShouldReturnLiveEventsAndSaveAllToCache() {
+        Events roadEvents = getRoadEvents();
+
+        when(autobahnApiClient.getAvailableRoadIds())
+                .thenReturn(List.of("A1", "A3"));
+
+        when(autobahnApiClient.fetchTrafficEvents("A1"))
+                .thenReturn(List.of(roadEvents.eventA1()));
+
+        when(autobahnApiClient.fetchTrafficEvents("A3"))
+                .thenReturn(List.of(roadEvents.eventA3()));
+
+        TrafficEventsResult result = adapter.getAllTrafficEvents();
+
+        assertThat(result.events()).containsExactly(roadEvents.eventA1(), roadEvents.eventA3());
+        assertThat(result.live()).isTrue();
+        assertThat(result.cachedAt()).isNotNull();
+        assertThat(result.riskScore()).isEqualTo(0);
+
+        verify(autobahnCacheWriter).saveAvailableRoadIds(List.of("A1", "A3"));
+        verify(autobahnCacheWriter).saveTrafficEvents("A1", List.of(roadEvents.eventA1()));
+        verify(autobahnCacheWriter).saveTrafficEvents("A3", List.of(roadEvents.eventA3()));
+        verify(autobahnCacheWriter).saveTrafficEvents("ALL", List.of(roadEvents.eventA1(), roadEvents.eventA3()));
+    }
+
+    @NotNull
+    private static Events getRoadEvents() {
         RoadEvent eventA1 = new RoadEvent(
                 "id-1",
                 "A1",
@@ -208,27 +235,10 @@ class ResilientAutobahnApiAdapterTest {
                 new Coordinate(48.1, 11.5),
                 null
         );
+        return new Events(eventA1, eventA3);
+    }
 
-        when(autobahnApiClient.getAvailableRoadIds())
-                .thenReturn(List.of("A1", "A3"));
-
-        when(autobahnApiClient.fetchTrafficEvents("A1"))
-                .thenReturn(List.of(eventA1));
-
-        when(autobahnApiClient.fetchTrafficEvents("A3"))
-                .thenReturn(List.of(eventA3));
-
-        TrafficEventsResult result = adapter.getAllTrafficEvents();
-
-        assertThat(result.events()).containsExactly(eventA1, eventA3);
-        assertThat(result.live()).isTrue();
-        assertThat(result.cachedAt()).isNotNull();
-        assertThat(result.riskScore()).isEqualTo(0);
-
-        verify(autobahnCacheWriter).saveAvailableRoadIds(List.of("A1", "A3"));
-        verify(autobahnCacheWriter).saveTrafficEvents("A1", List.of(eventA1));
-        verify(autobahnCacheWriter).saveTrafficEvents("A3", List.of(eventA3));
-        verify(autobahnCacheWriter).saveTrafficEvents("ALL", List.of(eventA1, eventA3));
+    private record Events(RoadEvent eventA1, RoadEvent eventA3) {
     }
 
     @Test

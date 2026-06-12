@@ -58,58 +58,84 @@ class AuthSavedRoadIntegrationTest {
 
     @Test
     void shouldRegisterLoginSaveRoadAndGetDashboardTraffic() throws Exception {
+        String token = registerUserAndExtractToken();
 
-        String registerResponse = mockMvc.perform(post("/api/auth/register")
+        saveRoad(token, "A8");
+        assertSavedRoadExists(token, "A8");
+
+        mockTrafficEvents("A8");
+
+        assertDashboardContainsSavedRoadTraffic(token, "A8");
+
+        verify(autobahnApiPort).getTrafficEvents("A8");
+    }
+
+    private String registerUserAndExtractToken() throws Exception {
+        String response = mockMvc.perform(post("/api/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
-                                {
-                                  "username": "testuser",
-                                  "password": "test123"
-                                }
-                                """))
+                            {
+                              "username": "testuser",
+                              "password": "test123"
+                            }
+                            """))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.token").exists())
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
 
-        String token = objectMapper.readTree(registerResponse)
+        String token = objectMapper.readTree(response)
                 .get("token")
                 .asText();
 
         assertThat(token).isNotBlank();
+        return token;
+    }
 
+    private void saveRoad(String token, String roadId) throws Exception {
         mockMvc.perform(post("/api/saved-roads")
-                        .header("Authorization", "Bearer " + token)
+                        .header("Authorization", bearer(token))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
-                                {
-                                  "roadId": "A8"
-                                }
-                                """))
+                            {
+                              "roadId": "%s"
+                            }
+                            """.formatted(roadId)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.roadId").value("A8"));
+                .andExpect(jsonPath("$.roadId").value(roadId));
+    }
 
+    private void assertSavedRoadExists(String token, String roadId) throws Exception {
         mockMvc.perform(get("/api/saved-roads")
-                        .header("Authorization", "Bearer " + token))
+                        .header("Authorization", bearer(token)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].roadId").value("A8"));
+                .andExpect(jsonPath("$[0].roadId").value(roadId));
+    }
 
-        when(autobahnApiPort.getTrafficEvents("A8"))
+    private void mockTrafficEvents(String roadId) {
+        when(autobahnApiPort.getTrafficEvents(roadId))
                 .thenReturn(new TrafficEventsResult(
                         List.of(),
                         true,
                         LocalDateTime.now(),
                         0
                 ));
+    }
 
+    private void assertDashboardContainsSavedRoadTraffic(
+            String token,
+            String roadId
+    ) throws Exception {
         mockMvc.perform(get("/api/dashboard/saved-road-traffic")
-                        .header("Authorization", "Bearer " + token))
+                        .header("Authorization", bearer(token)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].roadId").value("A8"))
+                .andExpect(jsonPath("$[0].roadId").value(roadId))
                 .andExpect(jsonPath("$[0].trafficEvents").exists())
                 .andExpect(jsonPath("$[0].trafficEvents.riskScore").value(0));
+    }
 
-        verify(autobahnApiPort).getTrafficEvents("A8");
+    private String bearer(String token) {
+        return "Bearer " + token;
     }
 }

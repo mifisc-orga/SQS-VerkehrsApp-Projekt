@@ -54,66 +54,65 @@ class AutobahnApiClientTest {
 
     @Test
     void fetchTrafficEventsShouldFetchAndCombineAllEventTypes() {
+        enqueueSuccessfulEventResponses();
+
+        RoadEvent warning = roadEvent("warning-1", "Warnung", RoadEventType.WARNING);
+        RoadEvent roadwork = roadEvent("roadwork-1", "Baustelle", RoadEventType.ROADWORK);
+        RoadEvent closure = roadEvent("closure-1", "Sperrung", RoadEventType.CLOSURE);
+
+        mockMappedResponses(warning, roadwork, closure);
+
+        List<RoadEvent> result = client.fetchTrafficEvents("A1");
+
+        assertEquals(3, result.size());
+        assertThat(result).containsExactlyInAnyOrder(warning, roadwork, closure);
+    }
+
+    private void enqueueSuccessfulEventResponses() {
+        enqueueJsonResponse("""
+            {
+              "warning": []
+            }
+            """);
+
+        enqueueJsonResponse("""
+            {
+              "roadworks": []
+            }
+            """);
+
+        enqueueJsonResponse("""
+            {
+              "closure": []
+            }
+            """);
+    }
+
+    private void enqueueJsonResponse(String body) {
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(200)
-                .setBody("""
-                        {
-                          "warning": []
-                        }
-                        """)
+                .setBody(body)
                 .addHeader("Content-Type", "application/json"));
+    }
 
-        mockWebServer.enqueue(new MockResponse()
-                .setResponseCode(200)
-                .setBody("""
-                        {
-                          "roadworks": []
-                        }
-                        """)
-                .addHeader("Content-Type", "application/json"));
-
-        mockWebServer.enqueue(new MockResponse()
-                .setResponseCode(200)
-                .setBody("""
-                        {
-                          "closure": []
-                        }
-                        """)
-                .addHeader("Content-Type", "application/json"));
-
-        RoadEvent warning = new RoadEvent(
-                "warning-1",
+    private RoadEvent roadEvent(String id, String title, RoadEventType type) {
+        return new RoadEvent(
+                id,
                 "A1",
-                "Warnung",
-                "Achtung",
+                title,
+                title,
                 "",
-                RoadEventType.WARNING,
+                type,
                 new Coordinate(52.1, 13.4),
                 null
         );
+    }
 
-        RoadEvent roadwork = new RoadEvent(
-                "roadwork-1",
-                "A1",
-                "Baustelle",
-                "Baustelle voraus",
-                "",
-                RoadEventType.ROADWORK,
-                new Coordinate(52.2, 13.5),
-                null
-        );
-
-        RoadEvent closure = new RoadEvent(
-                "closure-1",
-                "A1",
-                "Sperrung",
-                "gesperrt",
-                "",
-                RoadEventType.CLOSURE,
-                new Coordinate(52.3, 13.6),
-                null
-        );
-
+    private void mockMappedResponses(
+            RoadEvent warning,
+            RoadEvent roadwork,
+            RoadEvent closure
+    ) {
         when(mapper.mapWarnings(eq("A1"), any(WarningResponse.class)))
                 .thenReturn(List.of(warning));
 
@@ -122,10 +121,5 @@ class AutobahnApiClientTest {
 
         when(mapper.mapClosures(eq("A1"), any(ClosureResponse.class)))
                 .thenReturn(List.of(closure));
-
-        List<RoadEvent> result = client.fetchTrafficEvents("A1");
-
-        assertEquals(3, result.size());
-        assertThat(result).containsExactlyInAnyOrder(warning, roadwork, closure);
     }
 }
