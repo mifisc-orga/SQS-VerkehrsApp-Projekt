@@ -17,13 +17,13 @@ Die dargestellten Szenarien zeigen die Zusammenarbeit der wichtigsten Architektu
 
 ---
 
-# 6.2 Benutzerregistrierung
+## 6.2 Benutzerregistrierung
 
-## Ziel
+### Ziel
 
 Ein neuer Benutzer registriert sich im System.
 
-## Ablauf
+### Ablauf
 
 ```mermaid id="fslrmi"
 sequenceDiagram
@@ -69,13 +69,13 @@ AuthController-->>User: JWT Token
 
 ---
 
-# 6.3 Benutzeranmeldung
+## 6.3 Benutzeranmeldung
 
-## Ziel
+### Ziel
 
 Ein Benutzer authentifiziert sich und erhält ein JWT.
 
-## Ablauf
+### Ablauf
 
 ```mermaid id="rl3lmo"
 sequenceDiagram
@@ -106,13 +106,13 @@ AuthController-->>User: JWT
 
 ---
 
-# 6.4 Authentifizierte Anfrage
+## 6.4 Authentifizierte Anfrage
 
-## Ziel
+### Ziel
 
 Ein Benutzer ruft eine geschützte Ressource auf.
 
-## Ablauf
+### Ablauf
 
 ```mermaid id="1ih62d"
 sequenceDiagram
@@ -143,13 +143,13 @@ JwtAuthenticationFilter->>Controller: Request weiterleiten
 
 ---
 
-# 6.5 Verkehrsdaten für eine Autobahn abrufen
+## 6.5 Verkehrsdaten für eine Autobahn abrufen
 
-## Ziel
+### Ziel
 
 Abruf aller Verkehrsmeldungen für eine bestimmte Autobahn.
 
-## Ablauf
+### Ablauf
 
 ```mermaid id="qzyo3v"
 sequenceDiagram
@@ -193,13 +193,13 @@ TrafficController-->>User: JSON Response
 
 ---
 
-# 6.6 Risikobewertung von Verkehrsdaten
+## 6.6 Risikobewertung von Verkehrsdaten
 
-## Ziel
+### Ziel
 
 Berechnung eines normierten Risikoscores.
 
-## Ablauf
+### Ablauf
 
 ```mermaid id="9zck0r"
 sequenceDiagram
@@ -220,13 +220,13 @@ RiskScoreCalculator-->>TrafficService: RiskScore
 
 ---
 
-# 6.7 Dashboard-Abfrage
+## 6.7 Dashboard-Abfrage
 
-## Ziel
+### Ziel
 
 Anzeige aller gespeicherten Autobahnen eines Benutzers inklusive Verkehrsdaten.
 
-## Ablauf
+### Ablauf
 
 ```mermaid id="62m2va"
 sequenceDiagram
@@ -261,13 +261,13 @@ DashboardController-->>User: Dashboard Daten
 
 ---
 
-# 6.8 Autobahn speichern
+## 6.8 Autobahn speichern
 
-## Ziel
+### Ziel
 
 Ein Benutzer speichert eine Autobahn als Favorit.
 
-## Ablauf
+### Ablauf
 
 ```mermaid id="ez80gi"
 sequenceDiagram
@@ -297,13 +297,13 @@ SavedRoadController-->>User: 201 Created
 
 ---
 
-# 6.9 Cache-Aktualisierung
+## 6.9 Cache-Aktualisierung
 
-## Ziel
+### Ziel
 
 Speicherung neu geladener Verkehrsdaten.
 
-## Ablauf
+### Ablauf
 
 ```mermaid id="zwr0iv"
 sequenceDiagram
@@ -323,13 +323,13 @@ Die Speicherung erfolgt asynchron und beeinflusst die Antwortzeit der Benutzeran
 
 ---
 
-# 6.10 Ausfallszenario – API nicht erreichbar
+## 6.10 Ausfallszenario – API nicht erreichbar
 
-## Ziel
+### Ziel
 
 Bereitstellung von Verkehrsdaten trotz Ausfall der externen API.
 
-## Ablauf
+### Ablauf
 
 ```mermaid id="v68u56"
 sequenceDiagram
@@ -362,13 +362,13 @@ end
 
 ---
 
-# 6.11 Ausfallszenario – Verfügbare Autobahnen
+## 6.11 Ausfallszenario – Verfügbare Autobahnen
 
-## Ziel
+### Ziel
 
 Bereitstellung der Autobahnliste bei API-Ausfall.
 
-## Ablauf
+### Ablauf
 
 ```mermaid id="kysljn"
 sequenceDiagram
@@ -390,13 +390,13 @@ ResilientAdapter-->>Client: Cached Roads
 
 ---
 
-# 6.12 Fehlerbehandlung
+## 6.12 Fehlerbehandlung
 
-## Ziel
+### Ziel
 
 Einheitliche Fehlerkommunikation.
 
-## Ablauf
+### Ablauf
 
 ```mermaid id="g8dlzt"
 sequenceDiagram
@@ -415,7 +415,7 @@ GlobalExceptionHandler-->>Client: ApiErrorResponse
 
 ---
 
-# 6.13 Laufzeitverhalten im Überblick
+## 6.13 Laufzeitverhalten im Überblick
 
 ```mermaid id="gtub9m"
 flowchart LR
@@ -439,7 +439,7 @@ Adapter --> Cache
 
 ---
 
-# 6.14 Zusammenfassung
+## 6.14 Zusammenfassung
 
 Die Laufzeitsicht zeigt die wichtigsten Interaktionen innerhalb der Anwendung.
 

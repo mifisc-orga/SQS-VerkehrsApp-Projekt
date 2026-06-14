@@ -19,9 +19,9 @@ Die wichtigsten querschnittlichen Konzepte der SQS Verkehrsapp sind:
 
 ---
 
-# 8.2 Sicherheitskonzept
+## 8.2 Sicherheitskonzept
 
-## Zielsetzung
+### Zielsetzung
 
 Die Anwendung schützt benutzerbezogene Funktionen vor unbefugtem Zugriff.
 
@@ -34,7 +34,7 @@ Dabei gelten folgende Anforderungen:
 
 ---
 
-## Sicherheitsarchitektur
+### Sicherheitsarchitektur
 
 ```mermaid id="p4s7z5"
 flowchart LR
@@ -52,11 +52,11 @@ JwtAuthenticationFilter --> SecurityContext
 
 ---
 
-## Passwortspeicherung
+### Passwortspeicherung
 
 Passwörter werden niemals im Klartext gespeichert.
 
-### Verfahren
+#### Verfahren
 
 ```text id="k7cf3v"
 BCrypt
@@ -70,11 +70,11 @@ Eigenschaften:
 
 ---
 
-## Autorisierung
+### Autorisierung
 
 Geschützte Endpunkte erfordern ein gültiges JWT.
 
-### Öffentliche Endpunkte
+#### Öffentliche Endpunkte
 
 ```text id="4kw5cg"
 /api/auth/**
@@ -82,7 +82,7 @@ Geschützte Endpunkte erfordern ein gültiges JWT.
 /actuator/**
 ```
 
-### Geschützte Endpunkte
+#### Geschützte Endpunkte
 
 ```text id="yn3xqs"
 /api/dashboard/**
@@ -91,13 +91,13 @@ Geschützte Endpunkte erfordern ein gültiges JWT.
 
 ---
 
-# 8.3 Authentifizierungskonzept
+## 8.3 Authentifizierungskonzept
 
-## JWT-basierte Authentifizierung
+### JWT-basierte Authentifizierung
 
 Die Anwendung verwendet JSON Web Tokens (JWT).
 
-### Ablauf
+#### Ablauf
 
 ```mermaid id="ng1u3d"
 sequenceDiagram
@@ -119,7 +119,7 @@ AuthController-->>User: JWT
 
 ---
 
-## Tokeninhalt
+### Tokeninhalt
 
 Das JWT enthält:
 
@@ -132,7 +132,7 @@ expiration
 
 ---
 
-## Vorteile
+### Vorteile
 
 * Stateless Authentication
 * Horizontale Skalierbarkeit
@@ -140,15 +140,15 @@ expiration
 
 ---
 
-# 8.4 Fehlerbehandlung
+## 8.4 Fehlerbehandlung
 
-## Zielsetzung
+### Zielsetzung
 
 Fehler sollen konsistent behandelt und für Clients verständlich aufbereitet werden.
 
 ---
 
-## Architektur
+### Architektur
 
 ```mermaid id="h7gw1o"
 flowchart LR
@@ -160,9 +160,9 @@ GlobalExceptionHandler --> ApiErrorResponse
 
 ---
 
-## Fachliche Ausnahmen
+### Fachliche Ausnahmen
 
-### UserException
+#### UserException
 
 Wird für benutzerbezogene Fehler verwendet.
 
@@ -173,13 +173,13 @@ Beispiele:
 
 ---
 
-### ExternalTrafficApiException
+#### ExternalTrafficApiException
 
 Fehler bei externer API-Kommunikation.
 
 ---
 
-### TrafficDataUnavailableException
+#### TrafficDataUnavailableException
 
 Fehler beim Zugriff auf Verkehrsdaten.
 
@@ -190,15 +190,15 @@ Tritt auf wenn:
 
 ---
 
-# 8.5 Persistenzkonzept
+## 8.5 Persistenzkonzept
 
-## Zielsetzung
+### Zielsetzung
 
 Persistenzzugriffe sollen von der Fachlogik entkoppelt werden.
 
 ---
 
-## Umsetzung
+### Umsetzung
 
 ```mermaid id="5z6evf"
 flowchart LR
@@ -214,7 +214,7 @@ Repository --> Database
 
 ---
 
-## Repositories
+### Repositories
 
 ```text id="nmzrl7"
 UserRepository
@@ -225,7 +225,7 @@ AvailableRoadRepository
 
 ---
 
-## Vorteile
+### Vorteile
 
 * Trennung von Fachlogik und Infrastruktur
 * Testbarkeit
@@ -233,17 +233,17 @@ AvailableRoadRepository
 
 ---
 
-# 8.6 Caching-Konzept
+## 8.6 Caching-Konzept
 
-## Zielsetzung
+### Zielsetzung
 
 Erhöhung der Verfügbarkeit und Performance.
 
 ---
 
-## Gespeicherte Daten
+### Gespeicherte Daten
 
-### Verkehrsdaten
+#### Verkehrsdaten
 
 ```text id="8v6o0h"
 RoadEvent
@@ -252,7 +252,7 @@ TrafficEventsResult
 
 ---
 
-### Verfügbare Autobahnen
+#### Verfügbare Autobahnen
 
 ```text id="sws3bz"
 AvailableRoads
@@ -260,7 +260,7 @@ AvailableRoads
 
 ---
 
-## Cache-Struktur
+### Cache-Struktur
 
 ```mermaid id="jlwmby"
 flowchart LR
@@ -280,7 +280,7 @@ Cache --> Backend
 
 ---
 
-## Cache-Fallback
+### Cache-Fallback
 
 Bei Ausfall der API:
 
@@ -290,48 +290,48 @@ Bei Ausfall der API:
 
 ---
 
-## Asynchrones Schreiben
+### Asynchrones Schreiben
 
 Cache-Aktualisierungen erfolgen asynchron.
 
-### Vorteile
+#### Vorteile
 
 * geringere Antwortzeiten
 * Entkopplung der Verarbeitung
 
 ---
 
-# 8.7 Resilience-Konzept
+## 8.7 Resilience-Konzept
 
-## Zielsetzung
+### Zielsetzung
 
 Vermeidung von Totalausfällen bei externen Störungen.
 
 ---
 
-## Retry
+### Retry
 
 Fehlgeschlagene Requests werden automatisch wiederholt.
 
-### Nutzen
+#### Nutzen
 
 * Behandlung temporärer Fehler
 * Verbesserung der Verfügbarkeit
 
 ---
 
-## Circuit Breaker
+### Circuit Breaker
 
 Verhindert wiederholte Aufrufe eines fehlerhaften Systems.
 
-### Nutzen
+#### Nutzen
 
 * Schutz externer Systeme
 * schnellere Fehlerreaktion
 
 ---
 
-## Fallback
+### Fallback
 
 Alternative Datenquelle:
 
@@ -341,7 +341,7 @@ Lokaler Datenbank-Cache
 
 ---
 
-## Resilience-Architektur
+### Resilience-Architektur
 
 ```mermaid id="x5uh4q"
 flowchart LR
@@ -371,15 +371,15 @@ CircuitBreaker --> Cache
 
 ---
 
-# 8.8 Mapping-Konzept
+## 8.8 Mapping-Konzept
 
-## Zielsetzung
+### Zielsetzung
 
 Entkopplung externer Datenstrukturen von der Domäne.
 
 ---
 
-## Architektur
+### Architektur
 
 ```mermaid id="9vl1dl"
 flowchart LR
@@ -389,7 +389,7 @@ DTO --> Mapper --> Domain
 
 ---
 
-## Mapper
+### Mapper
 
 ```text id="aw1nmp"
 AutobahnApiMapper
@@ -397,7 +397,7 @@ AutobahnApiMapper
 
 ---
 
-## Vorteile
+### Vorteile
 
 * Schutz vor API-Änderungen
 * klare Verantwortlichkeiten
@@ -405,15 +405,15 @@ AutobahnApiMapper
 
 ---
 
-# 8.9 Domänenmodellierung
+## 8.9 Domänenmodellierung
 
-## Grundprinzip
+### Grundprinzip
 
 Die Fachlogik wird ausschließlich innerhalb der Domäne modelliert.
 
 ---
 
-## Domänenobjekte
+### Domänenobjekte
 
 ```text id="i1n6d9"
 AppUser
@@ -426,7 +426,7 @@ Coordinate
 
 ---
 
-## Domänenlogik
+### Domänenlogik
 
 ```text id="2dfdlt"
 RiskScoreCalculator
@@ -434,9 +434,9 @@ RiskScoreCalculator
 
 ---
 
-## Risikobewertung
+### Risikobewertung
 
-### Risikostufen
+#### Risikostufen
 
 ```text id="yksl7z"
 LOW
@@ -446,7 +446,7 @@ HIGH
 
 ---
 
-### Ereignistypen
+#### Ereignistypen
 
 ```text id="wy1u5x"
 WARNING
@@ -456,17 +456,17 @@ CLOSURE
 
 ---
 
-# 8.10 Konfigurationskonzept
+## 8.10 Konfigurationskonzept
 
-## Zielsetzung
+### Zielsetzung
 
 Trennung von Konfiguration und Anwendungscode.
 
 ---
 
-## Externe Konfiguration
+### Externe Konfiguration
 
-### Autobahn API
+#### Autobahn API
 
 ```text id="1mr1dr"
 autobahn.api.baseUrl
@@ -474,7 +474,7 @@ autobahn.api.baseUrl
 
 ---
 
-## Vorteile
+### Vorteile
 
 * flexible Deployment-Konfiguration
 * unterschiedliche Umgebungen
@@ -482,17 +482,17 @@ autobahn.api.baseUrl
 
 ---
 
-# 8.11 Logging-Konzept
+## 8.11 Logging-Konzept
 
-## Zielsetzung
+### Zielsetzung
 
 Nachvollziehbarkeit technischer Abläufe.
 
 ---
 
-## Typische Log-Ereignisse
+### Typische Log-Ereignisse
 
-### API-Kommunikation
+#### API-Kommunikation
 
 ```text id="vxjntf"
 Autobahn API Requests
@@ -501,7 +501,7 @@ Autobahn API Fehler
 
 ---
 
-### Sicherheit
+#### Sicherheit
 
 ```text id="s3yq7f"
 Login
@@ -511,7 +511,7 @@ Authentifizierungsfehler
 
 ---
 
-### Persistenz
+#### Persistenz
 
 ```text id="e3hf8s"
 Datenbankzugriffe
@@ -520,13 +520,13 @@ Cache-Aktualisierung
 
 ---
 
-# 8.12 Monitoring-Konzept
+## 8.12 Monitoring-Konzept
 
-## Actuator
+### Actuator
 
 Zur Überwachung der Anwendung werden Spring-Boot-Actuator-Endpunkte verwendet.
 
-### Mögliche Informationen
+#### Mögliche Informationen
 
 ```text id="x7jlwm"
 Health
@@ -536,7 +536,7 @@ Info
 
 ---
 
-## Gesundheitszustand
+### Gesundheitszustand
 
 Wichtige Komponenten:
 
@@ -550,11 +550,11 @@ Wichtige Komponenten:
 
 Zur Sicherstellung der Softwarequalität wird eine mehrstufige Teststrategie eingesetzt.
 
-### Unit Tests
+#### Unit Tests
 
 Unit Tests prüfen einzelne Komponenten isoliert.
 
-#### Controller Tests
+##### Controller Tests
 
 * AuthControllerTest
 * DashboardControllerTest
@@ -562,14 +562,14 @@ Unit Tests prüfen einzelne Komponenten isoliert.
 * SavedRoadControllerTest
 * TrafficControllerTest
 
-#### Service Tests
+##### Service Tests
 
 * AuthServiceTest
 * DashboardTrafficServiceTest
 * SavedRoadServiceTest
 * TrafficServiceTest
 
-#### Adapter Tests
+##### Adapter Tests
 
 * AutobahnApiClientTest
 * AutobahnApiMapperTest
@@ -580,54 +580,54 @@ Unit Tests prüfen einzelne Komponenten isoliert.
 * SavedRoadAdapterTest
 * UserAdapterTest
 
-#### Domänenlogik
+##### Domänenlogik
 
 * RiskScoreCalculatorTest
 
-#### Exception Tests
+##### Exception Tests
 
 * ExternalTrafficApiExceptionTest
 * TrafficDataUnavailableExceptionTest
 * UserAlreadyExistsExceptionTest
 
-### Integrationstests
+#### Integrationstests
 
 Integrationstests prüfen das Zusammenspiel mehrerer Komponenten innerhalb des Spring-Kontexts sowie die korrekte Integration von REST-Schnittstellen, Security, Persistenz und externen API-Adaptern.
 
-#### Controller- und Web-Integration
+##### Controller- und Web-Integration
 
 - TrafficControllerIntegrationTest
 - PublicTrafficEndpointIntegrationTest
 - AuthSavedRoadIntegrationTest
 
-#### Security-Integration
+##### Security-Integration
 
 - SecurityPenetrationIntegrationTest
 
-#### Externe API-Integration
+##### Externe API-Integration
 
 - AutobahnApiClientIntegrationTest
 - ResilientAutobahnApiAdapterIntegrationTest
 
-#### Persistenz-Integration
+##### Persistenz-Integration
 
 - CachedRoadEventRepositoryIntegrationTest
 - SavedRoadRepositoryIntegrationTest
 
-#### Anwendungskontext
+##### Anwendungskontext
 
 - ApplicationContextIntegrationTest
 
-### Ziel der Integrationstests
+#### Ziel der Integrationstests
 
 Die Integrationstests stellen sicher, dass zentrale Systemabläufe nicht nur isoliert, sondern im Zusammenspiel der Spring-Komponenten korrekt funktionieren.
 
 
-### Konfigurationstests
+#### Konfigurationstests
 
 * WebClientConfigTest
 
-### Architekturtests
+#### Architekturtests
 
 Zur Sicherstellung der Architekturkonformität wird ein dedizierter Architekturtest verwendet:
 
@@ -639,7 +639,7 @@ Geprüft werden unter anderem:
 * Schichtentrennung
 * Zulässige Paketabhängigkeiten
 
-### Eingesetzte Werkzeuge
+#### Eingesetzte Werkzeuge
 
 * JUnit 5
 * Mockito
@@ -649,7 +649,7 @@ Geprüft werden unter anderem:
 
 ---
 
-# 8.14 Zusammenfassung
+## 8.14 Zusammenfassung
 
 Die querschnittlichen Konzepte bilden das technische Fundament der Anwendung.
 
@@ -665,11 +665,11 @@ Besonders wichtige Konzepte sind:
 
 Diese Konzepte unterstützen die Erreichung der definierten Qualitätsziele hinsichtlich Wartbarkeit, Sicherheit, Testbarkeit und Verfügbarkeit.
 
-## 8.15 Kontinuierliche Softwarequalitätsüberwachung
+### 8.15 Kontinuierliche Softwarequalitätsüberwachung
 
 Zur kontinuierlichen Überwachung der Softwarequalität wurde Teamscale in den Entwicklungsprozess integriert.
 
-### Überwachte Qualitätsmerkmale
+#### Überwachte Qualitätsmerkmale
 
 Teamscale analysiert automatisiert:
 
@@ -680,11 +680,11 @@ Teamscale analysiert automatisiert:
 * Architekturverstöße
 * Technische Schulden
 
-### Integration
+#### Integration
 
 Die Analyse erfolgt automatisiert über die Build- bzw. CI-Pipeline.
 
-### Nutzen
+#### Nutzen
 
 * Frühe Erkennung von Qualitätsproblemen
 * Transparente Qualitätskennzahlen

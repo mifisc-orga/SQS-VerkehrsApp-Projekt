@@ -8,9 +8,9 @@ Die SQS Verkehrsapp ist als Spring-Boot-Anwendung konzipiert und wird als eigens
 
 ---
 
-# 7.2 Infrastrukturübersicht
+## 7.2 Infrastrukturübersicht
 
-## Deployment-Diagramm
+### Deployment-Diagramm
 
 ```mermaid id="0oc1nr"
 flowchart TB
@@ -40,7 +40,7 @@ SpringBoot -->|HTTP / JSON| AutobahnAPI
 
 ---
 
-## Hauptknoten
+### Hauptknoten
 
 | Knoten       | Beschreibung                     |
 | ------------ | -------------------------------- |
@@ -51,9 +51,9 @@ SpringBoot -->|HTTP / JSON| AutobahnAPI
 
 ---
 
-# 7.3 Client-Knoten
+## 7.3 Client-Knoten
 
-## Browser / Frontend
+### Browser / Frontend
 
 Der Client dient ausschließlich der Interaktion mit der REST-API.
 
@@ -74,9 +74,9 @@ JSON
 
 ---
 
-# 7.4 Backend-Knoten
+## 7.4 Backend-Knoten
 
-## SQS Verkehrsapp
+### SQS Verkehrsapp
 
 Die zentrale Anwendung wird als Spring-Boot-Service betrieben.
 
@@ -94,7 +94,7 @@ Caching
 
 ---
 
-## Interne Struktur
+### Interne Struktur
 
 ```mermaid id="dhd0kw"
 flowchart TB
@@ -120,7 +120,7 @@ Ports --> Adapters
 
 ---
 
-## Aufgaben
+### Aufgaben
 
 ### Fachlogik
 
@@ -142,9 +142,9 @@ Ports --> Adapters
 
 ---
 
-# 7.5 Datenbankknoten
+## 7.5 Datenbankknoten
 
-## Überblick
+### Überblick
 
 Die Datenbank dient sowohl der Persistenz fachlicher Daten als auch der Speicherung von Cache-Informationen.
 
@@ -159,7 +159,7 @@ Autobahn-Cache
 
 ---
 
-## Datenmodell
+### Datenmodell
 
 ```mermaid id="c8vxzv"
 erDiagram
@@ -194,7 +194,7 @@ APP_USERS ||--o{ SAVED_ROADS : owns
 
 ---
 
-## Tabelle APP_USERS
+### Tabelle APP_USERS
 
 Speichert Benutzerinformationen.
 
@@ -208,7 +208,7 @@ password_hash
 
 ---
 
-## Tabelle SAVED_ROADS
+### Tabelle SAVED_ROADS
 
 Speichert Favoriten eines Benutzers.
 
@@ -230,7 +230,7 @@ Eine Autobahn kann nur einmal pro Benutzer gespeichert werden.
 
 ---
 
-## Tabelle CACHED_ROAD_EVENT
+### Tabelle CACHED_ROAD_EVENT
 
 Speichert Verkehrsmeldungen für den Fallback-Betrieb.
 
@@ -247,7 +247,7 @@ cached_at
 
 ---
 
-## Tabelle AVAILABLE_ROADS
+### Tabelle AVAILABLE_ROADS
 
 Speichert verfügbare Autobahnen.
 
@@ -259,9 +259,9 @@ road_id
 
 ---
 
-# 7.6 Externer Systemknoten
+## 7.6 Externer Systemknoten
 
-## Autobahn API
+### Autobahn API
 
 Die Autobahn API stellt die primäre Quelle für Verkehrsinformationen dar.
 
@@ -274,7 +274,7 @@ Die Autobahn API stellt die primäre Quelle für Verkehrsinformationen dar.
 
 ---
 
-## Kommunikationsweg
+### Kommunikationsweg
 
 ```mermaid id="x6h0c2"
 sequenceDiagram
@@ -290,7 +290,7 @@ AutobahnAPI-->>Backend: JSON Response
 
 ---
 
-## Datenformat
+### Datenformat
 
 ```text id="gs1wnu"
 JSON
@@ -298,7 +298,7 @@ JSON
 
 ---
 
-## HTTP-Client
+### HTTP-Client
 
 Für die Kommunikation wird verwendet:
 
@@ -308,9 +308,9 @@ Spring WebClient
 
 ---
 
-# 7.7 Cache-Infrastruktur
+## 7.7 Cache-Infrastruktur
 
-## Ziel
+### Ziel
 
 Der Cache dient der Erhöhung der Verfügbarkeit.
 
@@ -323,7 +323,7 @@ Autobahnlisten
 
 ---
 
-## Cache-Ablauf
+### Cache-Ablauf
 
 ```mermaid id="0pdgdf"
 flowchart LR
@@ -343,7 +343,7 @@ Cache --> Backend
 
 ---
 
-## Vorteile
+### Vorteile
 
 * Ausfallsicherheit
 * Schnellere Antworten
@@ -351,9 +351,9 @@ Cache --> Backend
 
 ---
 
-# 7.8 Sicherheitsinfrastruktur
+## 7.8 Sicherheitsinfrastruktur
 
-## Authentifizierung
+### Authentifizierung
 
 JWT-basierte Authentifizierung.
 
@@ -375,7 +375,7 @@ JwtFilter --> SecurityContext
 
 ---
 
-## Sicherheitskomponenten
+### Sicherheitskomponenten
 
 ```text id="6g3twp"
 SecurityConfig
@@ -385,9 +385,9 @@ JwtService
 
 ---
 
-# 7.9 Verteilungsrelevante Qualitätsanforderungen
+## 7.9 Verteilungsrelevante Qualitätsanforderungen
 
-## Verfügbarkeit
+### Verfügbarkeit
 
 Die Anwendung muss auch bei Ausfällen der Autobahn API eingeschränkt funktionsfähig bleiben.
 
@@ -399,7 +399,7 @@ Die Anwendung muss auch bei Ausfällen der Autobahn API eingeschränkt funktions
 
 ---
 
-## Skalierbarkeit
+### Skalierbarkeit
 
 Die Anwendung verwendet:
 
@@ -411,7 +411,7 @@ Dadurch kann die Backend-Anwendung horizontal skaliert werden.
 
 ---
 
-## Sicherheit
+### Sicherheit
 
 Die Kommunikation erfolgt ausschließlich über:
 
@@ -422,9 +422,9 @@ JWT
 
 ---
 
-# 7.10 Betriebsumgebung
+## 7.10 Betriebsumgebung
 
-## Entwicklungsumgebung
+### Entwicklungsumgebung
 
 Mögliche lokale Ausführung:
 
@@ -435,7 +435,7 @@ H2
 
 ---
 
-## Testumgebung
+### Testumgebung
 
 Mögliche Testkonfiguration:
 
@@ -447,7 +447,7 @@ Mockito
 
 ---
 
-## Produktivumgebung
+### Produktivumgebung
 
 Mögliche Produktivkonfiguration:
 
@@ -459,7 +459,7 @@ HTTPS Reverse Proxy
 
 ---
 
-# 7.11 Zusammenfassung
+## 7.11 Zusammenfassung
 
 Die Verteilungssicht zeigt die physische Struktur der Anwendung.
 

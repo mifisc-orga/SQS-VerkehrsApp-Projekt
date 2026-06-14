@@ -17,7 +17,7 @@ Im Fokus stehen insbesondere:
 
 ---
 
-# 10.2 Qualitätsbaum
+## 10.2 Qualitätsbaum
 
 Der Qualitätsbaum stellt die priorisierten Qualitätsmerkmale der Anwendung dar.
 
@@ -43,49 +43,49 @@ Quality --> Performance
 
 ---
 
-# 10.3 Priorisierte Qualitätsziele
+## 10.3 Priorisierte Qualitätsziele
 
-## QZ-1 Wartbarkeit
+### QZ-1 Wartbarkeit
 
-### Priorität
+#### Priorität
 
 Sehr hoch
 
-### Beschreibung
+#### Beschreibung
 
 Die Architektur soll Änderungen und Erweiterungen mit minimalem Aufwand ermöglichen.
 
-### Unterstützende Maßnahmen
+#### Unterstützende Maßnahmen
 
 * Hexagonale Architektur
 * Ports & Adapters
 * DTO-Mapping
 * Single Responsibility Principle
 
-### Bewertung
+#### Bewertung
 
 Änderungen an Infrastrukturkomponenten dürfen keine Anpassungen der Fachlogik erfordern.
 
 ---
 
-## QZ-2 Testbarkeit
+### QZ-2 Testbarkeit
 
-### Priorität
+#### Priorität
 
 Sehr hoch
 
-### Beschreibung
+#### Beschreibung
 
 Fachlogik soll unabhängig von technischen Abhängigkeiten testbar sein.
 
-### Unterstützende Maßnahmen
+#### Unterstützende Maßnahmen
 
 * Input Ports
 * Output Ports
 * Dependency Injection
 * Mocking von Ports
 
-### Bewertung
+#### Bewertung
 
 Unit-Tests sollen ohne Datenbank oder externe API ausführbar sein.
 
@@ -95,24 +95,24 @@ Neben Unit- und Integrationstests werden Architekturtests mit ArchUnit eingesetz
 
 ---
 
-## QZ-3 Sicherheit
+### QZ-3 Sicherheit
 
-### Priorität
+#### Priorität
 
 Sehr hoch
 
-### Beschreibung
+#### Beschreibung
 
 Benutzerbezogene Funktionen müssen vor unbefugtem Zugriff geschützt werden.
 
-### Unterstützende Maßnahmen
+#### Unterstützende Maßnahmen
 
 * JWT-Authentifizierung
 * Spring Security
 * BCrypt
 * Security Filter
 
-### Bewertung
+#### Bewertung
 
 Geschützte Ressourcen dürfen ausschließlich authentifizierten Benutzern zugänglich sein.
 
@@ -120,84 +120,84 @@ Geschützte Ressourcen dürfen ausschließlich authentifizierten Benutzern zugä
 
 ## QZ-4 Verfügbarkeit
 
-### Priorität
+#### Priorität
 
 Sehr hoch
 
-### Beschreibung
+#### Beschreibung
 
 Die Anwendung soll auch bei Störungen externer Systeme möglichst verfügbar bleiben.
 
-### Unterstützende Maßnahmen
+#### Unterstützende Maßnahmen
 
 * Retry
 * Circuit Breaker
 * Cache Fallback
 * Datenbankgestützter Cache
 
-### Bewertung
+#### Bewertung
 
 Bei API-Ausfällen sollen Verkehrsdaten möglichst weiterhin bereitgestellt werden.
 
 ---
 
-## QZ-5 Erweiterbarkeit
+### QZ-5 Erweiterbarkeit
 
-### Priorität
+#### Priorität
 
 Hoch
 
-### Beschreibung
+#### Beschreibung
 
 Neue Funktionen sollen ohne umfangreiche Architekturänderungen integrierbar sein.
 
-### Unterstützende Maßnahmen
+#### Unterstützende Maßnahmen
 
 * Ports
 * Adapter
 * Entkopplung von Infrastruktur
 
-### Bewertung
+#### Bewertung
 
 Neue Datenquellen sollen durch zusätzliche Adapter integriert werden können.
 
 ---
 
-## QZ-6 Performance
+### QZ-6 Performance
 
-### Priorität
+#### Priorität
 
 Mittel
 
-### Beschreibung
+#### Beschreibung
 
 Antwortzeiten sollen auch bei häufigen Anfragen niedrig bleiben.
 
-### Unterstützende Maßnahmen
+#### Unterstützende Maßnahmen
 
 * Lokaler Cache
 * Asynchrones Schreiben
 * Reduzierte API-Aufrufe
 
-### Bewertung
+#### Bewertung
 
 Wiederkehrende Daten sollen bevorzugt aus dem Cache bereitgestellt werden.
 
 ---
 
-# 10.4 Qualitätsszenarien
+## 10.4 Qualitätsszenarien
 
 Die folgenden Szenarien konkretisieren die Qualitätsanforderungen.
 
 ---
 
-## QS-01 Wartbarkeit
+### QS-01 Wartbarkeit
 
-### Qualitätsmerkmal
+#### Qualitätsmerkmal
 
 Wartbarkeit
 
-### Szenario
+#### Szenario
 
 **Gegeben**
 
@@ -211,20 +211,20 @@ Ein Entwickler die Anwendung erweitert.
 
 Soll lediglich ein neuer Adapter implementiert werden, ohne Änderungen an der Fachlogik vornehmen zu müssen.
 
-### Architekturunterstützung
+#### Architekturunterstützung
 
 * Hexagonale Architektur
 * AutobahnApiPort
 
 ---
 
-## QS-02 Testbarkeit
+### QS-02 Testbarkeit
 
-### Qualitätsmerkmal
+#### Qualitätsmerkmal
 
 Testbarkeit
 
-### Szenario
+#### Szenario
 
 **Gegeben**
 
@@ -238,12 +238,12 @@ Unit-Tests ausgeführt werden.
 
 Soll die Berechnung ohne Datenbank oder externe API getestet werden können.
 
-### Architekturunterstützung
+#### Architekturunterstützung
 
 * RiskScoreCalculator
 * Dependency Injection
 
-### Qualitätsmessung
+#### Qualitätsmessung
 
 Die Testbarkeit wird anhand folgender Kriterien bewertet:
 
@@ -256,13 +256,13 @@ Ziel ist die frühzeitige Erkennung funktionaler und architektonischer Fehler.
 
 ---
 
-## QS-03 Sicherheit
+### QS-03 Sicherheit
 
-### Qualitätsmerkmal
+#### Qualitätsmerkmal
 
 Sicherheit
 
-### Szenario
+#### Szenario
 
 **Gegeben**
 
@@ -276,20 +276,20 @@ Die Anfrage verarbeitet wird.
 
 Muss der Zugriff verweigert werden.
 
-### Architekturunterstützung
+#### Architekturunterstützung
 
 * JwtAuthenticationFilter
 * SecurityConfig
 
 ---
 
-## QS-04 Passwortschutz
+### QS-04 Passwortschutz
 
-### Qualitätsmerkmal
+#### Qualitätsmerkmal
 
 Sicherheit
 
-### Szenario
+#### Szenario
 
 **Gegeben**
 
@@ -303,19 +303,19 @@ Das Passwort gespeichert wird.
 
 Darf ausschließlich ein Passwort-Hash gespeichert werden.
 
-### Architekturunterstützung
+#### Architekturunterstützung
 
 * BCryptPasswordEncoder
 
 ---
 
-## QS-05 API-Ausfall
+### QS-05 API-Ausfall
 
-### Qualitätsmerkmal
+#### Qualitätsmerkmal
 
 Verfügbarkeit
 
-### Szenario
+#### Szenario
 
 **Gegeben**
 
@@ -329,20 +329,20 @@ Verkehrsdaten abgefragt werden.
 
 Sollen gecachte Daten zurückgegeben werden.
 
-### Architekturunterstützung
+#### Architekturunterstützung
 
 * RoadEventCachePort
 * ResilientAutobahnApiAdapter
 
 ---
 
-## QS-06 Vollständiger Ausfall
+### QS-06 Vollständiger Ausfall
 
-### Qualitätsmerkmal
+#### Qualitätsmerkmal
 
 Verfügbarkeit
 
-### Szenario
+#### Szenario
 
 **Gegeben**
 
@@ -356,16 +356,16 @@ Eine Verkehrsabfrage erfolgt.
 
 Soll eine fachliche Fehlermeldung zurückgegeben werden.
 
-### Architekturunterstützung
+#### Architekturunterstützung
 
 * TrafficDataUnavailableException
 * GlobalExceptionHandler
 
 ---
 
-## QS-07 Dashboard-Ladezeit
+### QS-07 Dashboard-Ladezeit
 
-### Qualitätsmerkmal
+#### Qualitätsmerkmal
 
 Performance
 
@@ -383,20 +383,20 @@ Das Dashboard geladen wird.
 
 Sollen die Daten innerhalb einer akzeptablen Antwortzeit bereitgestellt werden.
 
-### Architekturunterstützung
+#### Architekturunterstützung
 
 * Caching
 * Asynchrone Verarbeitung
 
 ---
 
-## QS-08 Erweiterbarkeit
+### QS-08 Erweiterbarkeit
 
-### Qualitätsmerkmal
+#### Qualitätsmerkmal
 
 Erweiterbarkeit
 
-### Szenario
+#### Szenario
 
 **Gegeben**
 
@@ -410,14 +410,14 @@ Die Fachlogik erweitert wird.
 
 Sollen nur die Domänenlogik und die Risikobewertung angepasst werden.
 
-### Architekturunterstützung
+#### Architekturunterstützung
 
 * RoadEventType
 * RiskScoreCalculator
 
 ---
 
-# 10.5 Qualitätsszenario-Matrix
+## 10.5 Qualitätsszenario-Matrix
 
 | Szenario | Wartbarkeit | Testbarkeit | Sicherheit | Verfügbarkeit | Erweiterbarkeit | Performance |
 | -------- | ----------- | ----------- | ---------- | ------------- | --------------- | ----------- |
@@ -432,11 +432,11 @@ Sollen nur die Domänenlogik und die Risikobewertung angepasst werden.
 
 ---
 
-# 10.6 Qualitätsmaßnahmen
+## 10.6 Qualitätsmaßnahmen
 
-## Architekturmaßnahmen
+### Architekturmaßnahmen
 
-### Hexagonale Architektur
+#### Hexagonale Architektur
 
 Verbessert:
 
@@ -446,7 +446,7 @@ Verbessert:
 
 ---
 
-### JWT und Spring Security
+#### JWT und Spring Security
 
 Verbessern:
 
@@ -455,7 +455,7 @@ Verbessern:
 
 ---
 
-### Resilience4j
+#### Resilience4j
 
 Verbessert:
 
@@ -464,7 +464,7 @@ Verbessert:
 
 ---
 
-### Caching
+#### Caching
 
 Verbessert:
 
@@ -473,7 +473,7 @@ Verbessert:
 
 ---
 
-### Spring Data JPA
+#### Spring Data JPA
 
 Verbessert:
 
@@ -482,27 +482,27 @@ Verbessert:
 
 ---
 
-# 10.7 Risiken bezüglich der Qualitätsziele
+## 10.7 Risiken bezüglich der Qualitätsziele
 
-## Sicherheit
+### Sicherheit
 
-### Risiko
+#### Risiko
 
 JWT-Tokens können derzeit nicht aktiv widerrufen werden.
 
 ---
 
-## Verfügbarkeit
+### Verfügbarkeit
 
-### Risiko
+#### Risiko
 
 Die Qualität des Fallback-Mechanismus hängt von der Aktualität des Caches ab.
 
 ---
 
-## Performance
+### Performance
 
-### Risiko
+#### Risiko
 
 Das Dashboard führt mehrere Verkehrsabfragen durch.
 
@@ -510,7 +510,7 @@ Bei sehr vielen gespeicherten Autobahnen kann die Antwortzeit steigen.
 
 ---
 
-# 10.8 Zusammenfassung
+## 10.8 Zusammenfassung
 
 Die Architektur der SQS Verkehrsapp wurde gezielt zur Unterstützung der priorisierten Qualitätsziele entwickelt.
 

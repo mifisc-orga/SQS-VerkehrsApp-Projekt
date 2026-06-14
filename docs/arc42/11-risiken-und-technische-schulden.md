@@ -17,15 +17,15 @@ Die Risiken werden in folgende Kategorien eingeteilt:
 
 ---
 
-# 11.2 Architekturrisiken
+## 11.2 Architekturrisiken
 
-## R-01 Abhängigkeit von externer Autobahn API
+### R-01 Abhängigkeit von externer Autobahn API
 
-### Beschreibung
+#### Beschreibung
 
 Die Anwendung ist für aktuelle Verkehrsdaten auf eine externe Autobahn API angewiesen.
 
-### Auswirkungen
+#### Auswirkungen
 
 Mögliche Folgen:
 
@@ -33,59 +33,59 @@ Mögliche Folgen:
 * veraltete Informationen
 * reduzierte Funktionalität
 
-### Aktuelle Gegenmaßnahmen
+#### Aktuelle Gegenmaßnahmen
 
 * Retry
 * Circuit Breaker
 * Cache Fallback
 
-### Restrisiko
+#### Restrisiko
 
 Bei Ausfall von API und Cache können keine Verkehrsdaten bereitgestellt werden.
 
-### Priorität
+#### Priorität
 
 Hoch
 
 ---
 
-## R-02 Änderungen der API-Schnittstelle
+### R-02 Änderungen der API-Schnittstelle
 
-### Beschreibung
+#### Beschreibung
 
 Änderungen an den Datenstrukturen der externen API können das Mapping beeinflussen.
 
-### Auswirkungen
+#### Auswirkungen
 
 * Fehlerhafte Datenverarbeitung
 * Laufzeitfehler
 * falsche Risikobewertungen
 
-### Gegenmaßnahmen
+#### Gegenmaßnahmen
 
 * DTO-Mapping
 * Entkopplung durch Mapper
 
-### Priorität
+#### Priorität
 
 Mittel
 
 ---
 
-# 11.3 Sicherheitsrisiken
+## 11.3 Sicherheitsrisiken
 
-## R-03 Hardcoded JWT Secret
+### R-03 Hardcoded JWT Secret
 
-### Beschreibung
+#### Beschreibung
 
 Der JWT-Schlüssel ist aktuell direkt im Anwendungscode definiert.
 
-### Auswirkungen
+#### Auswirkungen
 
 * Sicherheitsrisiko bei Quellcodezugriff
 * eingeschränkte Rotation von Secrets
 
-### Empfohlene Lösung
+#### Empfohlene Lösung
 
 Verwendung von:
 
@@ -95,45 +95,45 @@ Secret Management
 Vault-Lösungen
 ```
 
-### Priorität
+#### Priorität
 
 Hoch
 
 ---
 
-## R-04 Fehlende Token-Revocation
+### R-04 Fehlende Token-Revocation
 
-### Beschreibung
+#### Beschreibung
 
 JWT-Tokens können derzeit nicht aktiv widerrufen werden.
 
-### Auswirkungen
+#### Auswirkungen
 
 Ein kompromittiertes Token bleibt bis zum Ablauf gültig.
 
-### Mögliche Lösungen
+#### Mögliche Lösungen
 
 * Token Blacklist
 * Refresh Token Konzept
 * OAuth2-basierte Lösung
 
-### Priorität
+#### Priorität
 
 Mittel
 
 ---
 
-## R-05 Fehlende rollenbasierte Autorisierung
+### R-05 Fehlende rollenbasierte Autorisierung
 
-### Beschreibung
+#### Beschreibung
 
 Aktuell wird ausschließlich zwischen authentifizierten und nicht authentifizierten Benutzern unterschieden.
 
-### Auswirkungen
+#### Auswirkungen
 
 Spätere Rollenmodelle sind nicht vorbereitet.
 
-### Mögliche Erweiterungen
+#### Mögliche Erweiterungen
 
 ```text
 ROLE_USER
@@ -141,43 +141,43 @@ ROLE_ADMIN
 ROLE_OPERATOR
 ```
 
-### Priorität
+#### Priorität
 
 Niedrig
 
 ---
 
-# 11.4 Verfügbarkeitsrisiken
+## 11.4 Verfügbarkeitsrisiken
 
-## R-06 Cache-Aktualität
+### R-06 Cache-Aktualität
 
-### Beschreibung
+#### Beschreibung
 
 Cache-Daten können gegenüber Live-Daten veraltet sein.
 
-### Auswirkungen
+#### Auswirkungen
 
 * veraltete Verkehrsinformationen
 * ungenaue Risikobewertung
 
-### Gegenmaßnahmen
+#### Gegenmaßnahmen
 
 * regelmäßige Aktualisierung
 * Zeitstempel im Cache
 
-### Priorität
+#### Priorität
 
 Mittel
 
 ---
 
-## R-07 Datenbank als Single Point of Failure
+### R-07 Datenbank als Single Point of Failure
 
-### Beschreibung
+#### Beschreibung
 
 Sowohl Fachdaten als auch Cache-Daten liegen in derselben Datenbank.
 
-### Auswirkungen
+#### Auswirkungen
 
 Ein Datenbankausfall beeinträchtigt:
 
@@ -185,53 +185,53 @@ Ein Datenbankausfall beeinträchtigt:
 * Favoriten
 * Cache-Funktionalität
 
-### Mögliche Lösungen
+#### Mögliche Lösungen
 
 * Replikation
 * Datenbankcluster
 * Backup-Systeme
 
-### Priorität
+#### Priorität
 
 Mittel
 
 ---
 
-# 11.5 Performance-Risiken
+## 11.5 Performance-Risiken
 
-## R-08 Dashboard-Abfragen
+### R-08 Dashboard-Abfragen
 
-### Beschreibung
+#### Beschreibung
 
 Für jede gespeicherte Autobahn wird eine Verkehrsabfrage durchgeführt.
 
-### Auswirkungen
+#### Auswirkungen
 
 Die Antwortzeit steigt mit der Anzahl gespeicherter Autobahnen.
 
-### Mögliche Verbesserungen
+#### Mögliche Verbesserungen
 
 * Batch Requests
 * Parallelisierung
 * Aggregierte API-Aufrufe
 
-### Priorität
+#### Priorität
 
 Mittel
 
 ---
 
-## R-09 Datenbankbasierter Cache
+### R-09 Datenbankbasierter Cache
 
-### Beschreibung
+#### Beschreibung
 
 Der Cache wird aktuell über relationale Tabellen umgesetzt.
 
-### Auswirkungen
+#### Auswirkungen
 
 Bei hoher Last kann dies zusätzliche Datenbankzugriffe verursachen.
 
-### Alternative Lösungen
+#### Alternative Lösungen
 
 ```text
 Redis
@@ -239,17 +239,17 @@ Hazelcast
 In-Memory Cache
 ```
 
-### Priorität
+#### Priorität
 
 Niedrig
 
 ---
 
-# 11.6 Wartbarkeitsrisiken
+## 11.6 Wartbarkeitsrisiken
 
-## R-10 Erweiterung der Risikobewertung
+### R-10 Erweiterung der Risikobewertung
 
-### Beschreibung
+#### Beschreibung
 
 Neue Ereignistypen erfordern Anpassungen an mehreren Stellen.
 
@@ -261,45 +261,45 @@ RiskScoreCalculator
 Mapper
 ```
 
-### Auswirkungen
+#### Auswirkungen
 
 Erhöhter Wartungsaufwand.
 
-### Priorität
+#### Priorität
 
 Niedrig
 
 ---
 
-## R-11 Wachsende Adapterlandschaft
+### R-11 Wachsende Adapterlandschaft
 
-### Beschreibung
+#### Beschreibung
 
 Die Hexagonale Architektur führt zu einer höheren Anzahl von Klassen und Interfaces.
 
-### Auswirkungen
+#### Auswirkungen
 
 Neue Entwickler benötigen mehr Einarbeitungszeit.
 
-### Bewertung
+#### Bewertung
 
 Bewusster Architekturkompromiss zugunsten von Wartbarkeit und Testbarkeit.
 
-### Priorität
+#### Priorität
 
 Niedrig
 
 ---
 
-# 11.7 Technische Schulden
+## 11.7 Technische Schulden
 
-## TS-01 Verwendung generischer Runtime Exceptions
+### TS-01 Verwendung generischer Runtime Exceptions
 
-### Beschreibung
+#### Beschreibung
 
 Teilweise werden noch generische Exceptions verwendet.
 
-### Verbesserung
+#### Verbesserung
 
 Einführung spezialisierter Fachausnahmen.
 
@@ -311,24 +311,24 @@ RoadNotFoundException
 AuthenticationException
 ```
 
-### Nutzen
+#### Nutzen
 
 * klarere Fehlerbehandlung
 * bessere API-Responses
 
 ---
 
-## TS-02 Fehlende API-Versionierung
+### TS-02 Fehlende API-Versionierung
 
-### Beschreibung
+#### Beschreibung
 
 Die REST-Schnittstelle besitzt derzeit keine Versionierung.
 
-### Risiko
+#### Risiko
 
 Spätere Änderungen können bestehende Clients beeinträchtigen.
 
-### Verbesserung
+#### Verbesserung
 
 Einführung von:
 
@@ -339,13 +339,13 @@ Einführung von:
 
 ---
 
-## TS-03 Begrenzte Monitoring-Möglichkeiten
+### TS-03 Begrenzte Monitoring-Möglichkeiten
 
-### Beschreibung
+#### Beschreibung
 
 Monitoring erfolgt derzeit primär über Standard-Actuator-Endpunkte.
 
-### Verbesserung
+#### Verbesserung
 
 Einbindung von:
 
@@ -357,13 +357,13 @@ OpenTelemetry
 
 ---
 
-## TS-04 Fehlende zentrale Konfigurationsverwaltung
+### TS-04 Fehlende zentrale Konfigurationsverwaltung
 
-### Beschreibung
+#### Beschreibung
 
 Konfigurationen werden lokal verwaltet.
 
-### Verbesserung
+#### Verbesserung
 
 Einführung von:
 
@@ -375,34 +375,34 @@ Kubernetes Secrets
 
 ---
 
-## TS-05 Fehlende Audit-Protokollierung
+### TS-05 Fehlende Audit-Protokollierung
 
-### Beschreibung
+#### Beschreibung
 
 Benutzeraktionen werden derzeit nicht revisionssicher protokolliert.
 
-### Betroffene Aktionen
+#### Betroffene Aktionen
 
 * Login
 * Registrierung
 * Speichern von Autobahnen
 * Löschen von Autobahnen
 
-### Verbesserung
+#### Verbesserung
 
 Audit Logging mit Zeitstempel und Benutzerreferenz.
 
 ---
 
-# 11.8 Maßnahmen zur Reduzierung technischer Risiken
+## 11.8 Maßnahmen zur Reduzierung technischer Risiken
 
 Zur frühzeitigen Erkennung von Qualitätsproblemen wurden automatisierte Prüfmechanismen etabliert.
 
-## Automatisierte Tests
+### Automatisierte Tests
 
 Die Anwendung wird durch mehrere Testebenen abgesichert:
 
-### Unit Tests
+#### Unit Tests
 
 Prüfung einzelner Komponenten und Fachlogik.
 
@@ -414,7 +414,7 @@ Beispiele:
 - RiskScoreCalculator
 - Exception-Klassen
 
-### Integrationstests
+#### Integrationstests
 
 Prüfung des Zusammenspiels mehrerer Komponenten.
 
@@ -426,7 +426,7 @@ Abgedeckte Bereiche:
 - Externe API-Integration
 - Spring Application Context
 
-### Architekturtests
+#### Architekturtests
 
 Architekturtests prüfen die Einhaltung der definierten Hexagonalen Architektur.
 
@@ -436,7 +436,7 @@ Insbesondere werden kontrolliert:
 - Paketabhängigkeiten
 - Architekturregeln
 
-## Kontinuierliche Qualitätsüberwachung
+### Kontinuierliche Qualitätsüberwachung
 
 Zur langfristigen Sicherung der Codequalität wird Teamscale eingesetzt.
 
@@ -451,7 +451,7 @@ Zur langfristigen Sicherung der Codequalität wird Teamscale eingesetzt.
 
 Dadurch können Qualitätsprobleme frühzeitig erkannt und behoben werden.
 
-# 11.9 Risiko-Matrix
+## 11.9 Risiko-Matrix
 
 | Risiko                      | Wahrscheinlichkeit | Auswirkung | Bewertung |
 | --------------------------- | ------------------ | ---------- | --------- |
@@ -465,9 +465,9 @@ Dadurch können Qualitätsprobleme frühzeitig erkannt und behoben werden.
 
 ---
 
-# 11.10 Priorisierte Verbesserungen
+## 11.10 Priorisierte Verbesserungen
 
-## Kurzfristig
+### Kurzfristig
 
 1. JWT Secret externalisieren
 2. Spezifische Fachausnahmen einführen
@@ -475,7 +475,7 @@ Dadurch können Qualitätsprobleme frühzeitig erkannt und behoben werden.
 
 ---
 
-## Mittelfristig
+### Mittelfristig
 
 1. Monitoring erweitern
 2. Audit Logging einführen
@@ -483,7 +483,7 @@ Dadurch können Qualitätsprobleme frühzeitig erkannt und behoben werden.
 
 ---
 
-## Langfristig
+### Langfristig
 
 1. Rollenmodell erweitern
 2. Token Revocation implementieren
@@ -491,7 +491,7 @@ Dadurch können Qualitätsprobleme frühzeitig erkannt und behoben werden.
 
 ---
 
-# 11.11 Zusammenfassung
+## 11.11 Zusammenfassung
 
 Die identifizierten Risiken betreffen hauptsächlich:
 

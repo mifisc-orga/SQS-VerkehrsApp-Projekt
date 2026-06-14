@@ -8,7 +8,7 @@ Ziel ist ein einheitliches Verständnis aller Begriffe für Entwickler, Architek
 
 ---
 
-# 12.2 Fachliche Begriffe
+## 12.2 Fachliche Begriffe
 
 | Begriff              | Beschreibung                                                                                  |
 | -------------------- | --------------------------------------------------------------------------------------------- |
@@ -25,7 +25,7 @@ Ziel ist ein einheitliches Verständnis aller Begriffe für Entwickler, Architek
 
 ---
 
-# 12.3 Domänenmodell
+## 12.3 Domänenmodell
 
 | Begriff                | Beschreibung                                                              |
 | ---------------------- | ------------------------------------------------------------------------- |
@@ -41,9 +41,9 @@ Ziel ist ein einheitliches Verständnis aller Begriffe für Entwickler, Architek
 
 ---
 
-# 12.4 Risikobewertung
+## 12.4 Risikobewertung
 
-## RiskLevel
+### RiskLevel
 
 | Wert   | Bedeutung        |
 | ------ | ---------------- |
@@ -53,7 +53,7 @@ Ziel ist ein einheitliches Verständnis aller Begriffe für Entwickler, Architek
 
 ---
 
-## RoadEventType
+### RoadEventType
 
 | Wert     | Bedeutung       |
 | -------- | --------------- |
@@ -63,7 +63,7 @@ Ziel ist ein einheitliches Verständnis aller Begriffe für Entwickler, Architek
 
 ---
 
-# 12.5 Architekturbegriffe
+## 12.5 Architekturbegriffe
 
 | Begriff                | Beschreibung                                                    |
 | ---------------------- | --------------------------------------------------------------- |
@@ -80,9 +80,9 @@ Ziel ist ein einheitliches Verständnis aller Begriffe für Entwickler, Architek
 
 ---
 
-# 12.6 Anwendungskomponenten
+## 12.6 Anwendungskomponenten
 
-## Controller
+### Controller
 
 | Komponente             | Beschreibung                               |
 | ---------------------- | ------------------------------------------ |
@@ -94,7 +94,7 @@ Ziel ist ein einheitliches Verständnis aller Begriffe für Entwickler, Architek
 
 ---
 
-## Services
+### Services
 
 | Komponente              | Beschreibung                              |
 | ----------------------- | ----------------------------------------- |
@@ -105,7 +105,7 @@ Ziel ist ein einheitliches Verständnis aller Begriffe für Entwickler, Architek
 
 ---
 
-## Ports
+### Ports
 
 | Port                   | Verantwortung                        |
 | ---------------------- | ------------------------------------ |
@@ -117,7 +117,7 @@ Ziel ist ein einheitliches Verständnis aller Begriffe für Entwickler, Architek
 
 ---
 
-# 12.7 Persistenzbegriffe
+## 12.7 Persistenzbegriffe
 
 | Begriff               | Beschreibung                                        |
 | --------------------- | --------------------------------------------------- |
@@ -132,7 +132,7 @@ Ziel ist ein einheitliches Verständnis aller Begriffe für Entwickler, Architek
 
 ---
 
-# 12.8 Sicherheitsbegriffe
+## 12.8 Sicherheitsbegriffe
 
 | Begriff                 | Beschreibung                                                 |
 | ----------------------- | ------------------------------------------------------------ |
@@ -147,7 +147,7 @@ Ziel ist ein einheitliches Verständnis aller Begriffe für Entwickler, Architek
 
 ---
 
-# 12.9 Resilience- und Caching-Begriffe
+## 12.9 Resilience- und Caching-Begriffe
 
 | Begriff             | Beschreibung                                              |
 | ------------------- | --------------------------------------------------------- |
@@ -161,7 +161,7 @@ Ziel ist ein einheitliches Verständnis aller Begriffe für Entwickler, Architek
 
 ---
 
-# 12.10 API- und Kommunikationsbegriffe
+## 12.10 API- und Kommunikationsbegriffe
 
 | Begriff   | Beschreibung                                   |
 | --------- | ---------------------------------------------- |
@@ -176,7 +176,7 @@ Ziel ist ein einheitliches Verständnis aller Begriffe für Entwickler, Architek
 
 ---
 
-# 12.11 Qualitätsbegriffe
+## 12.11 Qualitätsbegriffe
 
 | Begriff           | Beschreibung                                                |
 | ----------------- | ----------------------------------------------------------- |
@@ -190,7 +190,7 @@ Ziel ist ein einheitliches Verständnis aller Begriffe für Entwickler, Architek
 
 ---
 
-# 12.12 Abkürzungen
+## 12.12 Abkürzungen
 
 | Abkürzung | Bedeutung                          |
 | --------- | ---------------------------------- |
@@ -206,7 +206,7 @@ Ziel ist ein einheitliches Verständnis aller Begriffe für Entwickler, Architek
 
 ---
 
-# 12.13 Zusammenfassung
+## 12.13 Zusammenfassung
 
 Das Glossar definiert die wichtigsten Begriffe der SQS Verkehrsapp und bildet den gemeinsamen Sprachraum für Fachlichkeit, Architektur und technische Umsetzung.
 

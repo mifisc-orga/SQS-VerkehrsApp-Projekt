@@ -21,13 +21,13 @@ Die Entscheidungen orientieren sich an den Qualitätszielen des Systems:
 
 ---
 
-# ADR-001 – Verwendung von frontend-init ausschließlich als Vorlage
+### ADR-001 – Verwendung von frontend-init ausschließlich als Vorlage
 
-## Status
+#### Status
 
 Akzeptiert
 
-## Referenz
+#### Referenz
 
 Diese Entscheidung basiert auf dem projektspezifischen ADR:
 
@@ -35,7 +35,7 @@ Diese Entscheidung basiert auf dem projektspezifischen ADR:
 
 ---
 
-## Kontext
+#### Kontext
 
 Zu Projektbeginn wurde ein Frontend-Prototyp auf Basis eines KI-generierten Branches erstellt. Die erzeugte Struktur entsprach jedoch nicht vollständig den vereinbarten Architekturprinzipien und Qualitätszielen.
 
@@ -43,7 +43,7 @@ Eine direkte Weiterentwicklung hätte das Risiko erhöht, ungeeignete Architektu
 
 ---
 
-## Entscheidung
+#### Entscheidung
 
 Der Branch frontend-init wird ausschließlich als Inspirations- und Vorlagenquelle verwendet.
 
@@ -51,13 +51,13 @@ Architekturentscheidungen oder Implementierungen aus diesem Branch werden nicht 
 
 ---
 
-## Begründung
+#### Begründung
 
 Die Entscheidung stellt sicher, dass die tatsächliche Frontend-Implementierung den vereinbarten Architekturprinzipien folgt und nicht durch zufällige oder unzureichend spezifizierte KI-generierte Strukturen beeinflusst wird.
 
 ---
 
-## Konsequenzen
+#### Konsequenzen
 
 Positiv:
 
@@ -70,13 +70,13 @@ Negativ:
 - Bereits vorhandene Implementierungen können nicht direkt übernommen werden
 - Zusätzlicher Implementierungsaufwand
 
-# ADR-002 – Verwendung einer Hexagonalen Architektur
+### ADR-002 – Verwendung einer Hexagonalen Architektur
 
-## Status
+#### Status
 
 Akzeptiert
 
-## Referenz
+#### Referenz
 
 Diese Entscheidung basiert auf dem projektspezifischen ADR:
 
@@ -86,7 +86,7 @@ Der vorliegende ADR konkretisiert die in diesem Dokument beschriebene Architektu
 
 ---
 
-## Kontext
+#### Kontext
 
 Die Anwendung integriert mehrere externe Systeme:
 
@@ -99,13 +99,13 @@ Gleichzeitig soll die Fachlogik unabhängig von diesen Technologien bleiben.
 
 ---
 
-## Entscheidung
+#### Entscheidung
 
 Die Anwendung wird nach den Prinzipien der Hexagonalen Architektur (Ports & Adapters) aufgebaut.
 
 ---
 
-## Begründung
+#### Begründung
 
 Vorteile:
 
@@ -118,7 +118,7 @@ Die Entscheidung wurde bereits zu Projektbeginn getroffen und in einem separaten
 
 ---
 
-## Konsequenzen
+#### Konsequenzen
 
 Positiv:
 
@@ -132,27 +132,27 @@ Negativ:
 
 ---
 
-# ADR-003 – JWT-basierte Authentifizierung
+### ADR-003 – JWT-basierte Authentifizierung
 
-## Status
+#### Status
 
 Akzeptiert
 
 ---
 
-## Kontext
+#### Kontext
 
 Die Anwendung stellt REST-Schnittstellen bereit und soll ohne serverseitige Sessions betrieben werden.
 
 ---
 
-## Entscheidung
+#### Entscheidung
 
 Authentifizierung erfolgt über JSON Web Tokens (JWT).
 
 ---
 
-## Begründung
+#### Begründung
 
 Vorteile:
 
@@ -163,7 +163,7 @@ Vorteile:
 
 ---
 
-## Konsequenzen
+#### Konsequenzen
 
 Positiv:
 
@@ -177,25 +177,25 @@ Negativ:
 
 ---
 
-# ADR-004 – Konsequente Verwendung von Ports
+### ADR-004 – Konsequente Verwendung von Ports
 
-## Status
+#### Status
 
 Akzeptiert
 
 ---
 
-## Kontext
+#### Kontext
 
 Die Fachlogik soll unabhängig von Infrastrukturkomponenten bleiben.
 
 ---
 
-## Entscheidung
+#### Entscheidung
 
 Alle externen Abhängigkeiten werden über Ports abstrahiert.
 
-### Input Ports
+#### Input Ports
 
 ```text id="3iq83m"
 AuthUseCase
@@ -204,7 +204,7 @@ SavedRoadUseCase
 DashboardTrafficUseCase
 ```
 
-### Output Ports
+#### Output Ports
 
 ```text id="i4hzyv"
 UserPort
@@ -216,7 +216,7 @@ AvailableRoadCachePort
 
 ---
 
-## Begründung
+#### Begründung
 
 * Entkopplung
 * Testbarkeit
@@ -224,7 +224,7 @@ AvailableRoadCachePort
 
 ---
 
-## Konsequenzen
+#### Konsequenzen
 
 Positiv:
 
@@ -237,15 +237,15 @@ Negativ:
 
 ---
 
-# ADR-005 – Verwendung von Resilience4j
+### ADR-005 – Verwendung von Resilience4j
 
-## Status
+#### Status
 
 Akzeptiert
 
 ---
 
-## Kontext
+#### Kontext
 
 Die Anwendung hängt von einer externen Autobahn API ab.
 
@@ -253,7 +253,7 @@ API-Ausfälle dürfen nicht zum Totalausfall führen.
 
 ---
 
-## Entscheidung
+#### Entscheidung
 
 Verwendung von Resilience4j mit:
 
@@ -262,7 +262,7 @@ Verwendung von Resilience4j mit:
 
 ---
 
-## Begründung
+#### Begründung
 
 * höhere Verfügbarkeit
 * bessere Fehlerbehandlung
@@ -270,7 +270,7 @@ Verwendung von Resilience4j mit:
 
 ---
 
-## Konsequenzen
+#### Konsequenzen
 
 Positiv:
 
@@ -283,21 +283,21 @@ Negativ:
 
 ---
 
-# ADR-006 – Domänengetriebene Risikobewertung
+### ADR-006 – Domänengetriebene Risikobewertung
 
-## Status
+#### Status
 
 Akzeptiert
 
 ---
 
-## Kontext
+#### Kontext
 
 Verkehrsdaten sollen fachlich bewertet werden.
 
 ---
 
-## Entscheidung
+#### Entscheidung
 
 Die Berechnung erfolgt zentral über:
 
@@ -307,7 +307,7 @@ RiskScoreCalculator
 
 ---
 
-## Begründung
+#### Begründung
 
 * zentrale Fachlogik
 * konsistente Bewertung
@@ -315,7 +315,7 @@ RiskScoreCalculator
 
 ---
 
-## Konsequenzen
+#### Konsequenzen
 
 Positiv:
 
@@ -327,34 +327,34 @@ Negativ:
 
 ---
 
-# ADR-007 – Stateless Authentication
+### ADR-007 – Stateless Authentication
 
-## Status
+#### Status
 
 Akzeptiert
 
 ---
 
-## Kontext
+#### Kontext
 
 Benutzersitzungen sollen nicht serverseitig gespeichert werden.
 
 ---
 
-## Entscheidung
+#### Entscheidung
 
 Verwendung einer vollständig zustandslosen Authentifizierung.
 
 ---
 
-## Begründung
+#### Begründung
 
 * bessere Skalierbarkeit
 * weniger Infrastrukturaufwand
 
 ---
 
-## Konsequenzen
+#### Konsequenzen
 
 Positiv:
 
@@ -366,15 +366,15 @@ Negativ:
 
 ---
 
-# ADR-008 – DTO-Mapping über dedizierte Mapper
+### ADR-008 – DTO-Mapping über dedizierte Mapper
 
-## Status
+#### Status
 
 Akzeptiert
 
 ---
 
-## Kontext
+#### Kontext
 
 Die Autobahn API besitzt eigene Datenmodelle.
 
@@ -382,7 +382,7 @@ Diese sollen nicht direkt in die Domäne übernommen werden.
 
 ---
 
-## Entscheidung
+#### Entscheidung
 
 Verwendung eines separaten Mappers:
 
@@ -392,7 +392,7 @@ AutobahnApiMapper
 
 ---
 
-## Begründung
+#### Begründung
 
 * Schutz vor API-Änderungen
 * Entkopplung
@@ -400,7 +400,7 @@ AutobahnApiMapper
 
 ---
 
-## Konsequenzen
+#### Konsequenzen
 
 Positiv:
 
@@ -412,34 +412,34 @@ Negativ:
 
 ---
 
-# ADR-009 – Asynchrones Cache-Schreiben
+### ADR-009 – Asynchrones Cache-Schreiben
 
-## Status
+#### Status
 
 Akzeptiert
 
 ---
 
-## Kontext
+#### Kontext
 
 Cache-Operationen dürfen Benutzeranfragen nicht blockieren.
 
 ---
 
-## Entscheidung
+#### Entscheidung
 
 Cache-Aktualisierungen werden asynchron durchgeführt.
 
 ---
 
-## Begründung
+#### Begründung
 
 * kürzere Antwortzeiten
 * bessere Benutzererfahrung
 
 ---
 
-## Konsequenzen
+#### Konsequenzen
 
 Positiv:
 
@@ -451,27 +451,27 @@ Negativ:
 
 ---
 
-# ADR-010 – Persistenz über Spring Data JPA
+### ADR-010 – Persistenz über Spring Data JPA
 
-## Status
+#### Status
 
 Akzeptiert
 
 ---
 
-## Kontext
+#### Kontext
 
 Persistenzoperationen sollen standardisiert umgesetzt werden.
 
 ---
 
-## Entscheidung
+#### Entscheidung
 
 Verwendung von Spring Data JPA.
 
 ---
 
-## Begründung
+#### Begründung
 
 * weniger Boilerplate-Code
 * etablierter Standard
@@ -479,7 +479,7 @@ Verwendung von Spring Data JPA.
 
 ---
 
-## Konsequenzen
+#### Konsequenzen
 
 Positiv:
 
@@ -492,21 +492,21 @@ Negativ:
 
 ---
 
-# ADR-011 – Datenbankgestützter Cache
+### ADR-011 – Datenbankgestützter Cache
 
-## Status
+#### Status
 
 Akzeptiert
 
 ---
 
-## Kontext
+#### Kontext
 
 Verkehrsdaten sollen auch bei API-Ausfällen verfügbar bleiben.
 
 ---
 
-## Entscheidung
+#### Entscheidung
 
 Speicherung von:
 
@@ -517,14 +517,14 @@ in der Datenbank.
 
 ---
 
-## Begründung
+#### Begründung
 
 * hohe Verfügbarkeit
 * Fallback-Möglichkeit
 
 ---
 
-## Konsequenzen
+#### Konsequenzen
 
 Positiv:
 
@@ -537,7 +537,7 @@ Negativ:
 
 ---
 
-# 9.2 Übersicht der Entscheidungen
+## 9.2 Übersicht der Entscheidungen
 
 | ADR     | Titel                             |
 |---------|-----------------------------------|
@@ -555,9 +555,9 @@ Negativ:
 
 ---
 
-# 9.3 Einfluss auf Qualitätsziele
+## 9.3 Einfluss auf Qualitätsziele
 
-## Wartbarkeit
+### Wartbarkeit
 
 Unterstützt durch:
 
@@ -567,7 +567,7 @@ Unterstützt durch:
 
 ---
 
-## Testbarkeit
+### Testbarkeit
 
 Unterstützt durch:
 
@@ -577,7 +577,7 @@ Unterstützt durch:
 
 ---
 
-## Sicherheit
+### Sicherheit
 
 Unterstützt durch:
 
@@ -587,7 +587,7 @@ Unterstützt durch:
 
 ---
 
-## Verfügbarkeit
+### Verfügbarkeit
 
 Unterstützt durch:
 
@@ -597,7 +597,7 @@ Unterstützt durch:
 
 ---
 
-## Erweiterbarkeit
+### Erweiterbarkeit
 
 Unterstützt durch:
 
@@ -607,7 +607,7 @@ Unterstützt durch:
 
 ---
 
-# 9.4 Zusammenfassung
+## 9.4 Zusammenfassung
 
 Die dokumentierten Architekturentscheidungen bilden die Grundlage der Systemarchitektur.
 
