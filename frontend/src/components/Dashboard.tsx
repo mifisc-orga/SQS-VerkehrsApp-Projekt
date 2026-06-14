@@ -5,6 +5,7 @@ import { RiskBadge } from './RiskBadge';
 import type { RiskLevel } from './RiskBadge';
 import { ConfirmModal } from './ConfirmModal';
 
+/** Props für das Dashboard mit gespeicherten Autobahnen */
 interface DashboardProps {
   token: string;
   /** Wird erhöht, um das Dashboard nach dem Speichern eines Favoriten neu zu laden */
@@ -15,26 +16,31 @@ interface DashboardProps {
 
 function getMaxRiskLevel(events: DashboardRoadData['events']): RiskLevel | 'NONE' {
   if (events.length === 0) {
-    return 'LOW'; 
+    return 'LOW';
   }
-  if (events.some((e) => e.riskLevel === 'HIGH')) { 
-    return 'HIGH'; 
+  if (events.some(e => e.riskLevel === 'HIGH')) {
+    return 'HIGH';
   }
-  if (events.some((e) => e.riskLevel === 'MEDIUM')) { 
-    return 'MEDIUM'; 
+  if (events.some(e => e.riskLevel === 'MEDIUM')) {
+    return 'MEDIUM';
   }
   return 'LOW';
 }
 
 function getEventTypeLabel(type: string): string {
   switch (type) {
-    case 'ROADWORK': return '🚧 Baustelle';
-    case 'CLOSURE': return '🚫 Sperrung';
-    case 'WARNING': return '⚠️ Warnung';
-    default: return type;
+    case 'ROADWORK':
+      return '🚧 Baustelle';
+    case 'CLOSURE':
+      return '🚫 Sperrung';
+    case 'WARNING':
+      return '⚠️ Warnung';
+    default:
+      return type;
   }
 }
 
+/** Dashboard mit Übersicht der gespeicherten Autobahnen */
 export function Dashboard({ token, refreshKey, onRoadSelect }: DashboardProps) {
   const [roadData, setRoadData] = useState<DashboardRoadData[]>([]);
   const [confirmDeleteRoadId, setConfirmDeleteRoadId] = useState<string | null>(null);
@@ -49,11 +55,11 @@ export function Dashboard({ token, refreshKey, onRoadSelect }: DashboardProps) {
 
   async function handleDeleteConfirm() {
     if (!confirmDeleteRoadId) {
-    return;
+      return;
     }
     try {
       await deleteFavourite(token, confirmDeleteRoadId);
-      setRoadData((prev) => prev.filter((r) => r.roadId !== confirmDeleteRoadId));
+      setRoadData(prev => prev.filter(r => r.roadId !== confirmDeleteRoadId));
     } catch {
       alert('Fehler beim Löschen');
     } finally {
@@ -72,14 +78,16 @@ export function Dashboard({ token, refreshKey, onRoadSelect }: DashboardProps) {
       <div className="dashboard-grid">
         {roadData.map(({ roadId, events }) => {
           const maxRisk = getMaxRiskLevel(events);
-          const uniqueTypes = [...new Set(events.map((e) => e.type))];
+          const uniqueTypes = [...new Set(events.map(e => e.type))];
           return (
-           <button
+            <div
               key={roadId}
-              type="button"
               className="dashboard-card dashboard-card--clickable"
               data-testid={`dashboard-road-${roadId}`}
               onClick={() => onRoadSelect(roadId)}
+              onKeyDown={(e) => { if (e.key === 'Enter') { onRoadSelect(roadId); } }}
+              role="button"
+              tabIndex={0}
             >
               <div className="dashboard-card__header">
                 <span className="dashboard-card__title">🛣️ {roadId}</span>
@@ -93,7 +101,7 @@ export function Dashboard({ token, refreshKey, onRoadSelect }: DashboardProps) {
               </div>
               {uniqueTypes.length > 0 && (
                 <div className="dashboard-card__types">
-                  {uniqueTypes.map((type) => (
+                  {uniqueTypes.map(type => (
                     <span key={type} className="event-type-badge">
                       {getEventTypeLabel(type)}
                     </span>
