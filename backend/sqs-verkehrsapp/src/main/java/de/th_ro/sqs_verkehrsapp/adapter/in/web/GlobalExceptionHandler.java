@@ -1,6 +1,7 @@
 package de.th_ro.sqs_verkehrsapp.adapter.in.web;
 
 import de.th_ro.sqs_verkehrsapp.adapter.in.web.dto.ApiErrorResponse;
+import de.th_ro.sqs_verkehrsapp.domain.exception.InvalidCredentialsException;
 import de.th_ro.sqs_verkehrsapp.domain.exception.TrafficDataUnavailableException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +36,21 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity
                 .status(HttpStatus.SERVICE_UNAVAILABLE)
+                .body(response);
+    }
+
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<ApiErrorResponse> handleInvalidCredentials(
+            InvalidCredentialsException exception
+    ) {
+        ApiErrorResponse response = new ApiErrorResponse(
+                "AUTHENTICATION_FAILED",
+                exception.getMessage(),
+                LocalDateTime.now()
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
                 .body(response);
     }
 }
