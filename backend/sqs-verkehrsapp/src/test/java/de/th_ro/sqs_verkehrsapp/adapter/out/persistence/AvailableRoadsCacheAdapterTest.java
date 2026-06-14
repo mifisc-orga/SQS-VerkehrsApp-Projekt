@@ -25,7 +25,7 @@ class AvailableRoadsCacheAdapterTest {
     private AvailableRoadsCacheAdapter adapter;
 
     @Test
-    void saveAll_shouldDeleteExistingEntriesBeforeSavingNewRoadIds() {
+    void saveAllShouldDeleteExistingEntriesBeforeSavingNewRoadIds() {
         List<String> roadIds = List.of("A1", "A2", "A3");
 
         adapter.saveAll(roadIds);
@@ -34,7 +34,7 @@ class AvailableRoadsCacheAdapterTest {
     }
 
     @Test
-    void saveAll_shouldSaveRoadIdsAsEntities() {
+    void saveAllShouldSaveRoadIdsAsEntities() {
         List<String> roadIds = List.of("A1", "A2", "A3");
 
         adapter.saveAll(roadIds);
@@ -50,7 +50,7 @@ class AvailableRoadsCacheAdapterTest {
     }
 
     @Test
-    void saveAll_shouldSaveEmptyListWhenRoadIdsAreEmpty() {
+    void saveAllShouldSaveEmptyListWhenRoadIdsAreEmpty() {
         adapter.saveAll(List.of());
 
         ArgumentCaptor<List<AvailableRoadEntity>> captor =
@@ -63,7 +63,7 @@ class AvailableRoadsCacheAdapterTest {
     }
 
     @Test
-    void findAll_shouldReturnAllRoadIdsFromRepository() {
+    void findAllShouldReturnAllRoadIdsFromRepository() {
         when(repository.findAll()).thenReturn(List.of(
                 new AvailableRoadEntity("A1"),
                 new AvailableRoadEntity("A2"),
@@ -76,7 +76,7 @@ class AvailableRoadsCacheAdapterTest {
     }
 
     @Test
-    void findAll_shouldReturnEmptyListWhenRepositoryIsEmpty() {
+    void findAllShouldReturnEmptyListWhenRepositoryIsEmpty() {
         when(repository.findAll()).thenReturn(List.of());
 
         List<String> result = adapter.findAll();

@@ -26,7 +26,7 @@ class AutobahnCacheWriterTest {
     private AutobahnCacheWriter cacheWriter;
 
     @Test
-    void saveTrafficEvents_shouldSaveEventsInCache() {
+    void saveTrafficEventsShouldSaveEventsInCache() {
         String roadId = "A1";
         List<RoadEvent> events = List.of();
 
@@ -36,7 +36,7 @@ class AutobahnCacheWriterTest {
     }
 
     @Test
-    void saveAvailableRoadIds_shouldSaveRoadIdsInCache() {
+    void saveAvailableRoadIdsShouldSaveRoadIdsInCache() {
         List<String> roadIds = List.of("A1", "A2", "A3");
 
         cacheWriter.saveAvailableRoadIds(roadIds);

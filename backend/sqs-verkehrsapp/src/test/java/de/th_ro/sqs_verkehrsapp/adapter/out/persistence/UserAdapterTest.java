@@ -28,7 +28,7 @@ class UserAdapterTest {
     private UserAdapter adapter;
 
     @Test
-    void save_shouldMapDomainToEntityAndReturnSavedDomainObject() {
+    void saveShouldMapDomainToEntityAndReturnSavedDomainObject() {
         UUID id = UUID.randomUUID();
 
         AppUser user = AppUser.builder()
@@ -64,7 +64,7 @@ class UserAdapterTest {
     }
 
     @Test
-    void findByUsername_shouldReturnMappedUserWhenUserExists() {
+    void findByUsernameShouldReturnMappedUserWhenUserExists() {
         UUID id = UUID.randomUUID();
 
         UserEntity entity = UserEntity.builder()
@@ -85,7 +85,7 @@ class UserAdapterTest {
     }
 
     @Test
-    void findByUsername_shouldReturnEmptyWhenUserDoesNotExist() {
+    void findByUsernameShouldReturnEmptyWhenUserDoesNotExist() {
         when(repository.findByUsername("unknown"))
                 .thenReturn(Optional.empty());
 
@@ -95,7 +95,7 @@ class UserAdapterTest {
     }
 
     @Test
-    void existsByUsername_shouldReturnTrueWhenRepositoryReturnsTrue() {
+    void existsByUsernameShouldReturnTrueWhenRepositoryReturnsTrue() {
         when(repository.existsByUsername("testuser"))
                 .thenReturn(true);
 
@@ -105,7 +105,7 @@ class UserAdapterTest {
     }
 
     @Test
-    void existsByUsername_shouldReturnFalseWhenRepositoryReturnsFalse() {
+    void existsByUsernameShouldReturnFalseWhenRepositoryReturnsFalse() {
         when(repository.existsByUsername("unknown"))
                 .thenReturn(false);
 
