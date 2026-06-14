@@ -6,16 +6,16 @@
 Verkehrsapp documentation
 =========================
 
-Add your content using ``reStructuredText`` syntax. See the
-`reStructuredText <https://www.sphinx-doc.org/en/master/usage/restructuredtext/index.html>`_
-documentation for details.
+Willkommen zur technischen Dokumentation der SQS Verkehrsapp.
+
+Die Anwendung dient zur Bereitstellung und Verwaltung von
+Verkehrsinformationen für deutsche Autobahnen.
 
 
 .. toctree::
    :maxdepth: 2
-   :caption: arc42:
+   :caption: Arc42 Dokumentation:
 
-   arc42/arc42.md
    arc42/01-einfuehrung-und-ziele.md
    arc42/02-randbedingungen.md
    arc42/03-kontextabgrenzung.md
@@ -28,12 +28,6 @@ documentation for details.
    arc42/10-qualitaetsanforderungen.md
    arc42/11-risiken-und-technische-schulden.md
    arc42/12-glossar.md
-
-.. toctree::
-   :maxdepth: 2
-   :caption: ADR:
-
-   adr/frontend-init-als-feature-vorlage
 
 .. toctree::
    :maxdepth: 2
