@@ -8,6 +8,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * JPA entity for persisting available motorways.
+ * <p>
+ * Each instance represents a motorway identifier (e.g. A3, A8)
+ * that is retrieved from the Autobahn API and stored locally.
+ */
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor

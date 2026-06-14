@@ -4,12 +4,18 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-
+/**
+ * JPA entity for persisting traffic events in the local cache.
+ * <p>
+ * The entity stores traffic events retrieved from the Autobahn API
+ * together with the timestamp of caching, allowing previously loaded
+ * data to be used when the API is unavailable.
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -29,6 +35,9 @@ public class CachedRoadEventEntity {
     private double longitude;
     private LocalDateTime cachedAt;
 
+    /**
+     * Creates a new cache entity for a traffic event.
+     */
     public CachedRoadEventEntity(
             String roadId,
             String eventId,
