@@ -3,6 +3,7 @@ package de.th_ro.sqs_verkehrsapp.adapter.out.autobahn;
 import de.th_ro.sqs_verkehrsapp.adapter.out.autobahn.dto.wrapper.ClosureResponse;
 import de.th_ro.sqs_verkehrsapp.adapter.out.autobahn.dto.wrapper.RoadworksResponse;
 import de.th_ro.sqs_verkehrsapp.adapter.out.autobahn.dto.wrapper.WarningResponse;
+import de.th_ro.sqs_verkehrsapp.domain.exception.ExternalTrafficApiException;
 import de.th_ro.sqs_verkehrsapp.domain.model.Coordinate;
 import de.th_ro.sqs_verkehrsapp.domain.model.RoadEvent;
 import de.th_ro.sqs_verkehrsapp.domain.model.RoadEventType;
@@ -20,7 +21,7 @@ import java.io.IOException;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
@@ -64,8 +65,108 @@ class AutobahnApiClientTest {
 
         List<RoadEvent> result = client.fetchTrafficEvents("A1");
 
-        assertEquals(3, result.size());
         assertThat(result).containsExactlyInAnyOrder(warning, roadwork, closure);
+    }
+
+    @Test
+    void fetchWarningsShouldReturnMappedWarnings() {
+        enqueueJsonResponse("{}");
+
+        RoadEvent warning = roadEvent("warning-1", "Warnung", RoadEventType.WARNING);
+
+        when(mapper.mapWarnings(eq("A1"), any(WarningResponse.class)))
+                .thenReturn(List.of(warning));
+
+        List<RoadEvent> result = client.fetchWarnings("A1");
+
+        assertThat(result).containsExactly(warning);
+    }
+
+    @Test
+    void fetchRoadworksShouldReturnMappedRoadworks() {
+        enqueueJsonResponse("{}");
+
+        RoadEvent roadwork = roadEvent("roadwork-1", "Baustelle", RoadEventType.ROADWORK);
+
+        when(mapper.mapRoadworks(eq("A1"), any(RoadworksResponse.class)))
+                .thenReturn(List.of(roadwork));
+
+        List<RoadEvent> result = client.fetchRoadworks("A1");
+
+        assertThat(result).containsExactly(roadwork);
+    }
+
+    @Test
+    void fetchClosuresShouldReturnMappedClosures() {
+        enqueueJsonResponse("{}");
+
+        RoadEvent closure = roadEvent("closure-1", "Sperrung", RoadEventType.CLOSURE);
+
+        when(mapper.mapClosures(eq("A1"), any(ClosureResponse.class)))
+                .thenReturn(List.of(closure));
+
+        List<RoadEvent> result = client.fetchClosures("A1");
+
+        assertThat(result).containsExactly(closure);
+    }
+
+    @Test
+    void fetchTrafficEventsShouldThrowExternalTrafficApiExceptionWhenApiReturnsServerError() {
+        mockWebServer.enqueue(new MockResponse().setResponseCode(500));
+
+        ExternalTrafficApiException exception = assertThrows(
+                ExternalTrafficApiException.class,
+                () -> client.fetchTrafficEvents("A1")
+        );
+
+        assertThat(exception.getMessage()).contains("A1");
+    }
+
+    @Test
+    void getAvailableRoadIdsShouldReturnRoadIds() {
+        enqueueJsonResponse("""
+        {
+          "roads": ["A1", "A3", "A8"]
+        }
+        """);
+
+        List<String> result = client.getAvailableRoadIds();
+
+        assertThat(result).containsExactly("A1", "A3", "A8");
+    }
+
+    @Test
+    void getAvailableRoadIdsShouldReturnEmptyListWhenRoadsAreNull() {
+        enqueueJsonResponse("""
+        {
+          "roads": null
+        }
+        """);
+
+        List<String> result = client.getAvailableRoadIds();
+
+        assertThat(result).isEmpty();
+    }
+
+    @Test
+    void getAvailableRoadIdsShouldReturnEmptyListWhenResponseIsEmpty() {
+        enqueueJsonResponse("{}");
+
+        List<String> result = client.getAvailableRoadIds();
+
+        assertThat(result).isEmpty();
+    }
+
+    @Test
+    void getAvailableRoadIdsShouldThrowExternalTrafficApiExceptionWhenApiReturnsServerError() {
+        mockWebServer.enqueue(new MockResponse().setResponseCode(500));
+
+        ExternalTrafficApiException exception = assertThrows(
+                ExternalTrafficApiException.class,
+                () -> client.getAvailableRoadIds()
+        );
+
+        assertThat(exception.getMessage()).contains("Autobahnen");
     }
 
     private void enqueueSuccessfulEventResponses() {
