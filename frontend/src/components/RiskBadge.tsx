@@ -1,5 +1,7 @@
+/** Mögliche Risikolevel einer Autobahn */
 export type RiskLevel = 'LOW' | 'MEDIUM' | 'HIGH';
 
+/** Props für das Risikolevel-Badge */
 interface RiskBadgeProps {
   /** Risikolevel der Autobahn: LOW, MEDIUM oder HIGH */
   riskLevel: RiskLevel;
