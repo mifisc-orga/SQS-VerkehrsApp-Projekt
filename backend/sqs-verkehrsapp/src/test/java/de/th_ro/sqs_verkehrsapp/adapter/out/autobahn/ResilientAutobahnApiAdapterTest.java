@@ -7,6 +7,7 @@ import de.th_ro.sqs_verkehrsapp.domain.model.Coordinate;
 import de.th_ro.sqs_verkehrsapp.domain.model.RoadEvent;
 import de.th_ro.sqs_verkehrsapp.domain.model.RoadEventType;
 import de.th_ro.sqs_verkehrsapp.domain.model.TrafficEventsResult;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -18,7 +19,11 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertThrows;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.anyList;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class ResilientAutobahnApiAdapterTest {
@@ -39,7 +44,7 @@ class ResilientAutobahnApiAdapterTest {
     private ResilientAutobahnApiAdapter adapter;
 
     @Test
-    void getTrafficEvents_shouldReturnLiveEventsAndSaveToCache() {
+    void getTrafficEventsShouldReturnLiveEventsAndSaveToCache() {
         RoadEvent event = new RoadEvent(
                 "id-1",
                 "A1",
@@ -65,7 +70,7 @@ class ResilientAutobahnApiAdapterTest {
     }
 
     @Test
-    void getTrafficEventsFallback_shouldReturnCachedEvents() {
+    void getTrafficEventsFallbackShouldReturnCachedEvents() {
         RoadEvent cachedEvent = new RoadEvent(
                 "cached-1",
                 "A1",
@@ -116,7 +121,7 @@ class ResilientAutobahnApiAdapterTest {
     }
 
     @Test
-    void getAvailableRoadIds_shouldReturnRoadIdsFromClientAndSaveToCache() {
+    void getAvailableRoadIdsShouldReturnRoadIdsFromClientAndSaveToCache() {
         List<String> roadIds = List.of("A1", "A3", "A8");
 
         when(autobahnApiClient.getAvailableRoadIds())
@@ -132,7 +137,7 @@ class ResilientAutobahnApiAdapterTest {
     }
 
     @Test
-    void getAvailableRoadIds_shouldNotSaveEmptyRoadIdsToCache() {
+    void getAvailableRoadIdsShouldNotSaveEmptyRoadIdsToCache() {
         when(autobahnApiClient.getAvailableRoadIds())
                 .thenReturn(List.of());
 
@@ -146,7 +151,7 @@ class ResilientAutobahnApiAdapterTest {
     }
 
     @Test
-    void getAvailableRoadIdsFallback_shouldReturnCachedRoadIds() {
+    void getAvailableRoadIdsFallbackShouldReturnCachedRoadIds() {
         List<String> cachedRoadIds = List.of("A1", "A3", "A8");
 
         when(availableRoadCachePort.findAll())
@@ -164,7 +169,7 @@ class ResilientAutobahnApiAdapterTest {
     }
 
     @Test
-    void getAvailableRoadIdsFallback_shouldThrowTrafficDataUnavailableExceptionWhenCacheIsEmpty() {
+    void getAvailableRoadIdsFallbackShouldThrowTrafficDataUnavailableExceptionWhenCacheIsEmpty() {
         when(availableRoadCachePort.findAll())
                 .thenReturn(List.of());
 
@@ -182,7 +187,33 @@ class ResilientAutobahnApiAdapterTest {
     }
 
     @Test
-    void getAllTrafficEvents_shouldReturnLiveEventsAndSaveAllToCache() {
+    void getAllTrafficEventsShouldReturnLiveEventsAndSaveAllToCache() {
+        Events roadEvents = getRoadEvents();
+
+        when(autobahnApiClient.getAvailableRoadIds())
+                .thenReturn(List.of("A1", "A3"));
+
+        when(autobahnApiClient.fetchTrafficEvents("A1"))
+                .thenReturn(List.of(roadEvents.eventA1()));
+
+        when(autobahnApiClient.fetchTrafficEvents("A3"))
+                .thenReturn(List.of(roadEvents.eventA3()));
+
+        TrafficEventsResult result = adapter.getAllTrafficEvents();
+
+        assertThat(result.events()).containsExactly(roadEvents.eventA1(), roadEvents.eventA3());
+        assertThat(result.live()).isTrue();
+        assertThat(result.cachedAt()).isNotNull();
+        assertThat(result.riskScore()).isEqualTo(0);
+
+        verify(autobahnCacheWriter).saveAvailableRoadIds(List.of("A1", "A3"));
+        verify(autobahnCacheWriter).saveTrafficEvents("A1", List.of(roadEvents.eventA1()));
+        verify(autobahnCacheWriter).saveTrafficEvents("A3", List.of(roadEvents.eventA3()));
+        verify(autobahnCacheWriter).saveTrafficEvents("ALL", List.of(roadEvents.eventA1(), roadEvents.eventA3()));
+    }
+
+    @NotNull
+    private static Events getRoadEvents() {
         RoadEvent eventA1 = new RoadEvent(
                 "id-1",
                 "A1",
@@ -204,31 +235,14 @@ class ResilientAutobahnApiAdapterTest {
                 new Coordinate(48.1, 11.5),
                 null
         );
+        return new Events(eventA1, eventA3);
+    }
 
-        when(autobahnApiClient.getAvailableRoadIds())
-                .thenReturn(List.of("A1", "A3"));
-
-        when(autobahnApiClient.fetchTrafficEvents("A1"))
-                .thenReturn(List.of(eventA1));
-
-        when(autobahnApiClient.fetchTrafficEvents("A3"))
-                .thenReturn(List.of(eventA3));
-
-        TrafficEventsResult result = adapter.getAllTrafficEvents();
-
-        assertThat(result.events()).containsExactly(eventA1, eventA3);
-        assertThat(result.live()).isTrue();
-        assertThat(result.cachedAt()).isNotNull();
-        assertThat(result.riskScore()).isEqualTo(0);
-
-        verify(autobahnCacheWriter).saveAvailableRoadIds(List.of("A1", "A3"));
-        verify(autobahnCacheWriter).saveTrafficEvents("A1", List.of(eventA1));
-        verify(autobahnCacheWriter).saveTrafficEvents("A3", List.of(eventA3));
-        verify(autobahnCacheWriter).saveTrafficEvents("ALL", List.of(eventA1, eventA3));
+    private record Events(RoadEvent eventA1, RoadEvent eventA3) {
     }
 
     @Test
-    void getAllTrafficEventsFallback_shouldReturnCachedAllEvents() {
+    void getAllTrafficEventsFallbackShouldReturnCachedAllEvents() {
         RoadEvent cachedEvent = new RoadEvent(
                 "cached-1",
                 "A1",
@@ -264,7 +278,7 @@ class ResilientAutobahnApiAdapterTest {
     }
 
     @Test
-    void getAllTrafficEventsFallback_shouldThrowTrafficDataUnavailableExceptionWhenCacheIsEmpty() {
+    void getAllTrafficEventsFallbackShouldThrowTrafficDataUnavailableExceptionWhenCacheIsEmpty() {
         when(cachePort.findByRoadId("ALL"))
                 .thenReturn(new TrafficEventsResult(
                         List.of(),

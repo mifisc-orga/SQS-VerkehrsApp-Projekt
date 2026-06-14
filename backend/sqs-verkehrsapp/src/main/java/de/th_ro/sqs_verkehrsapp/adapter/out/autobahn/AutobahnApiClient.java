@@ -6,12 +6,13 @@ import de.th_ro.sqs_verkehrsapp.adapter.out.autobahn.dto.wrapper.RoadworksRespon
 import de.th_ro.sqs_verkehrsapp.adapter.out.autobahn.dto.wrapper.WarningResponse;
 import de.th_ro.sqs_verkehrsapp.domain.exception.ExternalTrafficApiException;
 import de.th_ro.sqs_verkehrsapp.domain.model.RoadEvent;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Client responsible for communication with the Autobahn API.
@@ -38,7 +39,7 @@ public class AutobahnApiClient {
             events.addAll(fetchClosures(roadId));
             return events;
 
-        } catch (WebClientException | IllegalStateException exception) {
+        } catch (WebClientException exception) {
             throw new ExternalTrafficApiException(
                     "Fehler beim Abrufen der Autobahn-API für " + roadId,
                     exception
@@ -112,7 +113,7 @@ public class AutobahnApiClient {
 
             return response.roads();
 
-        } catch (WebClientException | IllegalStateException exception) {
+        } catch (WebClientException exception) {
             throw new ExternalTrafficApiException(
                     "Fehler beim Abrufen der verfügbaren Autobahnen",
                     exception

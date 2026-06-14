@@ -1,6 +1,7 @@
 package de.th_ro.sqs_verkehrsapp.application.service;
 
 import de.th_ro.sqs_verkehrsapp.application.port.out.UserPort;
+import de.th_ro.sqs_verkehrsapp.domain.exception.UserAlreadyExistsException;
 import de.th_ro.sqs_verkehrsapp.domain.model.AppUser;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,7 +16,9 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class AuthServiceTest {
@@ -55,7 +58,7 @@ class AuthServiceTest {
                 .thenReturn(true);
 
         assertThatThrownBy(() -> authService.register("testuser", "test123"))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(UserAlreadyExistsException.class)
                 .hasMessageContaining("bereits vergeben");
 
         verify(userPort, never()).save(any());

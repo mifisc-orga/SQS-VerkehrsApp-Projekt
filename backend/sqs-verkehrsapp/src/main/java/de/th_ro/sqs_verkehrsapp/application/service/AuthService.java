@@ -3,6 +3,7 @@ package de.th_ro.sqs_verkehrsapp.application.service;
 
 import de.th_ro.sqs_verkehrsapp.application.port.in.AuthUseCase;
 import de.th_ro.sqs_verkehrsapp.application.port.out.UserPort;
+import de.th_ro.sqs_verkehrsapp.domain.exception.UserAlreadyExistsException;
 import de.th_ro.sqs_verkehrsapp.domain.model.AppUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,13 +33,13 @@ public class AuthService implements AuthUseCase {
      * @param username the desired username
      * @param password the user's password
      * @return the registered user
-     * @throws IllegalArgumentException if the username is already in use
+     * @throws UserAlreadyExistsException if the username is already in use
      */
     @Override
     public AppUser register(String username, String password) {
 
         if (userPort.existsByUsername(username)) {
-            throw new IllegalArgumentException("Username ist bereits vergeben");
+            throw new UserAlreadyExistsException("Username ist bereits vergeben");
         }
 
         AppUser user = AppUser.builder()

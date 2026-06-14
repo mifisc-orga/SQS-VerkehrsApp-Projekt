@@ -43,18 +43,6 @@ class RiskScoreCalculatorTest {
 
         int result = riskScoreCalculator.calculateRiskScore(events);
 
-        /*
-         * WARNING  = 25
-         * ROADWORK = 10
-         * CLOSURE  = 50
-         *
-         * rawScore = 85
-         * maxPossibleScore = 3 * 50 = 150
-         *
-         * 85 / 150 * 100 = 56.67
-         * gerundet = 57
-         */
-
         assertThat(result).isEqualTo(57);
     }
 
@@ -63,7 +51,7 @@ class RiskScoreCalculatorTest {
 
         int result = riskScoreCalculator.calculateRiskScore(List.of());
 
-        assertThat(result).isEqualTo(0);
+        assertThat(result).isZero();
     }
 
     @Test
@@ -90,13 +78,6 @@ class RiskScoreCalculatorTest {
         );
 
         int result = riskScoreCalculator.calculateRiskScore(events);
-
-        /*
-         * rawScore = 30
-         * max = 150
-         *
-         * 30 / 150 * 100 = 20
-         */
 
         assertThat(result).isEqualTo(20);
     }

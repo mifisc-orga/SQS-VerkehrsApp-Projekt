@@ -16,7 +16,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -30,7 +34,7 @@ class RoadEventCacheAdapterTest {
     private RoadEventCacheAdapter adapter;
 
     @Test
-    void save_shouldDeleteOldEventsAndSaveNewEvents() {
+    void saveShouldDeleteOldEventsAndSaveNewEvents() {
         String roadId = "A1";
 
         List<RoadEvent> events = List.of(
@@ -69,18 +73,18 @@ class RoadEventCacheAdapterTest {
     }
 
     @Test
-    void findByRoadId_shouldMapEntitiesToRoadEvents() {
+    void findByRoadIdShouldMapEntitiesToRoadEvents() {
         LocalDateTime cachedAt = LocalDateTime.of(2026, 5, 9, 14, 30);
-        CachedRoadEventEntity entity = new CachedRoadEventEntity(
-                "A1",
-                "event-1",
-                "Baustelle",
-                "rechter Fahrstreifen gesperrt",
-                "ROADWORK",
-                52.1,
-                13.4,
-                cachedAt
-        );
+        CachedRoadEventEntity entity = CachedRoadEventEntity.builder()
+                .roadId("A1")
+                .eventId("event-1")
+                .title("Baustelle")
+                .subtitle("rechter Fahrstreifen gesperrt")
+                .type("ROADWORK")
+                .latitude(52.1)
+                .longitude(13.4)
+                .cachedAt(cachedAt)
+                .build();
 
         when(repository.findByRoadId("A1")).thenReturn(List.of(entity));
 
@@ -102,7 +106,7 @@ class RoadEventCacheAdapterTest {
     }
 
     @Test
-    void findByRoadId_shouldReturnEmptyResultWhenNoCachedEventsExist() {
+    void findByRoadIdShouldReturnEmptyResultWhenNoCachedEventsExist() {
         when(repository.findByRoadId("A2")).thenReturn(List.of());
 
         TrafficEventsResult result = adapter.findByRoadId("A2");
