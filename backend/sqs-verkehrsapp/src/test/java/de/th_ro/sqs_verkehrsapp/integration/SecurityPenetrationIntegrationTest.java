@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-public class SecurityPenetrationIntegrationTest {
+class SecurityPenetrationIntegrationTest {
 
     private static final String USERNAME = "security-test-user";
     private static final String PASSWORD = "password";

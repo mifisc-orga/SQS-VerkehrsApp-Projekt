@@ -39,6 +39,15 @@ public class GlobalExceptionHandler {
                 .body(response);
     }
 
+    /**
+     * Handles authentication failures caused by invalid user credentials.
+     * <p>
+     * Returns a standardized error response indicating that authentication
+     * was unsuccessful.
+     *
+     * @param exception the exception describing the authentication failure
+     * @return a standardized API error response with HTTP status 401
+     */
     @ExceptionHandler(InvalidCredentialsException.class)
     public ResponseEntity<ApiErrorResponse> handleInvalidCredentials(
             InvalidCredentialsException exception
