@@ -13,20 +13,21 @@ documentation for details.
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: arc42:
 
-   arc42/01-einfuehrung-und-ziele
-   arc42/02-randbedingungen
-   arc42/03-kontextabgrenzung
-   arc42/04-loesungsstrategie
-   arc42/05-bausteinsicht
-   arc42/06-laufzeitsicht
-   arc42/07-verteilungssicht
-   arc42/08-querschnittliche-konzepte
-   arc42/09-architekturentscheidungen
-   arc42/10-qualitaetsanforderungen
-   arc42/11-risiken-und-technische-schulden
-   arc42/12-glossar
+   arc42/arc42.md
+   arc42/01-einfuehrung-und-ziele.md
+   arc42/02-randbedingungen.md
+   arc42/03-kontextabgrenzung.md
+   arc42/04-loesungsstrategie.md
+   arc42/05-bausteinsicht.md
+   arc42/06-laufzeitsicht.md
+   arc42/07-verteilungssicht.md
+   arc42/08-querschnittliche-konzepte.md
+   arc42/09-architekturentscheidungen.md
+   arc42/10-qualitaetsanforderungen.md
+   arc42/11-risiken-und-technische-schulden.md
+   arc42/12-glossar.md
 
 .. toctree::
    :maxdepth: 2
