@@ -38,7 +38,17 @@ const mockSavedRoads = [
   { id: '1', userId: '1', roadId: 'A3' },
   { id: '2', userId: '1', roadId: 'A92' },
 ];
-
+const createSavedRoadTraffic = (roadId: string, riskScore: number) => ({
+  roadId,
+  trafficEvents: {
+    events: mockTrafficData.events.filter(
+      (event: { roadId: string }) => event.roadId === roadId
+    ),
+    live: true,
+    cachedAt: null,
+    riskScore,
+  },
+});
 test.beforeEach(async ({ page }) => {
   await page.route('/api/traffic', async route => {
     await route.fulfill({ json: mockTrafficData });
@@ -62,24 +72,8 @@ test.beforeEach(async ({ page }) => {
   await page.route('/api/dashboard/saved-road-traffic', async route => {
     await route.fulfill({
       json: [
-        {
-          roadId: 'A3',
-          trafficEvents: {
-            events: mockTrafficData.events.filter((e: { roadId: string }) => e.roadId === 'A3'),
-            live: true,
-            cachedAt: null,
-            riskScore: 2,
-          },
-        },
-        {
-          roadId: 'A92',
-          trafficEvents: {
-            events: mockTrafficData.events.filter((e: { roadId: string }) => e.roadId === 'A92'),
-            live: true,
-            cachedAt: null,
-            riskScore: 1,
-          },
-        },
+       createSavedRoadTraffic('A3', 2),
+       createSavedRoadTraffic('A92', 1),
       ],
     });
   });

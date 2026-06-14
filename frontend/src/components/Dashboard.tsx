@@ -48,7 +48,9 @@ export function Dashboard({ token, refreshKey, onRoadSelect }: DashboardProps) {
   }
 
   async function handleDeleteConfirm() {
-    if (!confirmDeleteRoadId) { return; }
+    if (!confirmDeleteRoadId) {
+    return;
+    }
     try {
       await deleteFavourite(token, confirmDeleteRoadId);
       setRoadData((prev) => prev.filter((r) => r.roadId !== confirmDeleteRoadId));
@@ -72,14 +74,12 @@ export function Dashboard({ token, refreshKey, onRoadSelect }: DashboardProps) {
           const maxRisk = getMaxRiskLevel(events);
           const uniqueTypes = [...new Set(events.map((e) => e.type))];
           return (
-            <div
+           <button
               key={roadId}
+              type="button"
               className="dashboard-card dashboard-card--clickable"
               data-testid={`dashboard-road-${roadId}`}
               onClick={() => onRoadSelect(roadId)}
-              onKeyDown={(e) => { if (e.key === 'Enter') { onRoadSelect(roadId); } }}
-              role="button"
-              tabIndex={0}
             >
               <div className="dashboard-card__header">
                 <span className="dashboard-card__title">🛣️ {roadId}</span>
