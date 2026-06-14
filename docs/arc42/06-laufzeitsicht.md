@@ -25,7 +25,7 @@ Ein neuer Benutzer registriert sich im System.
 
 ### Ablauf
 
-```mermaid id="fslrmi"
+```{mermaid} id="fslrmi"
 sequenceDiagram
 
 actor User
@@ -77,7 +77,7 @@ Ein Benutzer authentifiziert sich und erhält ein JWT.
 
 ### Ablauf
 
-```mermaid id="rl3lmo"
+```{mermaid} id="rl3lmo"
 sequenceDiagram
 
 actor User
@@ -114,7 +114,7 @@ Ein Benutzer ruft eine geschützte Ressource auf.
 
 ### Ablauf
 
-```mermaid id="1ih62d"
+```{mermaid} id="1ih62d"
 sequenceDiagram
 
 actor User
@@ -151,7 +151,7 @@ Abruf aller Verkehrsmeldungen für eine bestimmte Autobahn.
 
 ### Ablauf
 
-```mermaid id="qzyo3v"
+```{mermaid} id="qzyo3v"
 sequenceDiagram
 
 actor User
@@ -201,7 +201,7 @@ Berechnung eines normierten Risikoscores.
 
 ### Ablauf
 
-```mermaid id="9zck0r"
+```{mermaid} id="9zck0r"
 sequenceDiagram
 
 participant TrafficService
@@ -228,7 +228,7 @@ Anzeige aller gespeicherten Autobahnen eines Benutzers inklusive Verkehrsdaten.
 
 ### Ablauf
 
-```mermaid id="62m2va"
+```{mermaid} id="62m2va"
 sequenceDiagram
 
 actor User
@@ -269,7 +269,7 @@ Ein Benutzer speichert eine Autobahn als Favorit.
 
 ### Ablauf
 
-```mermaid id="ez80gi"
+```{mermaid} id="ez80gi"
 sequenceDiagram
 
 actor User
@@ -305,7 +305,7 @@ Speicherung neu geladener Verkehrsdaten.
 
 ### Ablauf
 
-```mermaid id="zwr0iv"
+```{mermaid} id="zwr0iv"
 sequenceDiagram
 
 participant ResilientAdapter
@@ -331,7 +331,7 @@ Bereitstellung von Verkehrsdaten trotz Ausfall der externen API.
 
 ### Ablauf
 
-```mermaid id="v68u56"
+```{mermaid} id="v68u56"
 sequenceDiagram
 
 participant TrafficService
@@ -370,7 +370,7 @@ Bereitstellung der Autobahnliste bei API-Ausfall.
 
 ### Ablauf
 
-```mermaid id="kysljn"
+```{mermaid} id="kysljn"
 sequenceDiagram
 
 participant ResilientAdapter
@@ -398,7 +398,7 @@ Einheitliche Fehlerkommunikation.
 
 ### Ablauf
 
-```mermaid id="g8dlzt"
+```{mermaid} id="g8dlzt"
 sequenceDiagram
 
 participant Service
@@ -417,7 +417,7 @@ GlobalExceptionHandler-->>Client: ApiErrorResponse
 
 ## 6.13 Laufzeitverhalten im Überblick
 
-```mermaid id="gtub9m"
+```{mermaid} id="gtub9m"
 flowchart LR
 
 Client --> Controller

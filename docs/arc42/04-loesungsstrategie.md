@@ -32,7 +32,7 @@ Dadurch bleibt der Anwendungskern unabhängig von technischen Details.
 
 ### Architekturübersicht
 
-```mermaid id="8q1y9g"
+```{mermaid} id="8q1y9g"
 flowchart LR
 
 subgraph Inbound Adapter
