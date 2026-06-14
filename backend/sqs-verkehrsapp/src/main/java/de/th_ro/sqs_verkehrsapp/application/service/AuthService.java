@@ -3,6 +3,7 @@ package de.th_ro.sqs_verkehrsapp.application.service;
 
 import de.th_ro.sqs_verkehrsapp.application.port.in.AuthUseCase;
 import de.th_ro.sqs_verkehrsapp.application.port.out.UserPort;
+import de.th_ro.sqs_verkehrsapp.domain.exception.InvalidCredentialsException;
 import de.th_ro.sqs_verkehrsapp.domain.exception.UserAlreadyExistsException;
 import de.th_ro.sqs_verkehrsapp.domain.model.AppUser;
 import lombok.RequiredArgsConstructor;
@@ -63,10 +64,10 @@ public class AuthService implements AuthUseCase {
     public AppUser login(String username, String password) {
 
         AppUser user = userPort.findByUsername(username)
-                .orElseThrow(() -> new IllegalArgumentException("Ungültige Login-Daten"));
+                .orElseThrow(() -> new InvalidCredentialsException("Ungültige Login-Daten"));
 
         if (!passwordEncoder.matches(password, user.getPasswordHash())) {
-            throw new IllegalArgumentException("Ungültige Login-Daten");
+            throw new InvalidCredentialsException("Ungültige Login-Daten");
         }
 
         return user;
