@@ -13,18 +13,34 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Persistence adapter for the traffic event cache.
+ * <p>
+ * Implements {@link RoadEventCachePort} and stores as well as retrieves
+ * traffic events from the database. Domain objects are converted to
+ * persistence entities and vice versa.
+ */
 @Component
 public class RoadEventCacheAdapter implements RoadEventCachePort {
 
-    private static final String ALL_ROADS_CACHE_KEY = "ALL";
-    private static final String AVAILABLE_ROADS_CACHE_KEY = "AVAILABLE_ROADS";
-
     private final CachedRoadEventRepository repository;
 
+    /**
+     * Creates a new adapter for accessing the traffic event cache.
+     *
+     * @param repository repository for cached traffic events
+     */
     public RoadEventCacheAdapter(CachedRoadEventRepository repository) {
         this.repository = repository;
     }
 
+    /**
+     * Saves the traffic events of a motorway in the cache.
+     * Existing cache entries for the motorway are removed beforehand.
+     *
+     * @param roadId the motorway identifier
+     * @param events the traffic events to be cached
+     */
     @Override
     @Transactional
     public void save(String roadId, List<RoadEvent> events) {
@@ -48,6 +64,13 @@ public class RoadEventCacheAdapter implements RoadEventCachePort {
         repository.saveAll(entities);
     }
 
+    /**
+     * Finds the cached traffic events for a motorway.
+     *
+     * @param roadId the motorway identifier
+     * @return the result object containing the cached events and
+     *         associated cache information
+     */
     @Override
     public TrafficEventsResult findByRoadId(String roadId) {
         List<CachedRoadEventEntity> entities = repository.findByRoadId(roadId);

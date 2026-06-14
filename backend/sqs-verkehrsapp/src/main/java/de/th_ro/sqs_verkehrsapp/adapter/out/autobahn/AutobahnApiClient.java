@@ -6,24 +6,29 @@ import de.th_ro.sqs_verkehrsapp.adapter.out.autobahn.dto.wrapper.RoadworksRespon
 import de.th_ro.sqs_verkehrsapp.adapter.out.autobahn.dto.wrapper.WarningResponse;
 import de.th_ro.sqs_verkehrsapp.domain.exception.ExternalTrafficApiException;
 import de.th_ro.sqs_verkehrsapp.domain.model.RoadEvent;
+import java.util.ArrayList;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientException;
 
-import java.util.ArrayList;
-import java.util.List;
-
+/**
+ * Client responsible for communication with the Autobahn API.
+ * Retrieves warnings, roadworks, closures and available road IDs.
+ */
 @Component
+@RequiredArgsConstructor
 public class AutobahnApiClient {
 
     private final WebClient webClient;
     private final AutobahnApiMapper mapper;
-
-    public AutobahnApiClient(WebClient webClient, AutobahnApiMapper mapper) {
-        this.webClient = webClient;
-        this.mapper = mapper;
-    }
-
+    /**
+     * Retrieves all traffic events for the given road.
+     *
+     * @param roadId motorway identifier, for example A3
+     * @return combined list of warnings, roadworks and closures
+     */
     public List<RoadEvent> fetchTrafficEvents(String roadId) {
         try {
             List<RoadEvent> events = new ArrayList<>();
@@ -41,6 +46,12 @@ public class AutobahnApiClient {
         }
     }
 
+    /**
+     * Retrieves roadworks for the given road.
+     *
+     * @param roadId motorway identifier
+     * @return mapped roadwork events
+     */
     public List<RoadEvent> fetchRoadworks(String roadId) {
         RoadworksResponse roadworksResponse = webClient.get()
                 .uri("/{roadId}/services/roadworks", roadId)
@@ -51,6 +62,12 @@ public class AutobahnApiClient {
         return mapper.mapRoadworks(roadId, roadworksResponse);
     }
 
+    /**
+     * Retrieves warnings for the given road.
+     *
+     * @param roadId motorway identifier
+     * @return mapped warning events
+     */
     public List<RoadEvent> fetchWarnings(String roadId) {
         WarningResponse warningResponse = webClient.get()
                 .uri("/{roadId}/services/warning", roadId)
@@ -60,6 +77,12 @@ public class AutobahnApiClient {
         return mapper.mapWarnings(roadId, warningResponse);
     }
 
+    /**
+     * Retrieves closures for the given road.
+     *
+     * @param roadId motorway identifier
+     * @return mapped closure events
+     */
     public List<RoadEvent> fetchClosures(String roadId) {
 
         ClosureResponse closureResponse = webClient.get()
@@ -70,6 +93,11 @@ public class AutobahnApiClient {
         return mapper.mapClosures(roadId, closureResponse);
     }
 
+    /**
+     * Retrieves all motorway identifiers available from the Autobahn API.
+     *
+     * @return list of available road IDs
+     */
     public List<String> getAvailableRoadIds() {
         try {
             AutobahnRoadsResponse response = webClient.get()

@@ -9,12 +9,28 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+/**
+ * Spring Security configuration for the application.
+ * <p>
+ * Configures authentication, authorization rules,
+ * security filters, and password encoding.
+ */
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
+    /**
+     * Configures the security filter chain.
+     * <p>
+     * Defines publicly accessible endpoints, requires authentication
+     * for all other requests, and registers the JWT authentication filter.
+     *
+     * @param http the HTTP security configuration
+     * @return the configured security filter chain
+     * @throws Exception if the security configuration fails
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
@@ -36,6 +52,11 @@ public class SecurityConfig {
                 .build();
     }
 
+    /**
+     * Creates a password encoder for securely hashing passwords.
+     *
+     * @return a BCrypt password encoder
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

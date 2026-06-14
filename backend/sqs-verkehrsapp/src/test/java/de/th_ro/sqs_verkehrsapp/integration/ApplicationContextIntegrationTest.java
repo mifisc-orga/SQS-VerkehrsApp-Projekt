@@ -10,7 +10,7 @@ import org.springframework.test.context.ActiveProfiles;
         properties = "autobahn.api.base-url=http://localhost:9999"
 )
 @ActiveProfiles("test")
-public class ApplicationContextIntegrationTest {
+class ApplicationContextIntegrationTest {
 
     @Test
     void contextLoads() {

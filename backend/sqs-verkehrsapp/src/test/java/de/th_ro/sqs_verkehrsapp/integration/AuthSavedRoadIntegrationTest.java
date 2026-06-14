@@ -30,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @SpringBootTest
 @AutoConfigureMockMvc
-public class AuthSavedRoadIntegrationTest {
+class AuthSavedRoadIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -53,7 +53,7 @@ public class AuthSavedRoadIntegrationTest {
     }
 
     @Test
-    public void shouldRegisterLoginSaveRoadAndGetDashboardTraffic() throws Exception {
+    void shouldRegisterLoginSaveRoadAndGetDashboardTraffic() throws Exception {
 
         String registerResponse = mockMvc.perform(post("/api/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
