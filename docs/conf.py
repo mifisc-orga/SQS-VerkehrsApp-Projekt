@@ -16,6 +16,10 @@ release = '0.1'
 
 extensions = ['myst_parser','sphinxcontrib.mermaid']
 
+myst_fence_as_directive = [
+    "mermaid",
+]
+
 templates_path = ['_templates']
 exclude_patterns = []
 

@@ -36,7 +36,7 @@ Dabei gelten folgende Anforderungen:
 
 ### Sicherheitsarchitektur
 
-```{mermaid} id="p4s7z5"
+```mermaid id="p4s7z5"
 flowchart LR
 
 User --> AuthController
@@ -99,7 +99,7 @@ Die Anwendung verwendet JSON Web Tokens (JWT).
 
 #### Ablauf
 
-```{mermaid} id="ng1u3d"
+```mermaid id="ng1u3d"
 sequenceDiagram
 
 participant User
@@ -150,7 +150,7 @@ Fehler sollen konsistent behandelt und für Clients verständlich aufbereitet we
 
 ### Architektur
 
-```{mermaid} id="h7gw1o"
+```mermaid id="h7gw1o"
 flowchart LR
 
 Exception --> GlobalExceptionHandler
@@ -200,7 +200,7 @@ Persistenzzugriffe sollen von der Fachlogik entkoppelt werden.
 
 ### Umsetzung
 
-```{mermaid} id="5z6evf"
+```mermaid id="5z6evf"
 flowchart LR
 
 Service --> Port
@@ -262,7 +262,7 @@ AvailableRoads
 
 ### Cache-Struktur
 
-```{mermaid} id="jlwmby"
+```mermaid id="jlwmby"
 flowchart LR
 
 AutobahnAPI
@@ -343,7 +343,7 @@ Lokaler Datenbank-Cache
 
 ### Resilience-Architektur
 
-```{mermaid} id="x5uh4q"
+```mermaid id="x5uh4q"
 flowchart LR
 
 Client
@@ -381,7 +381,7 @@ Entkopplung externer Datenstrukturen von der Domäne.
 
 ### Architektur
 
-```{mermaid} id="9vl1dl"
+```mermaid id="9vl1dl"
 flowchart LR
 
 DTO --> Mapper --> Domain
@@ -694,7 +694,7 @@ Die Analyse erfolgt automatisiert über die Build- bzw. CI-Pipeline.
 
 ````
 
-```{mermaid}
+```mermaid
 flowchart LR
 
 Developer --> Git

@@ -8,7 +8,7 @@ Die Anwendung fungiert als Vermittler zwischen den Benutzern und einer externen 
 
 ### Fachliches Kontextdiagramm
 
-```{mermaid}
+```mermaid
 flowchart LR
 
 User["Benutzer"]
@@ -64,7 +64,7 @@ Aus technischer Sicht besteht die Anwendung aus mehreren logisch getrennten Komp
 
 ### Technisches Kontextdiagramm
 
-```{mermaid}
+```mermaid
 flowchart LR
 
 Client["Frontend / Browser"]

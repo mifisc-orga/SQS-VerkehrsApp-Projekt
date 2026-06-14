@@ -12,7 +12,7 @@ Die SQS Verkehrsapp ist als Spring-Boot-Anwendung konzipiert und wird als eigens
 
 ### Deployment-Diagramm
 
-```{mermaid} id="0oc1nr"
+```mermaid id="0oc1nr"
 flowchart TB
 
 subgraph Client
@@ -96,7 +96,7 @@ Caching
 
 ### Interne Struktur
 
-```{mermaid} id="dhd0kw"
+```mermaid id="dhd0kw"
 flowchart TB
 
 Controllers
@@ -161,7 +161,7 @@ Autobahn-Cache
 
 ### Datenmodell
 
-```{mermaid} id="c8vxzv"
+```mermaid id="c8vxzv"
 erDiagram
 
 APP_USERS {
@@ -276,7 +276,7 @@ Die Autobahn API stellt die primäre Quelle für Verkehrsinformationen dar.
 
 ### Kommunikationsweg
 
-```{mermaid} id="x6h0c2"
+```mermaid id="x6h0c2"
 sequenceDiagram
 
 participant Backend
@@ -325,7 +325,7 @@ Autobahnlisten
 
 ### Cache-Ablauf
 
-```{mermaid} id="0pdgdf"
+```mermaid id="0pdgdf"
 flowchart LR
 
 API["Autobahn API"]
@@ -359,7 +359,7 @@ JWT-basierte Authentifizierung.
 
 ### Ablauf
 
-```{mermaid} id="6u8zvh"
+```mermaid id="6u8zvh"
 flowchart LR
 
 User --> Login

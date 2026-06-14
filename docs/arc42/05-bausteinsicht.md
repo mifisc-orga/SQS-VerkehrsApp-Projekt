@@ -20,7 +20,7 @@ Die Fachlogik bildet den Mittelpunkt des Systems und ist vollständig von techni
 
 ### Systemübersicht
 
-```{mermaid}
+```mermaid
 flowchart TB
 
 subgraph Inbound Adapter
@@ -76,7 +76,7 @@ Die Inbound Adapter bilden die öffentliche Schnittstelle des Systems.
 
 ### Komponentenübersicht
 
-```{mermaid}
+```mermaid
 classDiagram
 
 class AuthController
@@ -164,7 +164,7 @@ Die Application Layer implementiert die Anwendungsfälle des Systems.
 
 ### Struktur
 
-```{mermaid}
+```mermaid
 flowchart LR
 
 UseCase --> Service
@@ -174,7 +174,7 @@ UseCase --> Service
 
 ### Input Ports
 
-```{mermaid}
+```mermaid
 classDiagram
 
 class AuthUseCase
@@ -191,7 +191,7 @@ Definition aller fachlichen Anwendungsfälle.
 
 ### Services
 
-```{mermaid}
+```mermaid
 classDiagram
 
 class AuthService
@@ -248,7 +248,7 @@ Die Domäne enthält die eigentliche Fachlogik.
 
 ### Domänenübersicht
 
-```{mermaid}
+```mermaid
 classDiagram
 
 class AppUser
@@ -354,7 +354,7 @@ Outbound Ports abstrahieren alle externen Abhängigkeiten.
 
 ### Übersicht
 
-```{mermaid}
+```mermaid
 classDiagram
 
 class UserPort
@@ -402,7 +402,7 @@ Die Infrastructure Layer implementiert alle technischen Schnittstellen.
 
 ### Adapterübersicht
 
-```{mermaid}
+```mermaid
 classDiagram
 
 class UserAdapter
@@ -524,7 +524,7 @@ Verantwortlich für:
 
 ### Entity-Struktur
 
-```{mermaid}
+```mermaid
 erDiagram
 
 APP_USERS {
@@ -559,7 +559,7 @@ APP_USERS ||--o{ SAVED_ROADS : owns
 
 ### Vollständige Komponentenübersicht
 
-```{mermaid}
+```mermaid
 flowchart LR
 
 Controllers --> UseCases
