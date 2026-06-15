@@ -44,4 +44,6 @@ jobs:
         run: npm run coverage:e2e
 
       - name: Check coverage report
-        run: test -s coverage/lcov.info
+        run: |
+          test -s coverage/lcov.info
+          grep -q '^SF:frontend/src/' coverage/lcov.info
