@@ -55,7 +55,7 @@ export function AutobahnSelector({
   function toggle(road: string) {
     let next: string[];
     if (selected.includes(road)) {
-      next = selected.filter((r) => r !== road);
+      next = selected.filter(r => r !== road);
     } else if (selected.length < max) {
       next = [...selected, road];
     } else {
@@ -65,10 +65,10 @@ export function AutobahnSelector({
   }
 
   function remove(road: string) {
-    onSelect(selected.filter((r) => r !== road));
+    onSelect(selected.filter(r => r !== road));
   }
 
-  if (error) return <p>{error}</p>;
+  if (error) { return <p>{error}</p>; }
 
   return (
     <div ref={wrapperRef} style={{ position: 'relative', display: 'inline-block' }}>
@@ -147,7 +147,7 @@ export function AutobahnSelector({
                   transition: 'background 0.15s',
                 }}
                 onMouseEnter={(e) => {
-                  if (!isDisabled) (e.currentTarget as HTMLElement).style.background = isSelected ? '#e0fdf4' : '#f8fafc';
+                  if (!isDisabled) { (e.currentTarget as HTMLElement).style.background = isSelected ? '#e0fdf4' : '#f8fafc'; }
                 }}
                 onMouseLeave={(e) => {
                   (e.currentTarget as HTMLElement).style.background = isSelected ? '#f0fdf9' : 'white';

@@ -187,3 +187,44 @@ test('Error message is cleared when switching tabs', async ({ page }) => {
   await page.getByTestId('tab-register').click();
   await expect(page.getByTestId('auth-error')).not.toBeVisible();
 });
+
+// ── Password toggle ──────────────────────────────────────────
+
+test('Password field type is password by default', async ({ page }) => {
+  await page.goto('/');
+  await page.getByTestId('login-button').click();
+  const input = page.getByTestId('password-input');
+  await expect(input).toHaveAttribute('type', 'password');
+});
+
+test('Password field becomes text after clicking toggle', async ({ page }) => {
+  await page.goto('/');
+  await page.getByTestId('login-button').click();
+  await page.getByTestId('toggle-password').click();
+  const input = page.getByTestId('password-input');
+  await expect(input).toHaveAttribute('type', 'text');
+});
+
+test('Password field returns to password after clicking toggle twice', async ({ page }) => {
+  await page.goto('/');
+  await page.getByTestId('login-button').click();
+  await page.getByTestId('toggle-password').click();
+  await page.getByTestId('toggle-password').click();
+  const input = page.getByTestId('password-input');
+  await expect(input).toHaveAttribute('type', 'password');
+});
+
+// ── Submit button label ──────────────────────────────────────
+
+test('Submit button shows Einloggen on login tab', async ({ page }) => {
+  await page.goto('/');
+  await page.getByTestId('login-button').click();
+  await expect(page.getByTestId('submit-login')).toContainText('Einloggen');
+});
+
+test('Submit button shows Registrieren on register tab', async ({ page }) => {
+  await page.goto('/');
+  await page.getByTestId('login-button').click();
+  await page.getByTestId('tab-register').click();
+  await expect(page.getByTestId('submit-register')).toContainText('Registrieren');
+});
