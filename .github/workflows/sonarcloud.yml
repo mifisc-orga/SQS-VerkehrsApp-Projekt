@@ -44,12 +44,6 @@ jobs:
           npm run build
 
       - name: Analyze with SonarCloud
-        uses: SonarSource/sonarcloud-github-action@v2
+        uses: SonarSource/sonarqube-scan-action@v8
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          args: >
-            -Dsonar.projectKey=mifisc_SQS-VerkehrsApp-Projekt
-            -Dsonar.organization=mifisc
-            -Dsonar.sources=backend/sqs-verkehrsapp/src/main/java,frontend/src
-            -Dsonar.tests=backend/sqs-verkehrsapp/src/test/java
