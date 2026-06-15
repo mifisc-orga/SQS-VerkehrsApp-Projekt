@@ -220,7 +220,7 @@ function App() {
                 </span>
               ) : (
                 <span data-testid="cached-indicator" className="status-cached">
-                  Gecacht · {formatCachedAt(cachedAt)}
+                  Gecached {formatCachedAt(cachedAt)}
                 </span>
               )}
             </div>
