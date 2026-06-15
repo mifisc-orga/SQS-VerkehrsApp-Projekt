@@ -116,11 +116,14 @@ interface SubmitButtonsProps {
 
 /** Submit button that switches label based on the active auth tab. */
 function SubmitButtons({ authMode, onLogin, onRegister }: SubmitButtonsProps) {
-  return authMode === 'login' ? (
-    <button className="btn btn-primary" data-testid="submit-login" onClick={onLogin} style={{ width: '100%', justifyContent: 'center' }}>
-      Einloggen
-    </button>
-  ) : (
+  if (authMode === 'login') {
+    return (
+      <button className="btn btn-primary" data-testid="submit-login" onClick={onLogin} style={{ width: '100%', justifyContent: 'center' }}>
+        Einloggen
+      </button>
+    );
+  }
+  return (
     <button className="btn btn-primary" data-testid="submit-register" onClick={onRegister} style={{ width: '100%', justifyContent: 'center' }}>
       Registrieren
     </button>
