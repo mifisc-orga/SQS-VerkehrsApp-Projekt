@@ -2,33 +2,33 @@ import type { TrafficEvent } from '../components/IncidentMap';
 
 const API_BASE = '/api';
 
-/** Lädt alle verfügbaren Autobahnen vom Server */
+/** Fetches all available motorways from the server */
 export async function fetchAvailableRoads(): Promise<string[]> {
   const response = await fetch(`${API_BASE}/traffic`);
   if (!response.ok) {
-    throw new Error(`Fehler beim Laden der Autobahnen: ${response.status}`);
+    throw new Error(`Failed to load motorways: ${response.status}`);
   }
   const data = await response.json();
   const roads: string[] = [...new Set<string>((data.events ?? []).map((e: { roadId: string }) => e.roadId))];
   return roads.sort();
 }
 
-/** Ergebnis einer Verkehrsdaten-Anfrage */
+/** Result of a traffic data request */
 export interface TrafficResult {
-  /** Liste der Verkehrsereignisse */
+  /** List of traffic events */
   events: TrafficEvent[];
-  /** true, wenn die Daten live vom Server kommen */
+  /** true if the data is live from the server */
   live: boolean;
-  /** Zeitstempel des Caches, oder null wenn live */
+  /** Cache timestamp, or null if live */
   cachedAt: string | null;
 }
 
-/** Lädt Verkehrsereignisse, optional gefiltert nach Autobahn */
+/** Fetches traffic events, optionally filtered by motorway */
 export async function fetchTrafficEvents(roadId?: string): Promise<TrafficResult> {
   const url = roadId ? `${API_BASE}/traffic/${roadId}` : `${API_BASE}/traffic`;
   const response = await fetch(url);
   if (!response.ok) {
-    throw new Error(`Fehler beim Laden der Ereignisse: ${response.status}`);
+    throw new Error(`Failed to load events: ${response.status}`);
   }
   const data = await response.json();
   return {
@@ -38,20 +38,41 @@ export async function fetchTrafficEvents(roadId?: string): Promise<TrafficResult
   };
 }
 
-/** Meldet den Nutzer an und gibt Token und Benutzernamen zurück */
-export async function login(username: string, password: string): Promise<{ token: string; username: string }> {
+/** Authenticates the user and returns a JWT token */
+export async function login(username: string, password: string): Promise<{ token: string }> {
   const response = await fetch(`${API_BASE}/auth/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ username, password }),
   });
   if (!response.ok) {
-    throw new Error('Login fehlgeschlagen');
+    throw new Error('Login failed');
   }
   return response.json();
 }
 
-/** Speichert eine Autobahn als Favorit des eingeloggten Nutzers */
+/** Registers a new user and returns a JWT token */
+export async function register(username: string, password: string): Promise<{ token: string }> {
+  const response = await fetch(`${API_BASE}/auth/register`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username, password }),
+  });
+  if (!response.ok) {
+    throw new Error('Registration failed');
+  }
+  return response.json();
+}
+
+/** Logs the user out server-side (JWT is stateless — token is only cleared on the client) */
+export async function logout(token: string): Promise<void> {
+  await fetch(`${API_BASE}/auth/logout`, {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${token}` },
+  });
+}
+
+/** Saves a motorway as a favourite for the logged-in user */
 export async function saveFavourite(token: string, roadId: string): Promise<void> {
   const response = await fetch(`${API_BASE}/saved-roads`, {
     method: 'POST',
@@ -62,50 +83,50 @@ export async function saveFavourite(token: string, roadId: string): Promise<void
     body: JSON.stringify({ roadId }),
   });
   if (!response.ok) {
-    throw new Error('Favorit konnte nicht gespeichert werden');
+    throw new Error('Failed to save favourite');
   }
 }
 
-/** Entfernt eine Autobahn aus den Favoriten des eingeloggten Nutzers */
+/** Removes a motorway from the logged-in user's favourites */
 export async function deleteFavourite(token: string, roadId: string): Promise<void> {
   const response = await fetch(`${API_BASE}/saved-roads/${roadId}`, {
     method: 'DELETE',
     headers: { 'Authorization': `Bearer ${token}` },
   });
   if (!response.ok) {
-    throw new Error('Favorit konnte nicht entfernt werden');
+    throw new Error('Failed to remove favourite');
   }
 }
 
-/** Lädt alle gespeicherten Autobahnen des eingeloggten Nutzers */
+/** Fetches all saved motorways for the logged-in user */
 export async function fetchSavedRoads(token: string): Promise<string[]> {
   const response = await fetch(`${API_BASE}/saved-roads`, {
     headers: { 'Authorization': `Bearer ${token}` },
   });
   if (!response.ok) {
-    throw new Error('Gespeicherte Straßen konnten nicht geladen werden');
+    throw new Error('Failed to load saved roads');
   }
   const data = await response.json();
   return data.map((item: { roadId: string }) => item.roadId);
 }
 
-/** Verkehrsdaten einer gespeicherten Autobahn für das Dashboard */
+/** Traffic data for a saved motorway used in the dashboard */
 export interface DashboardRoadData {
-  /** ID der Autobahn, z. B. "A3" */
+  /** Motorway ID, e.g. "A3" */
   roadId: string;
-  /** Liste der aktuellen Verkehrsereignisse */
+  /** List of current traffic events */
   events: TrafficEvent[];
-  /** Berechneter Risikowert der Autobahn */
+  /** Calculated risk score for the motorway */
   riskScore: number;
 }
 
-/** Lädt Dashboard-Daten für alle gespeicherten Autobahnen des Nutzers */
+/** Fetches dashboard data for all saved motorways of the logged-in user */
 export async function fetchDashboardTraffic(token: string): Promise<DashboardRoadData[]> {
   const response = await fetch(`${API_BASE}/dashboard/saved-road-traffic`, {
     headers: { 'Authorization': `Bearer ${token}` },
   });
   if (!response.ok) {
-    throw new Error('Dashboard-Daten konnten nicht geladen werden');
+    throw new Error('Failed to load dashboard data');
   }
   const data = await response.json();
   return data.map((item: { roadId: string; trafficEvents: { events: TrafficEvent[]; riskScore: number } }) => ({

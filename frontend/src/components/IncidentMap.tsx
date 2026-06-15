@@ -2,33 +2,53 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 
-// Fix für fehlende Marker-Icons in Leaflet + Vite
+// Fix for missing marker icons in Leaflet + Vite
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 
+// Vite does not expose Leaflet's bundled images at the expected paths,
+// so we delete the internal URL resolver and supply the imports manually.
+const iconProto = L.Icon.Default.prototype as L.Icon.Default & { _getIconUrl?: unknown };
+delete iconProto._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconUrl: markerIcon,
   iconRetinaUrl: markerIcon2x,
   shadowUrl: markerShadow,
 });
 
+/** Represents a single traffic event on the map */
 export interface TrafficEvent {
+  /** Unique event ID */
   id: string;
+  /** Motorway identifier, e.g. "A3" */
   roadId: string;
+  /** Short title of the event */
   title: string;
+  /** Subtitle with additional information */
   subtitle: string;
+  /** Full description of the event */
   description: string;
+  /** Event type, e.g. "CONSTRUCTION" or "ACCIDENT" */
   type: string;
+  /** Latitude of the event location */
   latitude: number;
+  /** Longitude of the event location */
   longitude: number;
+  /** Calculated risk level of the event */
   riskLevel: 'LOW' | 'MEDIUM' | 'HIGH';
 }
 
+/** Props for the IncidentMap component */
 interface IncidentMapProps {
+  /** List of traffic events to display */
   events: TrafficEvent[];
 }
 
+/**
+ * Displays all provided traffic events as markers on an
+ * interactive Leaflet map (OpenStreetMap).
+ */
 export function IncidentMap({ events }: IncidentMapProps) {
   return (
     <div data-testid="incident-map" style={{ height: '500px', width: '100%' }}>

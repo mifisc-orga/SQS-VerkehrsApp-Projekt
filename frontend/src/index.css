@@ -360,6 +360,54 @@ body {
 }
 
 /* ─────────────────────────────────────────
+   Auth tabs
+───────────────────────────────────────── */
+.auth-tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 1.25rem;
+  border-bottom: 2px solid var(--color-border);
+}
+
+.auth-tab {
+  flex: 1;
+  padding: 0.6rem 1rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.auth-tab:hover { color: var(--color-primary); }
+
+.auth-tab--active {
+  color: var(--color-primary-dk);
+  border-bottom-color: var(--color-primary);
+}
+
+/* ─────────────────────────────────────────
+   Error banner
+───────────────────────────────────────── */
+.banner-error {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #fef2f2;
+  color: var(--color-danger);
+  border: 1px solid #fecaca;
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+/* ─────────────────────────────────────────
    Dashboard
 ───────────────────────────────────────── */
 .dashboard-grid {
