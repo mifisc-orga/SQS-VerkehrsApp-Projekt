@@ -9,8 +9,8 @@ import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 
 // Vite does not expose Leaflet's bundled images at the expected paths,
 // so we delete the internal URL resolver and supply the imports manually.
-const iconProto = L.Icon.Default.prototype as L.Icon.Default & { _getIconUrl?: unknown };
-delete iconProto._getIconUrl;
+const ICON_PROTO = L.Icon.Default.prototype as L.Icon.Default & { _getIconUrl?: unknown };
+delete ICON_PROTO._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconUrl: markerIcon,
   iconRetinaUrl: markerIcon2x,

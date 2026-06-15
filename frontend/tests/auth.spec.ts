@@ -1,8 +1,8 @@
 import { expect, test } from './coverage';
 
-const mockTrafficData = { live: true, cachedAt: null, events: [] };
-const mockLoginResponse = { token: 'mock-jwt-token' };
-const mockRegisterResponse = { token: 'mock-register-token' };
+const MOCK_TRAFFIC_DATA = { live: true, cachedAt: null, events: [] };
+const MOCK_LOGIN_RESPONSE = { token: 'mock-jwt-token' };
+const MOCK_REGISTER_RESPONSE = { token: 'mock-register-token' };
 
 /**
  * Helper: performs the standard login flow.
@@ -28,16 +28,16 @@ async function performLogout(page: import('@playwright/test').Page): Promise<voi
 
 test.beforeEach(async ({ page }) => {
   await page.route('/api/traffic', async route => {
-    await route.fulfill({ json: mockTrafficData });
+    await route.fulfill({ json: MOCK_TRAFFIC_DATA });
   });
   await page.route('/api/traffic/**', async route => {
-    await route.fulfill({ json: mockTrafficData });
+    await route.fulfill({ json: MOCK_TRAFFIC_DATA });
   });
   await page.route('/api/auth/login', async route => {
-    await route.fulfill({ json: mockLoginResponse });
+    await route.fulfill({ json: MOCK_LOGIN_RESPONSE });
   });
   await page.route('/api/auth/register', async route => {
-    await route.fulfill({ json: mockRegisterResponse });
+    await route.fulfill({ json: MOCK_REGISTER_RESPONSE });
   });
   await page.route('/api/auth/logout', async route => {
     await route.fulfill({ status: 200 });

@@ -4,6 +4,7 @@ import { IncidentMap, type TrafficEvent } from './components/IncidentMap';
 import { RiskBadge } from './components/RiskBadge';
 import { Dashboard } from './components/Dashboard';
 import { ConfirmModal } from './components/ConfirmModal';
+import { AuthModal } from './components/AuthModal';
 import { fetchTrafficEvents, login, logout, register, saveFavourite } from './services/trafficService';
 
 /**
@@ -35,10 +36,10 @@ function App() {
         setAllEvents(result.events);
         setIsLive(result.live);
         setCachedAt(result.cachedAt);
-        const available = [...new Set(result.events.map((e) => e.roadId))].sort();
+        const available = [...new Set(result.events.map(e => e.roadId))].sort();
         const defaults = available.slice(0, 3);
         setSelectedRoads(defaults);
-        setEvents(result.events.filter((e) => defaults.includes(e.roadId)));
+        setEvents(result.events.filter(e => defaults.includes(e.roadId)));
       })
       .catch(() => {
         // Traffic data failed to load — app remains functional
@@ -51,7 +52,7 @@ function App() {
     if (roadIds.length === 0) {
       setEvents(allEvents);
     } else {
-      setEvents(allEvents.filter((e) => roadIds.includes(e.roadId)));
+      setEvents(allEvents.filter(e => roadIds.includes(e.roadId)));
     }
   }
 
@@ -110,10 +111,10 @@ function App() {
     if (!token || selectedRoads.length === 0) return;
 
     const results = await Promise.allSettled(
-      selectedRoads.map((road) => saveFavourite(token, road)),
+      selectedRoads.map(road => saveFavourite(token, road)),
     );
 
-    const saved = results.filter((r) => r.status === 'fulfilled').length;
+    const saved = results.filter(r => r.status === 'fulfilled').length;
     const alreadyExisted = results.length - saved;
 
     if (saved > 0 && alreadyExisted === 0) {
@@ -124,7 +125,7 @@ function App() {
       setSavedMessage('Alle Autobahnen sind bereits in deinen Favouriten.');
     }
 
-    setRefreshKey((prev) => prev + 1);
+    setRefreshKey(prev => prev + 1);
     setTimeout(() => setSavedMessage(null), 4000);
   }
 
@@ -178,148 +179,27 @@ function App() {
         <ConfirmModal
           message="Möchtest du dich wirklich abmelden?"
           confirmLabel="Abmelden"
-          onConfirm={() => { void handleLogout(); }}
+          onConfirm={handleLogout}
           onCancel={() => setShowLogoutConfirm(false)}
         />
       )}
 
       {/* ── Auth Modal ── */}
       {showLogin && (
-        <div
-          data-testid="login-modal-overlay"
-          className="modal-overlay"
-          onClick={handleCloseModal}
-        >
-          <div
-            data-testid="login-modal"
-            className="modal"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              data-testid="login-modal-close"
-              className="modal-close"
-              onClick={handleCloseModal}
-              aria-label="Schließen"
-            >
-              ×
-            </button>
-
-            {/* Tabs */}
-            <div className="auth-tabs">
-              <button
-                className={`auth-tab${authMode === 'login' ? ' auth-tab--active' : ''}`}
-                data-testid="tab-login"
-                onClick={() => handleTabSwitch('login')}
-              >
-                Anmelden
-              </button>
-              <button
-                className={`auth-tab${authMode === 'register' ? ' auth-tab--active' : ''}`}
-                data-testid="tab-register"
-                onClick={() => handleTabSwitch('register')}
-              >
-                Registrieren
-              </button>
-            </div>
-
-            {/* Error banner */}
-            {authError && (
-              <div className="banner-error" data-testid="auth-error">
-                {authError}
-              </div>
-            )}
-
-            <div className="login-panel">
-              <div className="form-field" style={{ width: '100%' }}>
-                <label>Benutzername</label>
-                <input
-                  data-testid="username-input"
-                  type="text"
-                  placeholder="Benutzername"
-                  value={usernameInput}
-                  onChange={(e) => setUsernameInput(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      void (authMode === 'login' ? handleLogin() : handleRegister());
-                    }
-                  }}
-                  style={{ width: '100%' }}
-                />
-              </div>
-              <div className="form-field" style={{ width: '100%' }}>
-                <label>Passwort</label>
-                <div style={{ position: 'relative', width: '100%' }}>
-                  <input
-                    data-testid="password-input"
-                    type={showPassword ? 'text' : 'password'}
-                    placeholder="Passwort"
-                    value={passwordInput}
-                    onChange={(e) => setPasswordInput(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter') {
-                        void (authMode === 'login' ? handleLogin() : handleRegister());
-                      }
-                    }}
-                    style={{ width: '100%', paddingRight: '2.5rem' }}
-                  />
-                  <button
-                    type="button"
-                    data-testid="toggle-password"
-                    aria-label={showPassword ? 'Passwort verbergen' : 'Passwort anzeigen'}
-                    onClick={() => setShowPassword((prev) => !prev)}
-                    style={{
-                      position: 'absolute',
-                      right: '0.6rem',
-                      top: '50%',
-                      transform: 'translateY(-50%)',
-                      background: 'none',
-                      border: 'none',
-                      cursor: 'pointer',
-                      color: 'var(--color-text-muted)',
-                      padding: '0.2rem',
-                      display: 'flex',
-                      alignItems: 'center',
-                      lineHeight: 0,
-                    }}
-                  >
-                    {showPassword ? (
-                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94" />
-                        <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19" />
-                        <line x1="1" y1="1" x2="23" y2="23" />
-                      </svg>
-                    ) : (
-                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                        <circle cx="12" cy="12" r="3" />
-                      </svg>
-                    )}
-                  </button>
-                </div>
-              </div>
-
-              {authMode === 'login' ? (
-                <button
-                  className="btn btn-primary"
-                  data-testid="submit-login"
-                  onClick={() => { void handleLogin(); }}
-                  style={{ width: '100%', justifyContent: 'center' }}
-                >
-                  Einloggen
-                </button>
-              ) : (
-                <button
-                  className="btn btn-primary"
-                  data-testid="submit-register"
-                  onClick={() => { void handleRegister(); }}
-                  style={{ width: '100%', justifyContent: 'center' }}
-                >
-                  Registrieren
-                </button>
-              )}
-            </div>
-          </div>
-        </div>
+        <AuthModal
+          authMode={authMode}
+          authError={authError}
+          usernameInput={usernameInput}
+          passwordInput={passwordInput}
+          showPassword={showPassword}
+          onClose={handleCloseModal}
+          onTabSwitch={handleTabSwitch}
+          onUsernameChange={setUsernameInput}
+          onPasswordChange={setPasswordInput}
+          onTogglePassword={() => setShowPassword(prev => !prev)}
+          onLogin={handleLogin}
+          onRegister={handleRegister}
+        />
       )}
 
       <main className="app-main">
@@ -339,7 +219,7 @@ function App() {
             <button
               className="btn btn-success"
               data-testid="save-favourite-button"
-              onClick={() => { void handleSaveFavourite(); }}
+              onClick={handleSaveFavourite}
               style={{ marginTop: '12px' }}
             >
               <i className="ti ti-star" aria-hidden="true"></i>
@@ -358,7 +238,7 @@ function App() {
         </div>
 
         {/* ── Dashboard ── */}
-        {token && <Dashboard token={token} refreshKey={refreshKey} onRoadSelect={(roadId) => handleRoadSelect([roadId])} />}
+        {token && <Dashboard token={token} refreshKey={refreshKey} onRoadSelect={roadId => handleRoadSelect([roadId])} />}
 
         {/* ── Map + Events ── */}
         <div className="map-events-layout">
