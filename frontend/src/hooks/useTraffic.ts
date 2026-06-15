@@ -27,22 +27,21 @@ export function useTraffic(): UseTrafficResult {
   const [isLive, setIsLive] = useState(false);
   const [cachedAt, setCachedAt] = useState<string | null>(null);
 
-  async function loadTrafficData(): Promise<void> {
-    try {
-      const result = await fetchTrafficEvents();
-      setAllEvents(result.events);
-      setIsLive(result.live);
-      setCachedAt(result.cachedAt);
-      const available = [...new Set(result.events.map(e => e.roadId))].sort();
-      const defaults = available.slice(0, 3);
-      setSelectedRoads(defaults);
-      setEvents(result.events.filter(e => defaults.includes(e.roadId)));
-    } catch {
-      // Traffic data failed to load — app remains functional
-    }
-  }
-
   useEffect(() => {
+    async function loadTrafficData(): Promise<void> {
+      try {
+        const result = await fetchTrafficEvents();
+        setAllEvents(result.events);
+        setIsLive(result.live);
+        setCachedAt(result.cachedAt);
+        const available = [...new Set(result.events.map(e => e.roadId))].sort();
+        const defaults = available.slice(0, 3);
+        setSelectedRoads(defaults);
+        setEvents(result.events.filter(e => defaults.includes(e.roadId)));
+      } catch {
+        // Traffic data failed to load — app remains functional
+      }
+    }
     loadTrafficData();
   }, []);
 
