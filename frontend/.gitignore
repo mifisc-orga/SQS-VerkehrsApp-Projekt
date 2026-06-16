@@ -13,6 +13,9 @@ dist-ssr
 *.local
 .nyc_output
 
+# Test coverage reports (generated, do not commit)
+coverage/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

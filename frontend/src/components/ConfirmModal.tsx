@@ -1,15 +1,19 @@
-/** Props für den Bestätigungsdialog */
+/** Props for the confirmation dialog */
 interface ConfirmModalProps {
-  /** Nachricht, die im Bestätigungsdialog angezeigt wird */
+  /** Message displayed in the confirmation dialog */
   message: string;
-  /** Wird aufgerufen, wenn der Nutzer die Aktion bestätigt */
+  /** Label for the confirm button (default: "Entfernen") */
+  confirmLabel?: string;
+  /** Called when the user confirms the action */
   onConfirm: () => void;
-  /** Wird aufgerufen, wenn der Nutzer abbricht oder außerhalb klickt */
+  /** Called when the user cancels or clicks outside */
   onCancel: () => void;
 }
 
-/** Bestätigungsdialog mit Abbrechen- und Entfernen-Button */
-export function ConfirmModal({ message, onConfirm, onCancel }: ConfirmModalProps) {
+/**
+ * Generic confirmation dialog with a cancel button and a configurable confirm button.
+ */
+export function ConfirmModal({ message, confirmLabel = 'Entfernen', onConfirm, onCancel }: ConfirmModalProps) {
   return (
     <div
       className="modal-overlay"
@@ -31,7 +35,7 @@ export function ConfirmModal({ message, onConfirm, onCancel }: ConfirmModalProps
             Abbrechen
           </button>
           <button className="btn btn-danger" data-testid="confirm-ok" onClick={onConfirm}>
-            Entfernen
+            {confirmLabel}
           </button>
         </div>
       </div>
