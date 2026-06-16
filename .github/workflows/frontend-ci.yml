@@ -46,16 +46,9 @@ jobs:
       - name: E2E-Tests with coverage
         run: npm run coverage:e2e
 
-      - name: Debug coverage paths
-        run: |
-          echo "--- UNIT ---"
-          head -20 coverage/lcov.info || true
-          echo "--- E2E ---"
-          head -20 coverage-e2e/lcov.info || true
-
       - name: Check coverage report
         run: |
           test -s coverage/lcov.info
-          grep -q '^SF:src/' coverage/lcov.info
+          grep -q '^SF:frontend/src/' coverage/lcov.info
           test -s coverage-e2e/lcov.info
-          grep -q '^SF:src/' coverage-e2e/lcov.info
+          grep -q '^SF:frontend/src/' coverage-e2e/lcov.info
