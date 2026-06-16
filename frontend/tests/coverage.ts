@@ -8,15 +8,21 @@ import path from 'path';
  * Erweiterte Playwright-Testinstanz mit automatischer Coverage-Erfassung.
  */
 export const test = base.extend({
-    page: async ({ page }, runTest) => {
-        await runTest(page);
+    page: async ({ page }, use) => {
+        await use(page);
 
-        const coverage = await page.evaluate(() => (window as { __coverage__?: unknown }).__coverage__);
+        const coverage = await page
+            .evaluate(() => (window as { __coverage__?: unknown }).__coverage__)
+            .catch(() => undefined);
 
         if (coverage) {
             const dir = path.join(process.cwd(), '.nyc_output');
             fs.mkdirSync(dir, { recursive: true });
-            fs.writeFileSync(path.join(dir, `coverage-${Date.now()}.json`), JSON.stringify(coverage));
+
+            fs.writeFileSync(
+                path.join(dir, `coverage-${Date.now()}.json`),
+                JSON.stringify(coverage)
+            );
         }
     },
 });
