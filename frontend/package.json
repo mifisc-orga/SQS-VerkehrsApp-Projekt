@@ -8,7 +8,8 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "coverage": "vitest run --coverage"
+    "coverage": "vitest run --coverage",
+    "coverage:e2e": "playwright test && nyc --cwd .. --temp-dir frontend/.nyc_output --report-dir frontend/coverage report --reporter=lcov --reporter=text-summary"
   },
   "dependencies": {
     "leaflet": "^1.9.4",
