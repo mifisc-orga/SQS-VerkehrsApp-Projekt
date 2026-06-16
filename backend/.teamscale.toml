@@ -1,0 +1,14 @@
+# Configuration for project verkehrsapp-backend, connector verkehrsapp-backend
+
+# Learn more about the Teamscale IDE Configuration File Format at
+# <https://docs.teamscale.com/reference/teamscale-toml/>.
+
+version = "1.0"
+
+root = true
+
+[server]
+url = "https://th-rosenheim.teamscale.io/"
+
+[project]
+id = "verkehrsapp-backend"

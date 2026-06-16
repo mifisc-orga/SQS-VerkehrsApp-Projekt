@@ -28,5 +28,8 @@ jobs:
       - name: Compile
         run: ./mvnw -B compile
 
-      - name: Verify
-        run: ./mvnw -B verify
+      - name: Verify with coverage
+        run: ./mvnw -B verify -Pjacoco
+
+      - name: Check coverage report
+        run: test -s target/site/jacoco/jacoco.xml

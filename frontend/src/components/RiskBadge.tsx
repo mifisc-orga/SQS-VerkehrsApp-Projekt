@@ -1,6 +1,9 @@
-type RiskLevel = 'LOW' | 'MEDIUM' | 'HIGH';
+/** Mögliche Risikolevel einer Autobahn */
+export type RiskLevel = 'LOW' | 'MEDIUM' | 'HIGH';
 
+/** Props für das Risikolevel-Badge */
 interface RiskBadgeProps {
+  /** Risikolevel der Autobahn: LOW, MEDIUM oder HIGH */
   riskLevel: RiskLevel;
 }
 
@@ -12,7 +15,6 @@ const labels: Record<RiskLevel, string> = {
 
 export function RiskBadge({ riskLevel }: RiskBadgeProps) {
   const className = `risk-badge risk-${riskLevel.toLowerCase()}`;
-
   return (
     <span data-testid="risk-badge">
       <span

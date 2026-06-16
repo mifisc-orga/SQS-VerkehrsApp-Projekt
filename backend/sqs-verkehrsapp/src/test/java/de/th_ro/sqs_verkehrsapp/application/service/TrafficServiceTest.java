@@ -1,7 +1,11 @@
 package de.th_ro.sqs_verkehrsapp.application.service;
 
 import de.th_ro.sqs_verkehrsapp.application.port.out.AutobahnApiPort;
-import de.th_ro.sqs_verkehrsapp.domain.model.*;
+import de.th_ro.sqs_verkehrsapp.domain.model.Coordinate;
+import de.th_ro.sqs_verkehrsapp.domain.model.RiskLevel;
+import de.th_ro.sqs_verkehrsapp.domain.model.RoadEvent;
+import de.th_ro.sqs_verkehrsapp.domain.model.RoadEventType;
+import de.th_ro.sqs_verkehrsapp.domain.model.TrafficEventsResult;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

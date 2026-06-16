@@ -22,11 +22,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 class PublicTrafficEndpointIntegrationTest {
-    @Autowired
-    private MockMvc mockMvc;
+
+    private final MockMvc mockMvc;
 
     @MockitoBean
     private AutobahnApiPort autobahnApiPort;
+
+    @Autowired
+    PublicTrafficEndpointIntegrationTest(MockMvc mockMvc) {
+        this.mockMvc = mockMvc;
+    }
 
     @Test
     void shouldAllowTrafficEndpointWithoutLogin() throws Exception {

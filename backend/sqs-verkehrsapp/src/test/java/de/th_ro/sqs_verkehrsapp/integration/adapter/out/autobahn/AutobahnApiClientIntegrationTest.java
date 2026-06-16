@@ -18,9 +18,13 @@ import java.io.IOException;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 class AutobahnApiClientIntegrationTest {
 
@@ -48,7 +52,7 @@ class AutobahnApiClientIntegrationTest {
     }
 
     @Test
-    void fetchTrafficEvents_shouldCallAllEndpointsAndCombineResults() throws Exception {
+    void fetchTrafficEventsShouldCallAllEndpointsAndCombineResults() throws Exception {
         mockWebServer.enqueue(jsonResponse("{}"));
         mockWebServer.enqueue(jsonResponse("{}"));
         mockWebServer.enqueue(jsonResponse("{}"));
@@ -78,7 +82,7 @@ class AutobahnApiClientIntegrationTest {
     }
 
     @Test
-    void fetchWarnings_shouldCallWarningEndpointAndMapResponse() throws Exception {
+    void fetchWarningsShouldCallWarningEndpointAndMapResponse() throws Exception {
         mockWebServer.enqueue(jsonResponse("{}"));
 
         RoadEvent warning = mock(RoadEvent.class);
@@ -96,7 +100,7 @@ class AutobahnApiClientIntegrationTest {
     }
 
     @Test
-    void fetchRoadworks_shouldCallRoadworksEndpointAndMapResponse() throws Exception {
+    void fetchRoadworksShouldCallRoadworksEndpointAndMapResponse() throws Exception {
         mockWebServer.enqueue(jsonResponse("{}"));
 
         RoadEvent roadwork = mock(RoadEvent.class);
@@ -114,7 +118,7 @@ class AutobahnApiClientIntegrationTest {
     }
 
     @Test
-    void fetchClosures_shouldCallClosureEndpointAndMapResponse() throws Exception {
+    void fetchClosuresShouldCallClosureEndpointAndMapResponse() throws Exception {
         mockWebServer.enqueue(jsonResponse("{}"));
 
         RoadEvent closure = mock(RoadEvent.class);
@@ -132,6 +136,19 @@ class AutobahnApiClientIntegrationTest {
     }
 
     @Test
+    void fetchTrafficEventsShouldThrowExternalTrafficApiExceptionWhenApiReturnsServerError() {
+        mockWebServer.enqueue(new MockResponse().setResponseCode(500));
+
+        ExternalTrafficApiException exception = assertThrows(
+                ExternalTrafficApiException.class,
+                () -> client.fetchTrafficEvents("A8")
+        );
+
+        assertThat(exception.getMessage()).contains("A8");
+    }
+
+
+    @Test
     void shouldThrowExternalTrafficApiExceptionWhenApiReturnsServerError() {
         mockWebServer.enqueue(new MockResponse().setResponseCode(500));
 
@@ -144,7 +161,7 @@ class AutobahnApiClientIntegrationTest {
     }
 
     @Test
-    void getAvailableRoadIds_shouldCallRootEndpointAndReturnRoadIds() throws Exception {
+    void getAvailableRoadIdsShouldCallRootEndpointAndReturnRoadIds() throws Exception {
         mockWebServer.enqueue(jsonResponse("""
             {
               "roads": ["A1", "A3", "A8"]
@@ -160,7 +177,29 @@ class AutobahnApiClientIntegrationTest {
     }
 
     @Test
-    void getAvailableRoadIds_shouldThrowExternalTrafficApiExceptionWhenApiReturnsServerError() {
+    void getAvailableRoadIdsShouldReturnEmptyListWhenRoadsAreNull() {
+        mockWebServer.enqueue(jsonResponse("""
+                {
+                  "roads": null
+                }
+                """));
+
+        List<String> result = client.getAvailableRoadIds();
+
+        assertThat(result).isEmpty();
+    }
+
+    @Test
+    void getAvailableRoadIdsShouldReturnEmptyListWhenResponseIsEmpty() {
+        mockWebServer.enqueue(jsonResponse("{}"));
+
+        List<String> result = client.getAvailableRoadIds();
+
+        assertThat(result).isEmpty();
+    }
+
+    @Test
+    void getAvailableRoadIdsThrowsExternalTrafficApiExceptionWhenApiReturnsServerError() {
         mockWebServer.enqueue(new MockResponse().setResponseCode(500));
 
         ExternalTrafficApiException exception = assertThrows(

@@ -23,7 +23,10 @@ const mockLoginResponse = {
   username: 'testuser',
 };
 
-const mockSavedRoads = ['A1', 'A3'];
+const mockSavedRoads = [
+  { id: '1', userId: '1', roadId: 'A1' },
+  { id: '2', userId: '1', roadId: 'A3' },
+];
 
 test.beforeEach(async ({ page }) => {
   await page.route('/api/traffic', async (route) => {
@@ -70,4 +73,55 @@ test('Autobahn kann als Favourit gespeichert werden', async ({ page }) => {
   // A1 ist standardmäßig vorausgewählt
   await page.getByTestId('save-favourite-button').click();
   await expect(page.getByTestId('favourite-saved-message')).toBeVisible();
+});
+
+test('Gespeicherter Favourit wird im Dashboard angezeigt', async ({ page }) => {
+  let saved = false;
+
+  await page.route('/api/saved-roads', async route => {
+    if (route.request().method() === 'POST') {
+      saved = true;
+      await route.fulfill({ status: 200, json: {} });
+    } else {
+      await route.fulfill({ json: [] });
+    }
+  });
+
+  await page.route('/api/dashboard/saved-road-traffic', async route => {
+    await route.fulfill({
+      json: saved ? [{
+        roadId: 'A1',
+        trafficEvents: { events: [], live: true, cachedAt: null, riskScore: 0 },
+      }] : [],
+    });
+  });
+
+  await page.goto('/');
+  await page.getByTestId('login-button').click();
+  await page.getByTestId('username-input').fill('testuser');
+  await page.getByTestId('password-input').fill('password');
+  await page.getByTestId('submit-login').click();
+  await expect(page.getByTestId('dashboard-road-A1')).not.toBeVisible();
+  await page.getByTestId('save-favourite-button').click();
+  await expect(page.getByTestId('favourite-saved-message')).toBeVisible();
+  await expect(page.getByTestId('dashboard-road-A1')).toBeVisible();
+});
+
+test('Hinweis wenn alle Autobahnen bereits gespeichert sind', async ({ page }) => {
+  await page.route('/api/saved-roads', async route => {
+    if (route.request().method() === 'POST') {
+      await route.fulfill({ status: 403, json: {} });
+    } else {
+      await route.fulfill({ json: [] });
+    }
+  });
+
+  await page.goto('/');
+  await page.getByTestId('login-button').click();
+  await page.getByTestId('username-input').fill('testuser');
+  await page.getByTestId('password-input').fill('password');
+  await page.getByTestId('submit-login').click();
+  await page.getByTestId('save-favourite-button').click();
+  await expect(page.getByTestId('favourite-saved-message')).toBeVisible();
+  await expect(page.getByTestId('favourite-saved-message')).toContainText('bereits');
 });

@@ -3,6 +3,7 @@ package de.th_ro.sqs_verkehrsapp.adapter.out.autobahn;
 import de.th_ro.sqs_verkehrsapp.adapter.out.autobahn.dto.wrapper.ClosureResponse;
 import de.th_ro.sqs_verkehrsapp.adapter.out.autobahn.dto.wrapper.RoadworksResponse;
 import de.th_ro.sqs_verkehrsapp.adapter.out.autobahn.dto.wrapper.WarningResponse;
+import de.th_ro.sqs_verkehrsapp.domain.exception.ExternalTrafficApiException;
 import de.th_ro.sqs_verkehrsapp.domain.model.Coordinate;
 import de.th_ro.sqs_verkehrsapp.domain.model.RoadEvent;
 import de.th_ro.sqs_verkehrsapp.domain.model.RoadEventType;
@@ -19,8 +20,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 import java.io.IOException;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
@@ -53,67 +54,166 @@ class AutobahnApiClientTest {
     }
 
     @Test
-    void fetchTrafficEvents_shouldFetchAndCombineAllEventTypes() {
+    void fetchTrafficEventsShouldFetchAndCombineAllEventTypes() {
+        enqueueSuccessfulEventResponses();
+
+        RoadEvent warning = roadEvent("warning-1", "Warnung", RoadEventType.WARNING);
+        RoadEvent roadwork = roadEvent("roadwork-1", "Baustelle", RoadEventType.ROADWORK);
+        RoadEvent closure = roadEvent("closure-1", "Sperrung", RoadEventType.CLOSURE);
+
+        mockMappedResponses(warning, roadwork, closure);
+
+        List<RoadEvent> result = client.fetchTrafficEvents("A1");
+
+        assertThat(result).containsExactlyInAnyOrder(warning, roadwork, closure);
+    }
+
+    @Test
+    void fetchWarningsShouldReturnMappedWarnings() {
+        enqueueJsonResponse("{}");
+
+        RoadEvent warning = roadEvent("warning-1", "Warnung", RoadEventType.WARNING);
+
+        when(mapper.mapWarnings(eq("A1"), any(WarningResponse.class)))
+                .thenReturn(List.of(warning));
+
+        List<RoadEvent> result = client.fetchWarnings("A1");
+
+        assertThat(result).containsExactly(warning);
+    }
+
+    @Test
+    void fetchRoadworksShouldReturnMappedRoadworks() {
+        enqueueJsonResponse("{}");
+
+        RoadEvent roadwork = roadEvent("roadwork-1", "Baustelle", RoadEventType.ROADWORK);
+
+        when(mapper.mapRoadworks(eq("A1"), any(RoadworksResponse.class)))
+                .thenReturn(List.of(roadwork));
+
+        List<RoadEvent> result = client.fetchRoadworks("A1");
+
+        assertThat(result).containsExactly(roadwork);
+    }
+
+    @Test
+    void fetchClosuresShouldReturnMappedClosures() {
+        enqueueJsonResponse("{}");
+
+        RoadEvent closure = roadEvent("closure-1", "Sperrung", RoadEventType.CLOSURE);
+
+        when(mapper.mapClosures(eq("A1"), any(ClosureResponse.class)))
+                .thenReturn(List.of(closure));
+
+        List<RoadEvent> result = client.fetchClosures("A1");
+
+        assertThat(result).containsExactly(closure);
+    }
+
+    @Test
+    void fetchTrafficEventsShouldThrowExternalTrafficApiExceptionWhenApiReturnsServerError() {
+        mockWebServer.enqueue(new MockResponse().setResponseCode(500));
+
+        ExternalTrafficApiException exception = assertThrows(
+                ExternalTrafficApiException.class,
+                () -> client.fetchTrafficEvents("A1")
+        );
+
+        assertThat(exception.getMessage()).contains("A1");
+    }
+
+    @Test
+    void getAvailableRoadIdsShouldReturnRoadIds() {
+        enqueueJsonResponse("""
+        {
+          "roads": ["A1", "A3", "A8"]
+        }
+        """);
+
+        List<String> result = client.getAvailableRoadIds();
+
+        assertThat(result).containsExactly("A1", "A3", "A8");
+    }
+
+    @Test
+    void getAvailableRoadIdsShouldReturnEmptyListWhenRoadsAreNull() {
+        enqueueJsonResponse("""
+        {
+          "roads": null
+        }
+        """);
+
+        List<String> result = client.getAvailableRoadIds();
+
+        assertThat(result).isEmpty();
+    }
+
+    @Test
+    void getAvailableRoadIdsShouldReturnEmptyListWhenResponseIsEmpty() {
+        enqueueJsonResponse("{}");
+
+        List<String> result = client.getAvailableRoadIds();
+
+        assertThat(result).isEmpty();
+    }
+
+    @Test
+    void getAvailableRoadIdsShouldThrowExternalTrafficApiExceptionWhenApiReturnsServerError() {
+        mockWebServer.enqueue(new MockResponse().setResponseCode(500));
+
+        ExternalTrafficApiException exception = assertThrows(
+                ExternalTrafficApiException.class,
+                () -> client.getAvailableRoadIds()
+        );
+
+        assertThat(exception.getMessage()).contains("Autobahnen");
+    }
+
+    private void enqueueSuccessfulEventResponses() {
+        enqueueJsonResponse("""
+            {
+              "warning": []
+            }
+            """);
+
+        enqueueJsonResponse("""
+            {
+              "roadworks": []
+            }
+            """);
+
+        enqueueJsonResponse("""
+            {
+              "closure": []
+            }
+            """);
+    }
+
+    private void enqueueJsonResponse(String body) {
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(200)
-                .setBody("""
-                        {
-                          "warning": []
-                        }
-                        """)
+                .setBody(body)
                 .addHeader("Content-Type", "application/json"));
+    }
 
-        mockWebServer.enqueue(new MockResponse()
-                .setResponseCode(200)
-                .setBody("""
-                        {
-                          "roadworks": []
-                        }
-                        """)
-                .addHeader("Content-Type", "application/json"));
-
-        mockWebServer.enqueue(new MockResponse()
-                .setResponseCode(200)
-                .setBody("""
-                        {
-                          "closure": []
-                        }
-                        """)
-                .addHeader("Content-Type", "application/json"));
-
-        RoadEvent warning = new RoadEvent(
-                "warning-1",
+    private RoadEvent roadEvent(String id, String title, RoadEventType type) {
+        return new RoadEvent(
+                id,
                 "A1",
-                "Warnung",
-                "Achtung",
+                title,
+                title,
                 "",
-                RoadEventType.WARNING,
+                type,
                 new Coordinate(52.1, 13.4),
                 null
         );
+    }
 
-        RoadEvent roadwork = new RoadEvent(
-                "roadwork-1",
-                "A1",
-                "Baustelle",
-                "Baustelle voraus",
-                "",
-                RoadEventType.ROADWORK,
-                new Coordinate(52.2, 13.5),
-                null
-        );
-
-        RoadEvent closure = new RoadEvent(
-                "closure-1",
-                "A1",
-                "Sperrung",
-                "gesperrt",
-                "",
-                RoadEventType.CLOSURE,
-                new Coordinate(52.3, 13.6),
-                null
-        );
-
+    private void mockMappedResponses(
+            RoadEvent warning,
+            RoadEvent roadwork,
+            RoadEvent closure
+    ) {
         when(mapper.mapWarnings(eq("A1"), any(WarningResponse.class)))
                 .thenReturn(List.of(warning));
 
@@ -122,12 +222,5 @@ class AutobahnApiClientTest {
 
         when(mapper.mapClosures(eq("A1"), any(ClosureResponse.class)))
                 .thenReturn(List.of(closure));
-
-        List<RoadEvent> result = client.fetchTrafficEvents("A1");
-
-        assertEquals(3, result.size());
-        assertTrue(result.contains(warning));
-        assertTrue(result.contains(roadwork));
-        assertTrue(result.contains(closure));
     }
 }

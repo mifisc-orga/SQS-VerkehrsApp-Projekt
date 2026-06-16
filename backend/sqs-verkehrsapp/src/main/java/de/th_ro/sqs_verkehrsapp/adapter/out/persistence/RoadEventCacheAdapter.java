@@ -49,16 +49,17 @@ public class RoadEventCacheAdapter implements RoadEventCachePort {
         LocalDateTime cachedAt = LocalDateTime.now();
 
         List<CachedRoadEventEntity> entities = events.stream()
-                .map(event -> new CachedRoadEventEntity(
-                        roadId,
-                        event.id(),
-                        event.title(),
-                        event.subtitle(),
-                        event.type().name(),
-                        event.coordinate().latitude(),
-                        event.coordinate().longitude(),
-                        cachedAt
-                ))
+                .map(event -> CachedRoadEventEntity.builder()
+                        .roadId(roadId)
+                        .eventId(event.id())
+                        .title(event.title())
+                        .subtitle(event.subtitle())
+                        .type(event.type().name())
+                        .latitude(event.coordinate().latitude())
+                        .longitude(event.coordinate().longitude())
+                        .cachedAt(cachedAt)
+                        .build()
+                )
                 .toList();
 
         repository.saveAll(entities);

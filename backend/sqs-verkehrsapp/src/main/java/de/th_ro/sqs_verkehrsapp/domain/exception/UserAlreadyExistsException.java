@@ -6,14 +6,14 @@ package de.th_ro.sqs_verkehrsapp.domain.exception;
  * Indicates failures related to user management, registration,
  * authentication, or other user-specific operations.
  */
-public class UserException extends RuntimeException {
+public class UserAlreadyExistsException extends RuntimeException {
 
     /**
      * Creates a new user exception.
      *
      * @param message the exception message
      */
-    public UserException(String message) {
+    public UserAlreadyExistsException(String message) {
         super(message);
     }
 }

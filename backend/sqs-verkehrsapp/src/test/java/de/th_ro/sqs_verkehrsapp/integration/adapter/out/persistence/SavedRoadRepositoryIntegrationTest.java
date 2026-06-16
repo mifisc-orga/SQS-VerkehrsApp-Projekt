@@ -14,8 +14,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 class SavedRoadRepositoryIntegrationTest {
 
+    private final SavedRoadRepository repository;
+
     @Autowired
-    private SavedRoadRepository repository;
+    SavedRoadRepositoryIntegrationTest(SavedRoadRepository repository) {
+        this.repository = repository;
+    }
 
     @Test
     void shouldSaveAndFindRoadsByUserId() {

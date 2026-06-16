@@ -5,6 +5,7 @@ import de.th_ro.sqs_verkehrsapp.application.port.out.SavedRoadPort;
 import de.th_ro.sqs_verkehrsapp.domain.model.SavedRoad;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -60,12 +61,14 @@ public class SavedRoadService implements SavedRoadUseCase {
         return savedRoadPort.findByUserId(userId);
     }
 
+
     /**
      * Deletes a saved motorway for a specific user.
      *
      * @param userId the user identifier
      * @param roadId the motorway identifier
      */
+    @Transactional
     @Override
     public void deleteRoad(UUID userId, String roadId) {
         savedRoadPort.deleteByUserIdAndRoadId(

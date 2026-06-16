@@ -3,6 +3,7 @@ package de.th_ro.sqs_verkehrsapp.domain.logic;
 import de.th_ro.sqs_verkehrsapp.domain.model.RiskLevel;
 import de.th_ro.sqs_verkehrsapp.domain.model.RoadEvent;
 import de.th_ro.sqs_verkehrsapp.domain.model.RoadEventType;
+
 import java.util.List;
 
 /**
@@ -12,8 +13,6 @@ import java.util.List;
  * and computing a normalized risk score based on their types.
  */
 public class RiskScoreCalculator {
-
-    private static final int MAX_SCORE = 100;
 
     /**
      * Determines the risk level for a given traffic event type.
