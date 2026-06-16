@@ -1051,6 +1051,8 @@ Die Analyse erfolgt automatisiert über die Build- bzw. CI-Pipeline.
 * Langfristige Sicherung der Wartbarkeit
 * Nachvollziehbare Entwicklung der Codequalität
 
+
+````md
 ```mermaid
 flowchart LR
 
