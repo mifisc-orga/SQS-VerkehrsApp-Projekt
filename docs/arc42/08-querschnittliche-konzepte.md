@@ -36,7 +36,7 @@ Dabei gelten folgende Anforderungen:
 
 ### Sicherheitsarchitektur
 
-```mermaid id="p4s7z5"
+```mermaid
 flowchart LR
 
 User --> AuthController
@@ -50,6 +50,21 @@ JWT --> JwtAuthenticationFilter
 JwtAuthenticationFilter --> SecurityContext
 ```
 
+```mermaid
+classDiagram
+
+class AuthController
+class AuthService
+class JwtService
+class JwtAuthenticationFilter
+class SecurityConfig
+
+AuthController --> AuthService
+AuthController --> JwtService
+JwtAuthenticationFilter --> JwtService
+SecurityConfig --> JwtAuthenticationFilter
+```
+
 ---
 
 ### Passwortspeicherung
@@ -58,7 +73,7 @@ Passwörter werden niemals im Klartext gespeichert.
 
 #### Verfahren
 
-```text id="k7cf3v"
+```text
 BCrypt
 ```
 
@@ -76,7 +91,7 @@ Geschützte Endpunkte erfordern ein gültiges JWT.
 
 #### Öffentliche Endpunkte
 
-```text id="4kw5cg"
+```text
 /api/auth/**
 /api/traffic/**
 /actuator/**
@@ -84,7 +99,7 @@ Geschützte Endpunkte erfordern ein gültiges JWT.
 
 #### Geschützte Endpunkte
 
-```text id="yn3xqs"
+```text
 /api/dashboard/**
 /api/saved-roads/**
 ```
@@ -99,7 +114,7 @@ Die Anwendung verwendet JSON Web Tokens (JWT).
 
 #### Ablauf
 
-```mermaid id="ng1u3d"
+```mermaid
 sequenceDiagram
 
 participant User
@@ -123,7 +138,7 @@ AuthController-->>User: JWT
 
 Das JWT enthält:
 
-```text id="8lqol7"
+```text
 userId
 username
 issuedAt
@@ -150,7 +165,7 @@ Fehler sollen konsistent behandelt und für Clients verständlich aufbereitet we
 
 ### Architektur
 
-```mermaid id="h7gw1o"
+```mermaid
 flowchart LR
 
 Exception --> GlobalExceptionHandler
@@ -200,7 +215,7 @@ Persistenzzugriffe sollen von der Fachlogik entkoppelt werden.
 
 ### Umsetzung
 
-```mermaid id="5z6evf"
+```mermaid
 flowchart LR
 
 Service --> Port
@@ -216,7 +231,7 @@ Repository --> Database
 
 ### Repositories
 
-```text id="nmzrl7"
+```text
 UserRepository
 SavedRoadRepository
 CachedRoadEventRepository
@@ -245,7 +260,7 @@ Erhöhung der Verfügbarkeit und Performance.
 
 #### Verkehrsdaten
 
-```text id="8v6o0h"
+```text
 RoadEvent
 TrafficEventsResult
 ```
@@ -254,7 +269,7 @@ TrafficEventsResult
 
 #### Verfügbare Autobahnen
 
-```text id="sws3bz"
+```text
 AvailableRoads
 ```
 
@@ -262,7 +277,7 @@ AvailableRoads
 
 ### Cache-Struktur
 
-```mermaid id="jlwmby"
+```mermaid
 flowchart LR
 
 AutobahnAPI
@@ -335,7 +350,7 @@ Verhindert wiederholte Aufrufe eines fehlerhaften Systems.
 
 Alternative Datenquelle:
 
-```text id="a67h5h"
+```text
 Lokaler Datenbank-Cache
 ```
 
@@ -343,7 +358,7 @@ Lokaler Datenbank-Cache
 
 ### Resilience-Architektur
 
-```mermaid id="x5uh4q"
+```mermaid
 flowchart LR
 
 Client
@@ -381,7 +396,7 @@ Entkopplung externer Datenstrukturen von der Domäne.
 
 ### Architektur
 
-```mermaid id="9vl1dl"
+```mermaid
 flowchart LR
 
 DTO --> Mapper --> Domain
@@ -391,7 +406,7 @@ DTO --> Mapper --> Domain
 
 ### Mapper
 
-```text id="aw1nmp"
+```text
 AutobahnApiMapper
 ```
 
@@ -415,7 +430,7 @@ Die Fachlogik wird ausschließlich innerhalb der Domäne modelliert.
 
 ### Domänenobjekte
 
-```text id="i1n6d9"
+```text
 AppUser
 SavedRoad
 RoadEvent
@@ -428,7 +443,7 @@ Coordinate
 
 ### Domänenlogik
 
-```text id="2dfdlt"
+```text
 RiskScoreCalculator
 ```
 
@@ -438,7 +453,7 @@ RiskScoreCalculator
 
 #### Risikostufen
 
-```text id="yksl7z"
+```text
 LOW
 MEDIUM
 HIGH
@@ -448,7 +463,7 @@ HIGH
 
 #### Ereignistypen
 
-```text id="wy1u5x"
+```text
 WARNING
 ROADWORK
 CLOSURE
@@ -468,7 +483,7 @@ Trennung von Konfiguration und Anwendungscode.
 
 #### Autobahn API
 
-```text id="1mr1dr"
+```text
 autobahn.api.baseUrl
 ```
 
@@ -494,7 +509,7 @@ Nachvollziehbarkeit technischer Abläufe.
 
 #### API-Kommunikation
 
-```text id="vxjntf"
+```text
 Autobahn API Requests
 Autobahn API Fehler
 ```
@@ -503,7 +518,7 @@ Autobahn API Fehler
 
 #### Sicherheit
 
-```text id="s3yq7f"
+```text
 Login
 JWT Validierung
 Authentifizierungsfehler
@@ -513,7 +528,7 @@ Authentifizierungsfehler
 
 #### Persistenz
 
-```text id="e3hf8s"
+```text
 Datenbankzugriffe
 Cache-Aktualisierung
 ```
@@ -528,7 +543,7 @@ Zur Überwachung der Anwendung werden Spring-Boot-Actuator-Endpunkte verwendet.
 
 #### Mögliche Informationen
 
-```text id="x7jlwm"
+```text
 Health
 Metrics
 Info

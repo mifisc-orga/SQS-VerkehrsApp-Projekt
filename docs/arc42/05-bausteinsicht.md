@@ -56,6 +56,26 @@ Adapters --> Repositories
 Adapters --> ExternalSystems
 ```
 
+```mermaid
+C4Container
+title Container Diagram - SQS Verkehrsapp
+
+Person(user, "Benutzer")
+
+Container(frontend, "Frontend", "React + TypeScript", "Browserbasierte Benutzeroberfläche")
+
+Container(backend, "Backend", "Spring Boot", "REST API und Fachlogik")
+
+ContainerDb(database, "Datenbank", "PostgreSQL / H2", "Persistenz und Cache")
+
+System_Ext(autobahnApi, "Autobahn API", "Verkehrsdaten")
+
+Rel(user, frontend, "Verwendet")
+Rel(frontend, backend, "REST API", "HTTPS/JSON")
+Rel(backend, database, "JPA")
+Rel(backend, autobahnApi, "HTTP/JSON")
+```
+
 ---
 
 ### Hauptverantwortlichkeiten
@@ -69,12 +89,80 @@ Adapters --> ExternalSystems
 | Infrastructure Layer | Datenbank, Cache, API    |
 
 ---
+## 5.3 Komponentendiagramm Backend
 
-## 5.3 Ebene 2 – Inbound Adapter
+Zeigt die interne Struktur des Spring-Boot-Backends nach Hexagonaler Architektur.
+
+Enthält:
+
+- Inbound Adapter
+- Application Layer
+- Domain Layer
+- Ports
+- Outbound Adapter
+- Repositories
+- externe API
+- Cache
+
+```mermaid
+C4Component
+title Komponentendiagramm - Backend
+
+Container_Boundary(backend, "Spring Boot Backend") {
+
+    Component(authController, "AuthController", "REST Controller", "Registrierung und Login")
+    Component(trafficController, "TrafficController", "REST Controller", "Verkehrsdaten-Endpunkte")
+    Component(savedRoadController, "SavedRoadController", "REST Controller", "Favoritenverwaltung")
+    Component(dashboardController, "DashboardController", "REST Controller", "Dashboard-Daten")
+
+    Component(authService, "AuthService", "Application Service", "Benutzerregistrierung und Anmeldung")
+    Component(trafficService, "TrafficService", "Application Service", "Verarbeitung von Verkehrsdaten")
+    Component(savedRoadService, "SavedRoadService", "Application Service", "Speichern und Löschen von Favoriten")
+    Component(dashboardService, "DashboardTrafficService", "Application Service", "Aggregiert Dashboard-Daten")
+
+    Component(domain, "Domain Model", "Domain Layer", "AppUser, SavedRoad, RoadEvent, TrafficEventsResult")
+    Component(riskCalculator, "RiskScoreCalculator", "Domain Service", "Berechnet Risikoscore")
+
+    Component(userPort, "UserPort", "Output Port")
+    Component(savedRoadPort, "SavedRoadPort", "Output Port")
+    Component(apiPort, "AutobahnApiPort", "Output Port")
+    Component(cachePort, "RoadEventCachePort", "Output Port")
+
+    Component(userAdapter, "UserAdapter", "Persistence Adapter")
+    Component(savedRoadAdapter, "SavedRoadAdapter", "Persistence Adapter")
+    Component(cacheAdapter, "RoadEventCacheAdapter", "Cache Adapter")
+    Component(apiAdapter, "ResilientAutobahnApiAdapter", "API Adapter", "Retry, Circuit Breaker, Fallback")
+
+    Component(jwtFilter, "JwtAuthenticationFilter", "Security")
+    Component(jwtService, "JwtService", "Security")
+}
+
+Rel(authController, authService, "uses")
+Rel(trafficController, trafficService, "uses")
+Rel(savedRoadController, savedRoadService, "uses")
+Rel(dashboardController, dashboardService, "uses")
+
+Rel(authService, userPort, "uses")
+Rel(trafficService, apiPort, "uses")
+Rel(trafficService, riskCalculator, "uses")
+Rel(savedRoadService, savedRoadPort, "uses")
+Rel(dashboardService, savedRoadPort, "uses")
+Rel(dashboardService, apiPort, "uses")
+
+Rel(userPort, userAdapter, "implemented by")
+Rel(savedRoadPort, savedRoadAdapter, "implemented by")
+Rel(cachePort, cacheAdapter, "implemented by")
+Rel(apiPort, apiAdapter, "implemented by")
+
+Rel(jwtFilter, jwtService, "validates token with")
+Rel(authController, jwtService, "generates JWT with")
+```
+
+### Ebene 2 – Inbound Adapter
 
 Die Inbound Adapter bilden die öffentliche Schnittstelle des Systems.
 
-### Komponentenübersicht
+#### Komponentenübersicht
 
 ```mermaid
 classDiagram
@@ -88,15 +176,15 @@ class GlobalExceptionHandler
 
 ---
 
-### AuthController
+#### AuthController
 
-#### Verantwortung
+##### Verantwortung
 
 * Registrierung neuer Benutzer
 * Anmeldung bestehender Benutzer
 * JWT-Erzeugung
 
-#### Verwendete Komponenten
+##### Verwendete Komponenten
 
 ```text
 AuthUseCase
@@ -105,13 +193,13 @@ JwtService
 
 ---
 
-### TrafficController
+#### TrafficController
 
-#### Verantwortung
+##### Verantwortung
 
 Bereitstellung von Verkehrsinformationen.
 
-#### Endpunkte
+##### Endpunkte
 
 ```text
 GET /api/traffic
@@ -120,13 +208,13 @@ GET /api/traffic/{roadId}
 
 ---
 
-### SavedRoadController
+#### SavedRoadController
 
-#### Verantwortung
+##### Verantwortung
 
 Verwaltung gespeicherter Autobahnen.
 
-#### Endpunkte
+##### Endpunkte
 
 ```text
 POST   /api/saved-roads
@@ -136,13 +224,13 @@ DELETE /api/saved-roads/{roadId}
 
 ---
 
-### DashboardController
+#### DashboardController
 
-#### Verantwortung
+##### Verantwortung
 
 Abruf personalisierter Dashboard-Daten.
 
-#### Endpunkt
+##### Endpunkt
 
 ```text
 GET /api/dashboard
@@ -150,19 +238,19 @@ GET /api/dashboard
 
 ---
 
-### GlobalExceptionHandler
+#### GlobalExceptionHandler
 
-#### Verantwortung
+##### Verantwortung
 
 Zentrale Behandlung fachlicher und technischer Fehler.
 
 ---
 
-## 5.4 Ebene 2 – Application Layer
+### Ebene 2 – Application Layer
 
 Die Application Layer implementiert die Anwendungsfälle des Systems.
 
-### Struktur
+#### Struktur
 
 ```mermaid
 flowchart LR
@@ -172,7 +260,7 @@ UseCase --> Service
 
 ---
 
-### Input Ports
+#### Input Ports
 
 ```mermaid
 classDiagram
@@ -183,13 +271,13 @@ class SavedRoadUseCase
 class DashboardTrafficUseCase
 ```
 
-#### Verantwortung
+##### Verantwortung
 
 Definition aller fachlichen Anwendungsfälle.
 
 ---
 
-### Services
+#### Services
 
 ```mermaid
 classDiagram
@@ -202,7 +290,7 @@ class DashboardTrafficService
 
 ---
 
-#### AuthService
+##### AuthService
 
 Verantwortlich für:
 
@@ -212,7 +300,7 @@ Verantwortlich für:
 
 ---
 
-#### TrafficService
+##### TrafficService
 
 Verantwortlich für:
 
@@ -222,7 +310,7 @@ Verantwortlich für:
 
 ---
 
-#### SavedRoadService
+##### SavedRoadService
 
 Verantwortlich für:
 
@@ -232,7 +320,7 @@ Verantwortlich für:
 
 ---
 
-#### DashboardTrafficService
+##### DashboardTrafficService
 
 Verantwortlich für:
 
@@ -242,43 +330,63 @@ Verantwortlich für:
 
 ---
 
-## 5.5 Ebene 2 – Domain Layer
+### Ebene 2 – Domain Layer
 
 Die Domäne enthält die eigentliche Fachlogik.
 
-### Domänenübersicht
+#### Domänenübersicht
 
 ```mermaid
 classDiagram
 
-class AppUser
-class SavedRoad
-class RoadEvent
-class Coordinate
-class TrafficEventsResult
-class SavedRoadTrafficResult
+class AppUser {
+    UUID id
+    String username
+    String passwordHash
+}
 
-class RiskLevel
-class RoadEventType
+class SavedRoad {
+    UUID id
+    UUID userId
+    String roadId
+}
 
-class RiskScoreCalculator
+class RoadEvent {
+    String id
+    String roadId
+    String title
+    String description
+    RoadEventType type
+    Coordinate coordinate
+    RiskLevel riskLevel
+}
 
-TrafficEventsResult --> RoadEvent
+class Coordinate {
+    double latitude
+    double longitude
+}
+
+class TrafficEventsResult {
+    List<RoadEvent> events
+    Integer riskScore
+    boolean liveData
+    LocalDateTime cachedAt
+}
+
+AppUser "1" --> "*" SavedRoad
+TrafficEventsResult --> "*" RoadEvent
 RoadEvent --> Coordinate
 RoadEvent --> RoadEventType
 RoadEvent --> RiskLevel
-
-RiskScoreCalculator --> RoadEventType
-RiskScoreCalculator --> RiskLevel
 ```
 
 ---
 
-### AppUser
+#### AppUser
 
 Repräsentiert einen Benutzer der Anwendung.
 
-#### Attribute
+##### Attribute
 
 ```text
 id
@@ -288,11 +396,11 @@ passwordHash
 
 ---
 
-### SavedRoad
+#### SavedRoad
 
 Repräsentiert eine gespeicherte Autobahn.
 
-#### Attribute
+##### Attribute
 
 ```text
 id
@@ -302,11 +410,11 @@ roadId
 
 ---
 
-### RoadEvent
+#### RoadEvent
 
 Repräsentiert ein einzelnes Verkehrsereignis.
 
-#### Attribute
+##### Attribute
 
 ```text
 id
@@ -321,11 +429,11 @@ riskLevel
 
 ---
 
-### TrafficEventsResult
+#### TrafficEventsResult
 
 Kapselt das Ergebnis einer Verkehrsabfrage.
 
-#### Enthält
+##### Enthält
 
 ```text
 events
@@ -336,11 +444,11 @@ riskScore
 
 ---
 
-### RiskScoreCalculator
+#### RiskScoreCalculator
 
 Zentrale fachliche Komponente zur Bewertung von Verkehrssituationen.
 
-#### Aufgaben
+##### Aufgaben
 
 * Risikostufe bestimmen
 * Risikoscore berechnen
@@ -348,11 +456,11 @@ Zentrale fachliche Komponente zur Bewertung von Verkehrssituationen.
 
 ---
 
-## 5.6 Ebene 2 – Outbound Ports
+### Ebene 2 – Outbound Ports
 
 Outbound Ports abstrahieren alle externen Abhängigkeiten.
 
-### Übersicht
+#### Übersicht
 
 ```mermaid
 classDiagram
@@ -366,41 +474,41 @@ class AvailableRoadCachePort
 
 ---
 
-### UserPort
+#### UserPort
 
 Verantwortlich für Benutzerpersistenz.
 
 ---
 
-### SavedRoadPort
+#### SavedRoadPort
 
 Verantwortlich für Favoritenpersistenz.
 
 ---
 
-### AutobahnApiPort
+#### AutobahnApiPort
 
 Verantwortlich für Verkehrsdatenzugriffe.
 
 ---
 
-### RoadEventCachePort
+#### RoadEventCachePort
 
 Verantwortlich für Verkehrsereignis-Caching.
 
 ---
 
-### AvailableRoadCachePort
+#### AvailableRoadCachePort
 
 Verantwortlich für Autobahnlisten-Caching.
 
 ---
 
-## 5.7 Ebene 2 – Infrastructure Layer
+### Ebene 2 – Infrastructure Layer
 
 Die Infrastructure Layer implementiert alle technischen Schnittstellen.
 
-### Adapterübersicht
+#### Adapterübersicht
 
 ```mermaid
 classDiagram
@@ -418,9 +526,9 @@ class AutobahnCacheWriter
 
 ---
 
-### Persistenzadapter
+#### Persistenzadapter
 
-#### UserAdapter
+##### UserAdapter
 
 Implementiert:
 
@@ -435,7 +543,7 @@ Verantwortlich für:
 
 ---
 
-#### SavedRoadAdapter
+##### SavedRoadAdapter
 
 Implementiert:
 
@@ -449,7 +557,7 @@ Verantwortlich für:
 
 ---
 
-#### RoadEventCacheAdapter
+##### RoadEventCacheAdapter
 
 Implementiert:
 
@@ -463,7 +571,7 @@ Verantwortlich für:
 
 ---
 
-#### AvailableRoadsCacheAdapter
+##### AvailableRoadsCacheAdapter
 
 Implementiert:
 
@@ -477,9 +585,9 @@ Verantwortlich für:
 
 ---
 
-### API-Integration
+#### API-Integration
 
-#### ResilientAutobahnApiAdapter
+##### ResilientAutobahnApiAdapter
 
 Implementiert:
 
@@ -495,7 +603,7 @@ Verantwortlich für:
 
 ---
 
-#### AutobahnApiClient
+##### AutobahnApiClient
 
 Verantwortlich für:
 
@@ -504,7 +612,7 @@ Verantwortlich für:
 
 ---
 
-#### AutobahnApiMapper
+##### AutobahnApiMapper
 
 Verantwortlich für:
 
@@ -512,7 +620,7 @@ Verantwortlich für:
 
 ---
 
-#### AutobahnCacheWriter
+##### AutobahnCacheWriter
 
 Verantwortlich für:
 
@@ -520,7 +628,7 @@ Verantwortlich für:
 
 ---
 
-## 5.8 Ebene 3 – Persistenzmodell
+## 5.2 Ebene 3 – Persistenzmodell
 
 ### Entity-Struktur
 
@@ -553,9 +661,39 @@ AVAILABLE_ROADS {
 APP_USERS ||--o{ SAVED_ROADS : owns
 ```
 
+```mermaid
+classDiagram
+
+class UserEntity {
+    UUID id
+    String username
+    String passwordHash
+}
+
+class SavedRoadEntity {
+    UUID id
+    UUID userId
+    String roadId
+}
+
+class CachedRoadEventEntity {
+    Long id
+    String roadId
+    String eventId
+    String type
+    LocalDateTime cachedAt
+}
+
+class AvailableRoadEntity {
+    String roadId
+}
+
+UserEntity "1" --> "*" SavedRoadEntity
+```
+
 ---
 
-## 5.9 Bausteinabhängigkeiten
+## 5.3 Bausteinabhängigkeiten
 
 ### Vollständige Komponentenübersicht
 
@@ -590,7 +728,7 @@ AvailableRoadsCacheAdapter --> AvailableRoadRepository
 
 ---
 
-## 5.10 Zusammenfassung
+## 5.4 Zusammenfassung
 
 Die Bausteinsicht zeigt die konsequente Umsetzung der Hexagonalen Architektur.
 

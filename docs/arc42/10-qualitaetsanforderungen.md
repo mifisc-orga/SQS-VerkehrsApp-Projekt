@@ -21,7 +21,7 @@ Im Fokus stehen insbesondere:
 
 Der Qualitätsbaum stellt die priorisierten Qualitätsmerkmale der Anwendung dar.
 
-```mermaid id="mhyh4l"
+```mermaid
 flowchart TB
 
 Quality["Qualität"]

@@ -12,30 +12,29 @@ Die SQS Verkehrsapp ist als Spring-Boot-Anwendung konzipiert und wird als eigens
 
 ### Deployment-Diagramm
 
-```mermaid id="0oc1nr"
-flowchart TB
+```mermaid
+C4Deployment
+title Deployment Diagram - SQS Verkehrsapp
 
-subgraph Client
-Browser["Web Browser / Frontend"]
-end
+Deployment_Node(clientDevice, "Client-Gerät", "Browser des Benutzers") {
+    Container(frontend, "React Frontend", "React, TypeScript, Vite", "Benutzeroberfläche der SQS Verkehrsapp")
+}
 
-subgraph Backend
-SpringBoot["SQS Verkehrsapp<br>Spring Boot"]
-end
+Deployment_Node(applicationServer, "Application Server", "Spring Boot Runtime") {
+    Container(backend, "SQS Verkehrsapp Backend", "Java 21, Spring Boot", "REST API, Fachlogik, Security und Caching")
+}
 
-subgraph Persistence
-Database["Relationale Datenbank"]
-end
+Deployment_Node(databaseServer, "Database Server", "Relationale Datenbank") {
+    ContainerDb(database, "Datenbank", "PostgreSQL / H2", "Speichert Benutzer, Favoriten, Verkehrsdaten-Cache und Autobahn-Cache")
+}
 
-subgraph External
-AutobahnAPI["Autobahn API"]
-end
+Deployment_Node(externalSystem, "Externes System", "Autobahn API") {
+    System_Ext(autobahnApi, "Autobahn API", "Liefert Verkehrsdaten, Baustellen, Warnungen und Sperrungen")
+}
 
-Browser -->|HTTPS / REST| SpringBoot
-
-SpringBoot -->|JPA / JDBC| Database
-
-SpringBoot -->|HTTP / JSON| AutobahnAPI
+Rel(frontend, backend, "REST-Aufrufe", "HTTPS / JSON")
+Rel(backend, database, "Persistenzzugriffe", "JPA / JDBC")
+Rel(backend, autobahnApi, "Verkehrsdaten abrufen", "HTTP / JSON")
 ```
 
 ---
@@ -66,7 +65,7 @@ Der Client dient ausschließlich der Interaktion mit der REST-API.
 
 ### Kommunikationsprotokoll
 
-```text id="rkcn1j"
+```text
 HTTPS
 REST
 JSON
@@ -82,7 +81,7 @@ Die zentrale Anwendung wird als Spring-Boot-Service betrieben.
 
 ### Enthaltene Komponenten
 
-```text id="lu5vyd"
+```text
 Controller
 Services
 Domain Model
@@ -96,7 +95,7 @@ Caching
 
 ### Interne Struktur
 
-```mermaid id="dhd0kw"
+```
 flowchart TB
 
 Controllers
@@ -150,7 +149,7 @@ Die Datenbank dient sowohl der Persistenz fachlicher Daten als auch der Speicher
 
 ### Persistierte Bereiche
 
-```text id="ttvqik"
+```text
 Benutzer
 Favoriten
 Verkehrsdaten-Cache
@@ -161,7 +160,7 @@ Autobahn-Cache
 
 ### Datenmodell
 
-```mermaid id="c8vxzv"
+```mermaid
 erDiagram
 
 APP_USERS {
@@ -200,7 +199,7 @@ Speichert Benutzerinformationen.
 
 ### Attribute
 
-```text id="4r08yh"
+```text
 id
 username
 password_hash
@@ -214,7 +213,7 @@ Speichert Favoriten eines Benutzers.
 
 ### Attribute
 
-```text id="szctk4"
+```text
 id
 user_id
 road_id
@@ -222,7 +221,7 @@ road_id
 
 ### Einschränkung
 
-```text id="a1yd4j"
+```text
 UNIQUE(user_id, road_id)
 ```
 
@@ -236,7 +235,7 @@ Speichert Verkehrsmeldungen für den Fallback-Betrieb.
 
 ### Attribute
 
-```text id="yltfj7"
+```text
 road_id
 event_id
 type
@@ -253,7 +252,7 @@ Speichert verfügbare Autobahnen.
 
 ### Attribute
 
-```text id="hyzzwo"
+```text
 road_id
 ```
 
@@ -276,7 +275,7 @@ Die Autobahn API stellt die primäre Quelle für Verkehrsinformationen dar.
 
 ### Kommunikationsweg
 
-```mermaid id="x6h0c2"
+```mermaid
 sequenceDiagram
 
 participant Backend
@@ -292,7 +291,7 @@ AutobahnAPI-->>Backend: JSON Response
 
 ### Datenformat
 
-```text id="gs1wnu"
+```text
 JSON
 ```
 
@@ -302,7 +301,7 @@ JSON
 
 Für die Kommunikation wird verwendet:
 
-```text id="qqh8fk"
+```text
 Spring WebClient
 ```
 
@@ -316,7 +315,7 @@ Der Cache dient der Erhöhung der Verfügbarkeit.
 
 ### Gespeicherte Daten
 
-```text id="cspnwu"
+```text
 Verkehrsmeldungen
 Autobahnlisten
 ```
@@ -325,7 +324,7 @@ Autobahnlisten
 
 ### Cache-Ablauf
 
-```mermaid id="0pdgdf"
+```mermaid
 flowchart LR
 
 API["Autobahn API"]
@@ -359,7 +358,7 @@ JWT-basierte Authentifizierung.
 
 ### Ablauf
 
-```mermaid id="6u8zvh"
+```mermaid
 flowchart LR
 
 User --> Login
@@ -377,7 +376,7 @@ JwtFilter --> SecurityContext
 
 ### Sicherheitskomponenten
 
-```text id="6g3twp"
+```text
 SecurityConfig
 JwtAuthenticationFilter
 JwtService
@@ -403,7 +402,7 @@ Die Anwendung muss auch bei Ausfällen der Autobahn API eingeschränkt funktions
 
 Die Anwendung verwendet:
 
-```text id="e9mxzi"
+```text
 Stateless Authentication
 ```
 
@@ -415,7 +414,7 @@ Dadurch kann die Backend-Anwendung horizontal skaliert werden.
 
 Die Kommunikation erfolgt ausschließlich über:
 
-```text id="wj1du6"
+```text
 HTTPS
 JWT
 ```
@@ -428,7 +427,7 @@ JWT
 
 Mögliche lokale Ausführung:
 
-```text id="md4bkn"
+```text
 Spring Boot
 H2
 ```
@@ -439,7 +438,7 @@ H2
 
 Mögliche Testkonfiguration:
 
-```text id="3vfx7w"
+```text
 Spring Test
 JUnit
 Mockito
@@ -451,7 +450,7 @@ Mockito
 
 Mögliche Produktivkonfiguration:
 
-```text id="t5yptw"
+```text
 Spring Boot
 PostgreSQL
 HTTPS Reverse Proxy

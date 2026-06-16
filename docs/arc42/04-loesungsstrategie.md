@@ -32,7 +32,7 @@ Dadurch bleibt der Anwendungskern unabhängig von technischen Details.
 
 ### Architekturübersicht
 
-```mermaid id="8q1y9g"
+```mermaid
 flowchart LR
 
 subgraph Inbound Adapter
@@ -84,7 +84,7 @@ Verantwortlich für:
 
 Komponenten:
 
-```text id="v3y4h8"
+```text
 AuthController
 TrafficController
 SavedRoadController
@@ -104,7 +104,7 @@ Verantwortlich für:
 
 Komponenten:
 
-```text id="j0n7ab"
+```text
 AuthService
 TrafficService
 SavedRoadService
@@ -123,7 +123,7 @@ Verantwortlich für:
 
 Komponenten:
 
-```text id="f7wd1m"
+```text
 RiskScoreCalculator
 
 RoadEvent
@@ -145,7 +145,7 @@ Verantwortlich für:
 
 Komponenten:
 
-```text id="l2xq9w"
+```text
 UserAdapter
 SavedRoadAdapter
 RoadEventCacheAdapter
@@ -163,7 +163,7 @@ JwtAuthenticationFilter
 
 Input Ports definieren die fachlichen Anwendungsfälle.
 
-```text id="jvw8rt"
+```text
 AuthUseCase
 TrafficQueryUseCase
 SavedRoadUseCase
@@ -178,7 +178,7 @@ Controller kommunizieren ausschließlich über diese Schnittstellen.
 
 Output Ports definieren externe Abhängigkeiten.
 
-```text id="ny0suy"
+```text
 UserPort
 SavedRoadPort
 AutobahnApiPort
@@ -298,7 +298,7 @@ Die Kommunikation mit der Autobahn-API erfolgt über einen dedizierten Client.
 
 Architekturprinzip:
 
-```text id="ch91sj"
+```text
 API → DTO → Mapper → Domain Model
 ```
 
@@ -310,7 +310,7 @@ Dadurch bleibt die Domäne vollständig von externen Datenstrukturen entkoppelt.
 
 Der Zugriff auf die Datenbank erfolgt über:
 
-```text id="g2bzpi"
+```text
 Spring Data JPA
 Repositories
 Persistence Adapter

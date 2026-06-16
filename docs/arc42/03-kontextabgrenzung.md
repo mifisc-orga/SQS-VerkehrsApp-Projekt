@@ -1,12 +1,48 @@
 # 03. Kontextabgrenzung
 
-## 3.1 Fachlicher Kontext
+## 3.1 Systemkontextdiagramm
+
+Zeigt die SQS Verkehrsapp als Gesamtsystem im Umfeld ihrer Benutzer und externen Systeme.
+
+Enthält:
+
+- Benutzer
+- SQS Verkehrsapp
+- Frontend / Browser
+- Autobahn API
+- Datenbank
+- GitHub Actions
+- Teamscale
+- SonarCloud
+
+```mermaid
+C4Context
+title Systemkontextdiagramm - SQS Verkehrsapp
+
+Person(user, "Benutzer", "Ruft Verkehrsdaten ab, verwaltet Favoriten und nutzt das Dashboard")
+
+System(sqsApp, "SQS Verkehrsapp", "Webbasierte Anwendung zur Anzeige und Bewertung von Verkehrsinformationen")
+
+System_Ext(autobahnApi, "Autobahn API", "Externe Quelle für Verkehrsdaten deutscher Autobahnen")
+System_Ext(database, "Relationale Datenbank", "Speichert Benutzer, Favoriten und Cache-Daten")
+System_Ext(githubActions, "GitHub Actions", "Führt CI-Pipelines, Tests und Analysen aus")
+System_Ext(teamscale, "Teamscale", "Testwise Coverage und Qualitätsüberwachung")
+System_Ext(sonarcloud, "SonarCloud", "Statische Codeanalyse und Quality Gate")
+
+Rel(user, sqsApp, "Nutzt", "HTTPS")
+Rel(sqsApp, autobahnApi, "Lädt Verkehrsdaten", "HTTP/JSON")
+Rel(sqsApp, database, "Speichert und liest Daten", "JPA/JDBC")
+Rel(githubActions, teamscale, "Übermittelt Test- und Coverage-Daten")
+Rel(githubActions, sonarcloud, "Startet statische Analyse")
+```
+
+### Fachlicher Kontext
 
 Die SQS Verkehrsapp stellt Verkehrsinformationen für deutsche Autobahnen bereit und ermöglicht Benutzern die Verwaltung persönlicher Favoritenlisten.
 
 Die Anwendung fungiert als Vermittler zwischen den Benutzern und einer externen Autobahn-API. Zusätzlich werden Benutzer- und Cache-Daten lokal gespeichert, um die Verfügbarkeit des Systems zu erhöhen.
 
-### Fachliches Kontextdiagramm
+#### Fachliches Kontextdiagramm
 
 ```mermaid
 flowchart LR
@@ -27,9 +63,9 @@ AutobahnAPI -->|Warnungen, Baustellen, Sperrungen| TrafficApp
 
 ---
 
-## 3.2 Fachliche Schnittstellen
+### Fachliche Schnittstellen
 
-### Benutzer → SQS Verkehrsapp
+#### Benutzer → SQS Verkehrsapp
 
 Der Benutzer interagiert über REST-Endpunkte mit dem System.
 
@@ -43,7 +79,7 @@ Bereitgestellte Funktionen:
 
 ---
 
-### SQS Verkehrsapp → Autobahn API
+#### SQS Verkehrsapp → Autobahn API
 
 Die Anwendung verwendet eine externe Autobahn-API als primäre Datenquelle.
 
@@ -58,11 +94,11 @@ Die Fachlogik der Anwendung verarbeitet diese Informationen und ergänzt sie um 
 
 ---
 
-## 3.3 Technischer Kontext
+### Technischer Kontext
 
 Aus technischer Sicht besteht die Anwendung aus mehreren logisch getrennten Komponenten.
 
-### Technisches Kontextdiagramm
+#### Technisches Kontextdiagramm
 
 ```mermaid
 flowchart LR
@@ -84,7 +120,7 @@ Backend -->|HTTP / JSON| AutobahnAPI
 
 ---
 
-## 3.4 Externe Systeme
+## 3.2 Externe Systeme
 
 ### Autobahn API
 
@@ -126,7 +162,7 @@ Die Datenbank wird für folgende Informationen genutzt:
 
 ---
 
-## 3.5 Systemgrenze
+## 3.3 Systemgrenze
 
 Die Systemgrenze der Anwendung umfasst sämtliche Komponenten innerhalb der Spring-Boot-Anwendung.
 
@@ -155,7 +191,7 @@ Datenbankserver
 
 ---
 
-## 3.6 Kommunikationsbeziehungen
+## 3.4 Kommunikationsbeziehungen
 
 ### Eingehende Kommunikation
 
@@ -174,7 +210,7 @@ Datenbankserver
 
 ---
 
-## 3.7 Sicherheitsrelevante Schnittstellen
+## 3.5 Sicherheitsrelevante Schnittstellen
 
 ### Öffentliche Endpunkte
 
@@ -200,7 +236,7 @@ Die folgenden Bereiche benötigen ein gültiges JWT:
 
 ---
 
-## 3.8 Kontextbezogene Qualitätsanforderungen
+## 3.6 Kontextbezogene Qualitätsanforderungen
 
 Die Kontextabgrenzung wird insbesondere durch folgende Anforderungen beeinflusst:
 
@@ -224,7 +260,7 @@ Dies wird durch die Verwendung von Ports und Adaptern sichergestellt.
 
 ---
 
-## 3.9 Zusammenfassung
+## 3.7 Zusammenfassung
 
 Die SQS Verkehrsapp befindet sich zwischen Benutzern und einer externen Autobahn-API. Sie erweitert die bereitgestellten Verkehrsdaten um zusätzliche Fachlogik, Risikobewertungen, Benutzerverwaltung und Caching-Funktionalitäten.
 

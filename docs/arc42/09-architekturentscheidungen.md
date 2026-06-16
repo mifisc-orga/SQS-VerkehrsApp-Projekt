@@ -197,7 +197,7 @@ Alle externen Abhängigkeiten werden über Ports abstrahiert.
 
 #### Input Ports
 
-```text id="3iq83m"
+```text
 AuthUseCase
 TrafficQueryUseCase
 SavedRoadUseCase
@@ -206,7 +206,7 @@ DashboardTrafficUseCase
 
 #### Output Ports
 
-```text id="i4hzyv"
+```text
 UserPort
 SavedRoadPort
 AutobahnApiPort
@@ -301,7 +301,7 @@ Verkehrsdaten sollen fachlich bewertet werden.
 
 Die Berechnung erfolgt zentral über:
 
-```text id="x2mfwp"
+```text
 RiskScoreCalculator
 ```
 
@@ -386,7 +386,7 @@ Diese sollen nicht direkt in die Domäne übernommen werden.
 
 Verwendung eines separaten Mappers:
 
-```text id="msax14"
+```text
 AutobahnApiMapper
 ```
 

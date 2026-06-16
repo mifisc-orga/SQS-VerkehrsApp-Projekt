@@ -15,6 +15,7 @@ Im Fokus stehen die wichtigsten fachlichen Abläufe:
 
 Die dargestellten Szenarien zeigen die Zusammenarbeit der wichtigsten Architekturbausteine.
 
+
 ---
 
 ## 6.2 Benutzerregistrierung
@@ -25,7 +26,7 @@ Ein neuer Benutzer registriert sich im System.
 
 ### Ablauf
 
-```mermaid id="fslrmi"
+```mermaid
 sequenceDiagram
 
 actor User
@@ -77,7 +78,7 @@ Ein Benutzer authentifiziert sich und erhält ein JWT.
 
 ### Ablauf
 
-```mermaid id="rl3lmo"
+```mermaid
 sequenceDiagram
 
 actor User
@@ -114,7 +115,7 @@ Ein Benutzer ruft eine geschützte Ressource auf.
 
 ### Ablauf
 
-```mermaid id="1ih62d"
+```mermaid
 sequenceDiagram
 
 actor User
@@ -151,7 +152,7 @@ Abruf aller Verkehrsmeldungen für eine bestimmte Autobahn.
 
 ### Ablauf
 
-```mermaid id="qzyo3v"
+```mermaid
 sequenceDiagram
 
 actor User
@@ -201,7 +202,7 @@ Berechnung eines normierten Risikoscores.
 
 ### Ablauf
 
-```mermaid id="9zck0r"
+```mermaid
 sequenceDiagram
 
 participant TrafficService
@@ -228,7 +229,7 @@ Anzeige aller gespeicherten Autobahnen eines Benutzers inklusive Verkehrsdaten.
 
 ### Ablauf
 
-```mermaid id="62m2va"
+```mermaid
 sequenceDiagram
 
 actor User
@@ -269,7 +270,7 @@ Ein Benutzer speichert eine Autobahn als Favorit.
 
 ### Ablauf
 
-```mermaid id="ez80gi"
+```mermaid
 sequenceDiagram
 
 actor User
@@ -305,7 +306,7 @@ Speicherung neu geladener Verkehrsdaten.
 
 ### Ablauf
 
-```mermaid id="zwr0iv"
+```mermaid
 sequenceDiagram
 
 participant ResilientAdapter
@@ -331,7 +332,7 @@ Bereitstellung von Verkehrsdaten trotz Ausfall der externen API.
 
 ### Ablauf
 
-```mermaid id="v68u56"
+```mermaid
 sequenceDiagram
 
 participant TrafficService
@@ -370,7 +371,7 @@ Bereitstellung der Autobahnliste bei API-Ausfall.
 
 ### Ablauf
 
-```mermaid id="kysljn"
+```mermaid
 sequenceDiagram
 
 participant ResilientAdapter
@@ -398,7 +399,7 @@ Einheitliche Fehlerkommunikation.
 
 ### Ablauf
 
-```mermaid id="g8dlzt"
+```mermaid
 sequenceDiagram
 
 participant Service
@@ -417,7 +418,7 @@ GlobalExceptionHandler-->>Client: ApiErrorResponse
 
 ## 6.13 Laufzeitverhalten im Überblick
 
-```mermaid id="gtub9m"
+```mermaid
 flowchart LR
 
 Client --> Controller
