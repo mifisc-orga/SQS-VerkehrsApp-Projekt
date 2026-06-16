@@ -1028,6 +1028,20 @@ Diese Konzepte unterstützen die Erreichung der definierten Qualitätsziele hins
 
 Zur kontinuierlichen Überwachung der Softwarequalität wurde Teamscale in den Entwicklungsprozess integriert.
 
+```mermaid
+flowchart LR
+
+Developer --> Git
+
+Git --> CI
+
+CI --> Teamscale
+
+Teamscale --> QualityDashboard
+
+QualityDashboard --> Developer
+```
+
 #### Überwachte Qualitätsmerkmale
 
 Teamscale analysiert automatisiert:
@@ -1050,19 +1064,3 @@ Die Analyse erfolgt automatisiert über die Build- bzw. CI-Pipeline.
 * Unterstützung bei Refactorings
 * Langfristige Sicherung der Wartbarkeit
 * Nachvollziehbare Entwicklung der Codequalität
-
-
-````md
-```mermaid
-flowchart LR
-
-Developer --> Git
-
-Git --> CI
-
-CI --> Teamscale
-
-Teamscale --> QualityDashboard
-
-QualityDashboard --> Developer
-```
