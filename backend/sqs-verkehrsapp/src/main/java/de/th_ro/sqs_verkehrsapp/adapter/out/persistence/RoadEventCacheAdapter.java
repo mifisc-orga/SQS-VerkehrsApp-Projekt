@@ -8,10 +8,10 @@ import de.th_ro.sqs_verkehrsapp.domain.model.RoadEvent;
 import de.th_ro.sqs_verkehrsapp.domain.model.RoadEventType;
 import de.th_ro.sqs_verkehrsapp.domain.model.TrafficEventsResult;
 import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Component;
-
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
+import org.springframework.stereotype.Component;
 
 /**
  * Persistence adapter for the traffic event cache.
@@ -46,7 +46,7 @@ public class RoadEventCacheAdapter implements RoadEventCachePort {
     public void save(String roadId, List<RoadEvent> events) {
         repository.deleteByRoadId(roadId);
 
-        LocalDateTime cachedAt = LocalDateTime.now(ZoneId.of("Europe/Berlin");
+        LocalDateTime cachedAt = LocalDateTime.now(ZoneId.of("Europe/Berlin"));
 
         List<CachedRoadEventEntity> entities = events.stream()
                 .map(event -> CachedRoadEventEntity.builder()
