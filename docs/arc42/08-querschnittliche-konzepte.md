@@ -548,11 +548,67 @@ Wichtige Komponenten:
 
 ## 8.13 Testkonzept
 
-Zur Sicherstellung der Softwarequalität wird eine mehrstufige Teststrategie eingesetzt.
+Dieses Kapitel beschreibt das Testkonzept der SQS-VerkehrsApp. Es dokumentiert die eingesetzten Testarten, Testwerkzeuge, Testumgebungen, Continuous-Integration-Prozesse sowie Maßnahmen zur Sicherung und Überwachung der Softwarequalität.
+
+### Zielsetzung
+
+Die Tests sollen sicherstellen, dass die VerkehrsApp fachlich korrekt, technisch stabil, sicher und langfristig wartbar bleibt.
+
+Abgesichert werden insbesondere:
+
+* korrekte Berechnung und Darstellung von Verkehrslagen und Risikobewertungen
+* sichere Authentifizierung und Zugriffskontrolle
+* robuste Verarbeitung externer Verkehrsdaten der Autobahn-API
+* zuverlässige Speicherung und Anzeige persönlicher Autobahn-Favoriten
+* Einhaltung der gewählten hexagonalen Architektur
+* stabile Benutzeroberfläche für die wichtigsten Nutzerworkflows
+
+### Teststrategie
+
+Das Projekt verwendet eine mehrstufige Teststrategie.
+
+| Ebene | Ziel | Beispiele im Projekt |
+|---------|---------|---------|
+| Unit-Tests | Einzelne Klassen und Funktionen isoliert prüfen | Risiko-Score, Services, Mapper, Exception-Klassen |
+| Controller-/Adapter-Tests | Web- und Infrastrukturadapter prüfen | Auth-, Traffic-, Saved-Road- und Dashboard-Controller |
+| Integrationstests | Zusammenspiel mehrerer Komponenten prüfen | Authentifizierung, Persistenz, Security, REST-Endpunkte |
+| Architekturtests | Architekturregeln automatisch prüfen | ArchUnit-Regeln für Domain, Application, Adapter und Ports |
+| Frontend-End-to-End-Tests | Nutzerworkflows im Browser prüfen | Login, Dashboard, Favoriten, Karte, Autobahnauswahl |
+| Qualitäts- und Coverage-Analyse | Testabdeckung und Codequalität sichtbar machen | JaCoCo, LCOV, Teamscale, SonarCloud |
+
+### Backend-Tests
+
+Das Backend befindet sich unter:
+
+```text
+backend/sqs-verkehrsapp
+```
+
+Die Testklassen liegen unter:
+
+```text
+src/test/java
+```
+
+Die Testkonfiguration liegt unter:
+
+```text
+src/test/resources/application-test.properties
+```
+
+Das Backend wird mit Maven getestet.
 
 #### Unit Tests
 
-Unit Tests prüfen einzelne Komponenten isoliert.
+Unit Tests prüfen einzelne Komponenten isoliert und ohne vollständigen Start der Anwendung.
+
+Die Tests enden auf:
+
+```text
+*Test.java
+```
+
+Die Ausführung erfolgt über das Maven-Surefire-Plugin.
 
 ##### Controller Tests
 
@@ -584,69 +640,372 @@ Unit Tests prüfen einzelne Komponenten isoliert.
 
 * RiskScoreCalculatorTest
 
+Der Test überprüft die fachliche Risikobewertung der Verkehrsereignisse.
+
 ##### Exception Tests
 
 * ExternalTrafficApiExceptionTest
 * TrafficDataUnavailableExceptionTest
 * UserAlreadyExistsExceptionTest
 
+Die Exception-Tests stellen sicher, dass Fehlerfälle korrekt erzeugt und weitergegeben werden.
+
 #### Integrationstests
 
-Integrationstests prüfen das Zusammenspiel mehrerer Komponenten innerhalb des Spring-Kontexts sowie die korrekte Integration von REST-Schnittstellen, Security, Persistenz und externen API-Adaptern.
+Integrationstests prüfen das Zusammenspiel mehrerer Komponenten innerhalb des Spring-Kontexts.
+
+Die Testklassen enden auf:
+
+```text
+*IntegrationTest.java
+```
+
+Die Ausführung erfolgt über das Maven-Failsafe-Plugin während der Maven-Phase:
+
+```text
+verify
+```
 
 ##### Controller- und Web-Integration
 
-- TrafficControllerIntegrationTest
-- PublicTrafficEndpointIntegrationTest
-- AuthSavedRoadIntegrationTest
+* TrafficControllerIntegrationTest
+* PublicTrafficEndpointIntegrationTest
+* AuthSavedRoadIntegrationTest
 
 ##### Security-Integration
 
-- SecurityPenetrationIntegrationTest
+* SecurityPenetrationIntegrationTest
+
+Prüft insbesondere:
+
+* Authentifizierung
+* Autorisierung
+* Zugriffsschutz
+* Sicherheitskonfiguration
 
 ##### Externe API-Integration
 
-- AutobahnApiClientIntegrationTest
-- ResilientAutobahnApiAdapterIntegrationTest
+* AutobahnApiClientIntegrationTest
+* ResilientAutobahnApiAdapterIntegrationTest
+
+Prüft:
+
+* Kommunikation mit externen Verkehrsdatenquellen
+* Fehlerbehandlung
+* Retry-Verhalten
+* Circuit-Breaker-Verhalten
 
 ##### Persistenz-Integration
 
-- CachedRoadEventRepositoryIntegrationTest
-- SavedRoadRepositoryIntegrationTest
+* CachedRoadEventRepositoryIntegrationTest
+* SavedRoadRepositoryIntegrationTest
+
+Prüft:
+
+* Datenbankzugriffe
+* Speicherung
+* Lesen und Aktualisieren von Daten
 
 ##### Anwendungskontext
 
-- ApplicationContextIntegrationTest
+* ApplicationContextIntegrationTest
 
-#### Ziel der Integrationstests
+Prüft den vollständigen Start des Spring-Kontexts.
+
+##### Ziel der Integrationstests
 
 Die Integrationstests stellen sicher, dass zentrale Systemabläufe nicht nur isoliert, sondern im Zusammenspiel der Spring-Komponenten korrekt funktionieren.
 
+Insbesondere werden geprüft:
+
+* REST-Endpunkte
+* Security-Konfiguration
+* Persistenz
+* externe Adapter
+* Spring-Konfiguration
+
+#### Testdaten und Testumgebung
+
+Für Backend-Tests wird das Spring-Profil `test` verwendet.
+
+Wichtige Eigenschaften:
+
+* H2-In-Memory-Datenbank für schnelle und reproduzierbare Tests
+* `ddl-auto=create-drop`
+* frisches Datenbankschema für jeden Testlauf
+* eigener JWT-Testschlüssel
+* lokale Autobahn-API-Basis-URL für Adaptertests
+* reduzierte Retry-Zeiten
+* reduzierte Circuit-Breaker-Zeiten
+
+Dadurch können Fehler- und Ausfallszenarien effizient getestet werden.
+
+Zusätzlich werden Testcontainers-Abhängigkeiten verwendet, wenn realistischere Integrationstests gegen Container benötigt werden.
 
 #### Konfigurationstests
 
-* WebClientConfigTest
+##### WebClientConfigTest
+
+Prüft die korrekte Konfiguration der HTTP-Kommunikation mit externen Diensten.
 
 #### Architekturtests
 
-Zur Sicherstellung der Architekturkonformität wird ein dedizierter Architekturtest verwendet:
+Zur Sicherstellung der Architekturkonformität wird ArchUnit eingesetzt.
+
+##### Architekturtest
 
 * ArchitectureTest
 
-Geprüft werden unter anderem:
+##### Geprüfte Regeln
 
 * Einhaltung der Hexagonalen Architektur
 * Schichtentrennung
-* Zulässige Paketabhängigkeiten
+* zulässige Paketabhängigkeiten
+* Controller liegen im Web-Adapter-Paket
+* Services liegen in der Application-Schicht
+* Ports sind Interfaces
+* Domain-Code hängt nicht von Spring ab
+* Domain-Code hängt nicht von Adapter-Schichten ab
+* Domain-Code hängt nicht von der Application-Schicht ab
+* Incoming- und Outgoing-Adapter bleiben voneinander getrennt
+* Persistenz-Entities verbleiben im Persistenzadapter
+* Repositories verbleiben im Persistenzadapter
 
-#### Eingesetzte Werkzeuge
+Diese Tests laufen gemeinsam mit den übrigen Backend-Tests.
+
+#### Eingesetzte Werkzeuge im Backend
 
 * JUnit 5
 * Mockito
 * Spring Boot Test
 * MockMvc
 * ArchUnit
+* H2 Database
+* Testcontainers
+* Maven Surefire Plugin
+* Maven Failsafe Plugin
 
+### Frontend-Tests
+
+Das Frontend befindet sich unter:
+
+```text
+frontend
+```
+
+Die Tests befinden sich unter:
+
+```text
+frontend/tests
+```
+
+Das Frontend wird mit:
+
+* React
+* TypeScript
+* Vite
+* Playwright
+
+getestet.
+
+#### End-to-End-Tests mit Playwright
+
+Die Playwright-Tests prüfen zentrale Nutzerabläufe im Browser.
+
+Geprüft werden unter anderem:
+
+* Grundzustand der Anwendung
+* Start der Anwendung
+* Autobahnauswahl
+* Kartenansicht
+* Risiko-Score-Anzeige
+* Login
+* Dashboard
+* Speichern von Favoriten
+* Löschen von Favoriten
+* zentrale UI-Funktionen
+
+Die Tests verwenden gemockte API-Antworten über Playwright-Routing.
+
+Dadurch sind die Tests:
+
+* reproduzierbar
+* unabhängig von externen Diensten
+* schnell ausführbar
+
+#### Linting und Build
+
+Neben den Browser-Tests werden zusätzliche Qualitätsprüfungen ausgeführt.
+
+Der Build-Prozess führt aus:
+
+1. TypeScript-Typprüfung
+2. statische Analyse mittels ESLint
+3. Produktionsbuild mit Vite
+
+Dadurch werden Fehler bereits vor der Ausführung der Anwendung erkannt.
+
+#### Frontend-Coverage
+
+Für die Frontend-Coverage wird die Playwright-Testumgebung erweitert.
+
+Datei:
+
+```text
+frontend/tests/coverage.ts
+```
+
+Nach jedem Test wird die Browser-Coverage aus:
+
+```javascript
+window.__coverage__
+```
+
+ausgelesen.
+
+Die Daten werden in:
+
+```text
+.nyc_output
+```
+
+gespeichert.
+
+Anschließend wird ein LCOV-Report erzeugt.
+
+Report-Datei:
+
+```text
+frontend/coverage/lcov.info
+```
+
+### Continuous Integration
+
+Alle automatisierten Prüfungen werden über GitHub Actions ausgeführt.
+
+#### Backend CI
+
+Workflow:
+
+```text
+.github/workflows/backend-ci.yml
+```
+
+Ausgeführt werden:
+
+* Kompilierung
+* Unit-Tests
+* Integrationstests
+* Architekturtests
+
+#### Frontend CI
+
+Workflow:
+
+```text
+.github/workflows/frontend-ci.yml
+```
+
+Ausgeführt werden:
+
+* reproduzierbare Dependency-Installation
+* TypeScript-Prüfung
+* ESLint
+* Build
+* Playwright-Tests
+
+#### Teamscale
+
+Workflow:
+
+```text
+.github/workflows/teamscale-ci.yml
+```
+
+Teamscale wird für Testwise Coverage und Coverage-Uploads verwendet.
+
+##### Verwendete Profile
+
+Backend:
+
+```text
+teamscale-tia
+```
+
+Coverage:
+
+```text
+jacoco
+```
+
+##### Hochgeladene Daten
+
+* JaCoCo-Coverage des Backends
+* LCOV-Coverage des Frontends
+* Testausführungen
+* Qualitätsmetriken
+
+#### SonarCloud
+
+Workflow:
+
+```text
+.github/workflows/sonarcloud.yml
+```
+
+Vor der Analyse werden ausgeführt:
+
+Backend:
+
+```bash
+./mvnw -B verify
+```
+
+Frontend:
+
+* Linting
+* TypeScript-Prüfung
+* Build
+
+Analysiert werden:
+
+* Bugs
+* Code Smells
+* Sicherheitsprobleme
+* Testabdeckung
+* Wartbarkeit
+
+### Coverage
+
+#### Backend
+
+Für das Backend wird JaCoCo verwendet.
+
+Report:
+
+```text
+backend/sqs-verkehrsapp/target/site/jacoco/jacoco.xml
+```
+
+#### Frontend
+
+Für das Frontend wird LCOV verwendet.
+
+Report:
+
+```text
+frontend/coverage/lcov.info
+```
+
+### Testdaten
+
+Für lokale Entwicklungs- und Demonstrationsszenarien existiert ein Testnutzer:
+
+* Benutzername: `testuser`
+* Passwort: `test123`
+* gespeicherte Autobahnen:
+    * `A3`
+    * `A92`
 ---
 
 ## 8.14 Zusammenfassung
@@ -706,4 +1065,4 @@ CI --> Teamscale
 Teamscale --> QualityDashboard
 
 QualityDashboard --> Developer
-````
+```
