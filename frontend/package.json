@@ -11,7 +11,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "coverage": "vitest run --coverage",
-    "coverage:e2e": "playwright test && nyc --cwd .. --temp-dir frontend/.nyc_output --report-dir frontend/coverage report --reporter=lcov --reporter=text-summary"
+    "coverage:e2e": "playwright test && nyc --cwd .. --temp-dir frontend/.nyc_output --report-dir frontend/coverage-e2e report --reporter=lcov --reporter=text-summary"
   },
   "dependencies": {
     "leaflet": "^1.9.4",
@@ -31,7 +31,7 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.1",
-    "@vitest/coverage-v8": "^4.1.8",
+    "@vitest/coverage-v8": "^4.1.9",
     "eslint": "^10.2.1",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.2",
