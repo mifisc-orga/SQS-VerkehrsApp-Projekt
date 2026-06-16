@@ -20,3 +20,27 @@ Frontend runs at:
 ```text
 http://localhost:5173
 ```
+
+## Testing
+
+**Unit tests** (Vitest):
+```bash
+npm test
+```
+
+**Unit test coverage report**:
+```bash
+npm run coverage
+open coverage/index.html
+```
+
+**End-to-end tests** (Playwright) — requires the app to be running:
+```bash
+npx playwright test
+```
+
+**E2E coverage report** (NYC/Istanbul):
+```bash
+npx nyc report --reporter=html
+open coverage/index.html
+```
