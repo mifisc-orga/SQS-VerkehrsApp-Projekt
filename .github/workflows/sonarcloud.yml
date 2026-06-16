@@ -49,11 +49,11 @@ jobs:
       - name: Check coverage reports
         run: |
           test -s backend/sqs-verkehrsapp/target/site/jacoco/jacoco.xml
-          test -s coverage/lcov.info
-          test -s coverage-e2e/lcov.info 
+          test -s frontend/coverage/lcov.info
+          test -s frontend/coverage-e2e/lcov.info 
           grep -q '<counter type="LINE"' backend/sqs-verkehrsapp/target/site/jacoco/jacoco.xml
-          grep -q '^SF:src/' coverage/lcov.info
-          grep -q '^SF:src/' coverage-e2e/lcov.info
+          grep -q '^SF:src/' frontend/coverage/lcov.info
+          grep -q '^SF:src/' frontend/coverage-e2e/lcov.info
 
       - name: Analyze with SonarCloud
         uses: SonarSource/sonarqube-scan-action@v8
