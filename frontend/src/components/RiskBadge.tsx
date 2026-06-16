@@ -1,9 +1,9 @@
-/** Mögliche Risikolevel einer Autobahn */
+/** Possible risk levels for a motorway */
 export type RiskLevel = 'LOW' | 'MEDIUM' | 'HIGH';
 
-/** Props für das Risikolevel-Badge */
+/** Props for the RiskBadge component */
 interface RiskBadgeProps {
-  /** Risikolevel der Autobahn: LOW, MEDIUM oder HIGH */
+  /** Risk level of the motorway: LOW, MEDIUM, or HIGH */
   riskLevel: RiskLevel;
 }
 
@@ -13,6 +13,10 @@ const labels: Record<RiskLevel, string> = {
   HIGH: 'Hoch',
 };
 
+/**
+ * Displays the risk level of a traffic event as a coloured badge.
+ * LOW = green, MEDIUM = yellow, HIGH = red.
+ */
 export function RiskBadge({ riskLevel }: RiskBadgeProps) {
   const className = `risk-badge risk-${riskLevel.toLowerCase()}`;
   return (
