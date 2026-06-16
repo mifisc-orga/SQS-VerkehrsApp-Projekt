@@ -3,12 +3,12 @@ package de.th_ro.sqs_verkehrsapp.adapter.in.web;
 import de.th_ro.sqs_verkehrsapp.adapter.in.web.dto.ApiErrorResponse;
 import de.th_ro.sqs_verkehrsapp.domain.exception.InvalidCredentialsException;
 import de.th_ro.sqs_verkehrsapp.domain.exception.TrafficDataUnavailableException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import java.time.LocalDateTime;
 
 /**
  * Global exception handler for REST controllers.
@@ -31,7 +31,7 @@ public class GlobalExceptionHandler {
         ApiErrorResponse response = new ApiErrorResponse(
                 "TRAFFIC_DATA_UNAVAILABLE",
                 exception.getMessage(),
-                LocalDateTime.now()
+                LocalDateTime.now(ZoneId.of("Europe/Berlin"))
         );
 
         return ResponseEntity
@@ -55,7 +55,7 @@ public class GlobalExceptionHandler {
         ApiErrorResponse response = new ApiErrorResponse(
                 "AUTHENTICATION_FAILED",
                 exception.getMessage(),
-                LocalDateTime.now()
+                LocalDateTime.now(ZoneId.of("Europe/Berlin"))
         );
 
         return ResponseEntity

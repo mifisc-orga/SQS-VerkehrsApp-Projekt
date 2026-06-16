@@ -47,10 +47,10 @@ class DashboardTrafficServiceTest {
                 .build();
 
         TrafficEventsResult a8Result =
-                new TrafficEventsResult(List.of(), true, LocalDateTime.now(),0);
+                new TrafficEventsResult(List.of(), true, LocalDateTime.now(ZoneId.of("Europe/Berlin"),0);
 
         TrafficEventsResult a3Result =
-                new TrafficEventsResult(List.of(), true, LocalDateTime.now(),0);
+                new TrafficEventsResult(List.of(), true, LocalDateTime.now(ZoneId.of("Europe/Berlin"),0);
 
         when(savedRoadPort.findByUserId(userId))
                 .thenReturn(List.of(a8, a3));

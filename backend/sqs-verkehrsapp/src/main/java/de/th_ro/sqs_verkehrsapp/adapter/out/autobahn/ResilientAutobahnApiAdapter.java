@@ -49,7 +49,7 @@ public class ResilientAutobahnApiAdapter implements AutobahnApiPort {
         return new TrafficEventsResult(
                 events,
                 true,
-                LocalDateTime.now(),
+                LocalDateTime.now(ZoneId.of("Europe/Berlin"),
                 0
         );
     }
@@ -94,7 +94,7 @@ public class ResilientAutobahnApiAdapter implements AutobahnApiPort {
         return new TrafficEventsResult(
                 events,
                 true,
-                LocalDateTime.now(),
+                LocalDateTime.now(ZoneId.of("Europe/Berlin"),
                 0
         );
     }

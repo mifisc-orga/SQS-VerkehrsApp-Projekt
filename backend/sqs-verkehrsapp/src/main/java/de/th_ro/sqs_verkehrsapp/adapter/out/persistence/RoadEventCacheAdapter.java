@@ -46,7 +46,7 @@ public class RoadEventCacheAdapter implements RoadEventCachePort {
     public void save(String roadId, List<RoadEvent> events) {
         repository.deleteByRoadId(roadId);
 
-        LocalDateTime cachedAt = LocalDateTime.now();
+        LocalDateTime cachedAt = LocalDateTime.now(ZoneId.of("Europe/Berlin");
 
         List<CachedRoadEventEntity> entities = events.stream()
                 .map(event -> CachedRoadEventEntity.builder()
