@@ -81,18 +81,29 @@ jobs:
           npx playwright install --with-deps chromium
           npm run lint
           npm run build
-          npx playwright test
-          npx nyc report --reporter=lcov
+          npm run coverage
+          npm run coverage:e2e
 
-      - name: Upload frontend LCOV to second Teamscale project
+      - name: Upload Vitest LCOV to Teamscale
         uses: cqse/teamscale-upload-action@v2.9.14
         with:
           server: ${{ secrets.TEAMSCALE_SERVER }}
           project: ${{ secrets.TEAMSCALE_FRONTEND }}
           user: ${{ secrets.TEAMSCALE_USER }}
           accesskey: ${{ secrets.TEAMSCALE_ACCESSKEY }}
-          partition: GitHub Actions LCOV
+          partition: Unit Tests (Vitest)
           format: LCOV
           revision: ${{ env.TEAMSCALE_REVISION }}
           files: frontend/coverage/lcov.info
 
+      - name: Upload Playwright LCOV to Teamscale
+        uses: cqse/teamscale-upload-action@v2.9.14
+        with:
+          server: ${{ secrets.TEAMSCALE_SERVER }}
+          project: ${{ secrets.TEAMSCALE_FRONTEND }}
+          user: ${{ secrets.TEAMSCALE_USER }}
+          accesskey: ${{ secrets.TEAMSCALE_ACCESSKEY }}
+          partition: E2E Tests (Playwright)
+          format: LCOV
+          revision: ${{ env.TEAMSCALE_REVISION }}
+          files: frontend/coverage-e2e/lcov.info

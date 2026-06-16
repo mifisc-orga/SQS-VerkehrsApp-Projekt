@@ -43,14 +43,17 @@ jobs:
           npx playwright install --with-deps chromium
           npm run lint
           npm run build
+          npm run coverage
           npm run coverage:e2e
 
       - name: Check coverage reports
         run: |
           test -s backend/sqs-verkehrsapp/target/site/jacoco/jacoco.xml
           test -s frontend/coverage/lcov.info
+          test -s frontend/coverage-e2e/lcov.info 
           grep -q '<counter type="LINE"' backend/sqs-verkehrsapp/target/site/jacoco/jacoco.xml
-          grep -q '^SF:frontend/src/' frontend/coverage/lcov.info
+          grep -q '^SF:src/' frontend/coverage/lcov.info
+          grep -q '^SF:src/' frontend/coverage-e2e/lcov.info
 
       - name: Analyze with SonarCloud
         uses: SonarSource/sonarqube-scan-action@v8
