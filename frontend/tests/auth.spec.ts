@@ -99,6 +99,18 @@ async function performLogout(page: import('@playwright/test').Page): Promise<voi
   await page.getByTestId('confirm-ok').click();
 }
 
+async function performRegister(
+  page: import('@playwright/test').Page,
+  username = 'newuser',
+  password = 'securePass123',
+): Promise<void> {
+  await page.getByTestId('login-button').click();
+  await page.getByTestId('tab-register').click();
+  await page.getByTestId('username-input').fill(username);
+  await page.getByTestId('password-input').fill(password);
+  await page.getByTestId('submit-register').click();
+}
+
 test.beforeEach(async ({ page }) => {
   await page.route('/api/traffic', async route => 
     await route.fulfill({ json: MOCK_TRAFFIC_DATA });
@@ -190,32 +202,20 @@ test('Switching back to login tab shows login button again', async ({ page }) =>
 
 test('Username is displayed after registration', async ({ page }) => {
   await page.goto('/');
-  await page.getByTestId('login-button').click();
-  await page.getByTestId('tab-register').click();
-  await page.getByTestId('username-input').fill('newuser');
-  await page.getByTestId('password-input').fill('securePass123');
-  await page.getByTestId('submit-register').click();
+  await performRegister(page);
   await expect(page.getByTestId('user-info')).toBeVisible();
   await expect(page.getByTestId('user-info')).toContainText('newuser');
 });
 
 test('Logout button is visible after registration', async ({ page }) => {
   await page.goto('/');
-  await page.getByTestId('login-button').click();
-  await page.getByTestId('tab-register').click();
-  await page.getByTestId('username-input').fill('newuser');
-  await page.getByTestId('password-input').fill('securePass123');
-  await page.getByTestId('submit-register').click();
+  await performRegister(page);
   await expect(page.getByTestId('logout-button')).toBeVisible();
 });
 
 test('Dashboard is displayed after registration', async ({ page }) => {
   await page.goto('/');
-  await page.getByTestId('login-button').click();
-  await page.getByTestId('tab-register').click();
-  await page.getByTestId('username-input').fill('newuser');
-  await page.getByTestId('password-input').fill('securePass123');
-  await page.getByTestId('submit-register').click();
+  await performRegister(page);
   await expect(page.getByTestId('dashboard')).toBeVisible();
 });
 
