@@ -33,6 +33,9 @@ Anleitung zum Starten:
 Dokumentation der Teamabsprachen:
 ➡️ [Teammeeting](docs/Teammeetings/Teammeeting.md)
 
+Aufgabenverteilung:
+➡️ [Aufgabenverteilung](docs/Teammeetings/Aufgabenverteilung.md)
+
 Projektbeteiligte:
 - Louisa Böhm
 - Zlata Polovka
