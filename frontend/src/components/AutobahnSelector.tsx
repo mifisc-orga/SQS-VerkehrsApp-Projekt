@@ -1,5 +1,7 @@
 import {useEffect, useRef, useState} from 'react';
 import {fetchAvailableRoads} from '../services/trafficService';
+import { RoadOption } from './RoadOption';
+import { SelectedChips } from './SelectedChips';
 
 /**
  * Eigenschaften für den AutobahnSelector.
@@ -23,6 +25,8 @@ interface AutobahnSelectorProps {
   max?: number;
 }
 
+const COLOR_PRIMARY = 'var(--color-primary)';
+
 /**
  * Dropdown-Komponente zur Auswahl mehrerer Autobahnen.
  */
@@ -35,8 +39,6 @@ export function AutobahnSelector({
   const [isOpen, setIsOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
-
-  const COLOR_PRIMARY = 'var(--color-primary)';
 
   useEffect(() => {
     fetchAvailableRoads()
@@ -130,93 +132,19 @@ export function AutobahnSelector({
             const isSelected = selected.includes(road);
             const isDisabled = !isSelected && selected.length >= max;
             return (
-              <div
+              <RoadOption
                 key={road}
-                data-testid={`road-option-${road}`}
-                onClick={() => !isDisabled && toggle(road)}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '10px',
-                  padding: '9px 14px',
-                  cursor: isDisabled ? 'not-allowed' : 'pointer',
-                  background: isSelected ? '#f0fdf9' : 'white',
-                  opacity: isDisabled ? 0.4 : 1,
-                  borderBottom: '0.5px solid var(--color-border)',
-                  fontSize: '13px',
-                  fontWeight: isSelected ? 600 : 400,
-                  color: isSelected ? 'var(--color-primary-dk)' : 'var(--color-text)',
-                  transition: 'background 0.15s',
-                }}
-                onMouseEnter={(e) => {
-                  if (!isDisabled) { (e.currentTarget as HTMLElement).style.background = isSelected ? '#e0fdf4' : '#f8fafc'; }
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLElement).style.background = isSelected ? '#f0fdf9' : 'white';
-                }}
-              >
-                <div style={{
-                  width: '16px',
-                  height: '16px',
-                  borderRadius: '4px',
-                  border: `2px solid ${isSelected ? 'COLOR_PRIMARY' : '#cbd5e1'}`,
-                  background: isSelected ? COLOR_PRIMARY : 'white',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  flexShrink: 0,
-                }}>
-                  {isSelected && <i className="ti ti-check" style={{ fontSize: '10px', color: 'white' }} aria-hidden="true"></i>}
-                </div>
-                {road}
-              </div>
+                road={road}
+                isSelected={isSelected}
+                isDisabled={isDisabled}
+                onToggle={toggle}
+              />
             );
           })}
         </div>
       )}
 
-      {selected.length > 0 && (
-        <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginTop: '8px' }}>
-          {selected.map((road) => (
-            <span
-              key={road}
-              data-testid={`selected-chip-${road}`}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '4px',
-                background: '#f0fdf9',
-                border: '1.5px solid #5eead4',
-                borderRadius: '999px',
-                padding: '3px 10px 3px 10px',
-                fontSize: '12px',
-                fontWeight: 600,
-                color: 'var(--color-primary-dk)',
-              }}
-            >
-              {road}
-              <button
-                data-testid={`chip-remove-${road}`}
-                onClick={(e) => { e.stopPropagation(); remove(road); }}
-                aria-label={`${road} entfernen`}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  cursor: 'pointer',
-                  color: COLOR_PRIMARY,
-                  padding: '0 2px',
-                  fontSize: '14px',
-                  lineHeight: 1,
-                  minWidth: '14px',
-                  minHeight: '14px',
-                }}
-              >
-                ×
-              </button>
-            </span>
-          ))}
-        </div>
-      )}
+      <SelectedChips selected={selected} onRemove={remove} />
     </div>
   );
 }
