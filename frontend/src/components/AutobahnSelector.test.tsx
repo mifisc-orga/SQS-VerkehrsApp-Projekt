@@ -24,12 +24,12 @@ describe('AutobahnSelector', () => {
 
   test('renders the selector button', async () => {
     render(<AutobahnSelector selected={[]} onSelect={vi.fn()} />);
-    expect(screen.getByTestId('SELECTOR')).toBeInTheDocument();
+    expect(screen.getByTestId(SELECTOR)).toBeInTheDocument();
   });
 
   test('opens dropdown when selector button is clicked', async () => {
     render(<AutobahnSelector selected={[]} onSelect={vi.fn()} />);
-    fireEvent.click(screen.getByTestId('SELECTOR'));
+    fireEvent.click(screen.getByTestId(SELECTOR));
     await waitFor(() => {
       expect(screen.getByTestId('autobahn-dropdown')).toBeInTheDocument();
     });
@@ -37,7 +37,7 @@ describe('AutobahnSelector', () => {
 
   test('shows all available roads in dropdown', async () => {
     render(<AutobahnSelector selected={[]} onSelect={vi.fn()} />);
-    fireEvent.click(screen.getByTestId('SELECTOR'));
+    fireEvent.click(screen.getByTestId(SELECTOR));
     await waitFor(() => {
       expect(screen.getByTestId('road-option-A3')).toBeInTheDocument();
     });
@@ -49,9 +49,9 @@ describe('AutobahnSelector', () => {
   test('calls onSelect with added road when a road is clicked', async () => {
     const onSelect = vi.fn();
     render(<AutobahnSelector selected={['A3']} onSelect={onSelect} />);
-    fireEvent.click(screen.getByTestId('SELECTOR'));
+    fireEvent.click(screen.getByTestId(SELECTOR));
     await waitFor(() => {
-      expect(screen.getByTestId('OPTION_A9')).toBeInTheDocument();
+      expect(screen.getByTestId(OPTION_A9)).toBeInTheDocument();
     });
     fireEvent.click(screen.getByTestId('road-option-A9'));
     expect(onSelect).toHaveBeenCalledWith(['A3', 'A9']);
@@ -60,11 +60,11 @@ describe('AutobahnSelector', () => {
   test('calls onSelect with road removed when already selected road is clicked', async () => {
     const onSelect = vi.fn();
     render(<AutobahnSelector selected={['A3', 'A9']} onSelect={onSelect} />);
-    fireEvent.click(screen.getByTestId('SELECTOR'));
+    fireEvent.click(screen.getByTestId(SELECTOR));
     await waitFor(() => {
-      expect(screen.getByTestId('OPTION_A3')).toBeInTheDocument();
+      expect(screen.getByTestId(OPTION_A3)).toBeInTheDocument();
     });
-    fireEvent.click(screen.getByTestId('OPTION_A3'));
+    fireEvent.click(screen.getByTestId(OPTION_A3));
     expect(onSelect).toHaveBeenCalledWith(['A9']);
   });
 
@@ -74,18 +74,18 @@ describe('AutobahnSelector', () => {
     const onSelect = vi.fn();
     const maxSelected = ['A1', 'A3', 'A8', 'A9', 'A92'];
     render(<AutobahnSelector selected={maxSelected} onSelect={onSelect} max={5} />);
-    fireEvent.click(screen.getByTestId('SELECTOR'));
+    fireEvent.click(screen.getByTestId(SELECTOR));
     await waitFor(() => {
-      expect(screen.getByTestId('OPTION_A99')).toBeInTheDocument();
+      expect(screen.getByTestId(OPTION_A99)).toBeInTheDocument();
     });
-    fireEvent.click(screen.getByTestId('OPTION_A99'));
+    fireEvent.click(screen.getByTestId(OPTION_A99));
     expect(onSelect).not.toHaveBeenCalled();
   });
 
   test('shows max-reached warning when selection limit is hit', async () => {
     const maxSelected = ['A1', 'A3', 'A8', 'A9', 'A92'];
     render(<AutobahnSelector selected={maxSelected} onSelect={vi.fn()} max={5} />);
-    fireEvent.click(screen.getByTestId('SELECTOR'));
+    fireEvent.click(screen.getByTestId(SELECTOR));
     await waitFor(() => {
       expect(screen.getByText(/Maximum 5 Autobahnen erreicht/)).toBeInTheDocument();
     });

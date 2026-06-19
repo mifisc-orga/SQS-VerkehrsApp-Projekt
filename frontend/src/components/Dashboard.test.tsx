@@ -59,7 +59,7 @@ describe('Dashboard', () => {
     ]);
     render(<Dashboard {...DEFAULT_PROPS} />);
     await waitFor(() => {
-      expect(screen.getByTestId('ROAD_A3')).toBeInTheDocument();
+      expect(screen.getByTestId(ROAD_A3)).toBeInTheDocument();
     });
   });
 
@@ -196,9 +196,9 @@ describe('Dashboard', () => {
     ]);
     render(<Dashboard {...DEFAULT_PROPS} onRoadSelect={onRoadSelect} />);
     await waitFor(() => {
-      expect(screen.getByTestId('ROAD_A3')).toBeInTheDocument();
+      expect(screen.getByTestId(ROAD_A3)).toBeInTheDocument();
     });
-    fireEvent.click(screen.getByTestId('ROAD_A3'));
+    fireEvent.click(screen.getByTestId(ROAD_A3));
     expect(onRoadSelect).toHaveBeenCalledWith('A3');
   });
 
@@ -209,9 +209,9 @@ describe('Dashboard', () => {
     ]);
     render(<Dashboard {...DEFAULT_PROPS} onRoadSelect={onRoadSelect} />);
     await waitFor(() => {
-      expect(screen.getByTestId('ROAD_A3')).toBeInTheDocument();
+      expect(screen.getByTestId(ROAD_A3)).toBeInTheDocument();
     });
-    fireEvent.keyDown(screen.getByTestId('ROAD_A3'), { key: 'Enter' });
+    fireEvent.keyDown(screen.getByTestId(ROAD_A3), { key: 'Enter' });
     expect(onRoadSelect).toHaveBeenCalledWith('A3');
   });
 
@@ -223,9 +223,9 @@ describe('Dashboard', () => {
     ]);
     render(<Dashboard {...DEFAULT_PROPS} />);
     await waitFor(() => {
-      expect(screen.getByTestId('DELETE_A3')).toBeInTheDocument();
+      expect(screen.getByTestId(DELETE_A3)).toBeInTheDocument();
     });
-    fireEvent.click(screen.getByTestId('DELETE_A3'));
+    fireEvent.click(screen.getByTestId(DELETE_A3));
     expect(screen.getByTestId('confirm-ok')).toBeInTheDocument();
   });
 
@@ -236,12 +236,12 @@ describe('Dashboard', () => {
     vi.mocked(deleteFavourite).mockResolvedValue(undefined);
     render(<Dashboard {...DEFAULT_PROPS} />);
     await waitFor(() => {
-      expect(screen.getByTestId('DELETE_A3')).toBeInTheDocument();
+      expect(screen.getByTestId(DELETE_A3)).toBeInTheDocument();
     });
-    fireEvent.click(screen.getByTestId('DELETE_A3'));
+    fireEvent.click(screen.getByTestId(DELETE_A3));
     fireEvent.click(screen.getByTestId('confirm-ok'));
     await waitFor(() => {
-      expect(screen.queryByTestId('ROAD_A3')).not.toBeInTheDocument();
+      expect(screen.queryByTestId(ROAD_A3)).not.toBeInTheDocument();
     });
   });
 
@@ -251,10 +251,10 @@ describe('Dashboard', () => {
     ]);
     render(<Dashboard {...DEFAULT_PROPS} />);
     await waitFor(() => {
-      expect(screen.getByTestId('DELETE_A3')).toBeInTheDocument();
+      expect(screen.getByTestId(DELETE_A3)).toBeInTheDocument();
     });
-    fireEvent.click(screen.getByTestId('DELETE_A3'));
+    fireEvent.click(screen.getByTestId(DELETE_A3));
     fireEvent.click(screen.getByTestId('confirm-cancel'));
-    expect(screen.getByTestId('ROAD_A3')).toBeInTheDocument();
+    expect(screen.getByTestId(ROAD_A3)).toBeInTheDocument();
   });
 });

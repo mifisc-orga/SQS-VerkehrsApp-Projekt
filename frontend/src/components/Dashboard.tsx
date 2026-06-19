@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { fetchDashboardTraffic, deleteFavourite } from '../services/trafficService';
 import type { DashboardRoadData } from '../services/trafficService';
-import { RiskBadge } from './RiskBadge';
 import type { RiskLevel } from './RiskBadge';
 import { ConfirmModal } from './ConfirmModal';
+import { DashboardRoadCard } from './DashboardRoadCard';
 
 /** Props für das Dashboard mit gespeicherten Autobahnen */
 interface DashboardProps {
@@ -26,19 +26,6 @@ function getMaxRiskLevel(events: DashboardRoadData['events']): RiskLevel | 'NONE
     return 'MEDIUM';
   }
   return 'LOW';
-}
-
-function getEventTypeLabel(type: string): string {
-  switch (type) {
-    case 'ROADWORK':
-      return '🚧 Baustelle';
-    case 'CLOSURE':
-      return '🚫 Sperrung';
-    case 'WARNING':
-      return '⚠️ Warnung';
-    default:
-      return type;
-  }
 }
 
 /** Dashboard mit Übersicht der gespeicherten Autobahnen */
@@ -81,48 +68,15 @@ export function Dashboard({ token, refreshKey, onRoadSelect }: DashboardProps) {
           const maxRisk = getMaxRiskLevel(events);
           const uniqueTypes = [...new Set(events.map(e => e.type))];
           return (
-            <div
+            <DashboardRoadCard
               key={roadId}
-              className="dashboard-card dashboard-card--clickable"
-              data-testid={`dashboard-road-${roadId}`}
-              onClick={() => onRoadSelect(roadId)}
-              onKeyDown={(e) => { if (e.key === 'Enter') { onRoadSelect(roadId); } }}
-              role="button"
-              tabIndex={0}
-            >
-              <div className="dashboard-card__header">
-                <span className="dashboard-card__title">🛣️ {roadId}</span>
-                {maxRisk !== 'NONE' && <RiskBadge riskLevel={maxRisk} />}
-                {maxRisk === 'NONE' && (
-                  <span className="badge badge-ok">✓ Frei</span>
-                )}
-              </div>
-              <div className="dashboard-card__stats">
-                <span>{events.length} {events.length === 1 ? 'Ereignis' : 'Ereignisse'}</span>
-              </div>
-              {uniqueTypes.length > 0 && (
-                <div className="dashboard-card__types">
-                  {uniqueTypes.map(type => (
-                    <span key={type} className="event-type-badge">
-                      {getEventTypeLabel(type)}
-                    </span>
-                  ))}
-                </div>
-              )}
-              {events.length === 0 && (
-                <p className="dashboard-card__empty">Keine aktuellen Ereignisse.</p>
-              )}
-              <button
-                className="btn btn-danger"
-                data-testid={`delete-favourite-${roadId}`}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleDeleteRequest(roadId);
-                }}
-              >
-                ✕ Entfernen
-              </button>
-            </div>
+              roadId={roadId}
+              events={events}
+              maxRiskLevel={maxRisk}
+              uniqueTypes={uniqueTypes}
+              onRoadSelect={onRoadSelect}
+              onDeleteRequest={handleDeleteRequest}
+            />
           );
         })}
       </div>
