@@ -36,6 +36,8 @@ export function AutobahnSelector({
   const [error, setError] = useState<string | null>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
+  const COLOR_PRIMARY = 'var(--color-primary)';
+
   useEffect(() => {
     fetchAvailableRoads()
       .then(setRoads)
@@ -82,7 +84,7 @@ export function AutobahnSelector({
         Autobahn wählen
         {selected.length > 0 && (
           <span style={{
-            background: 'var(--color-primary)',
+            background: COLOR_PRIMARY,
             color: 'white',
             borderRadius: '999px',
             padding: '1px 7px',
@@ -157,8 +159,8 @@ export function AutobahnSelector({
                   width: '16px',
                   height: '16px',
                   borderRadius: '4px',
-                  border: `2px solid ${isSelected ? 'var(--color-primary)' : '#cbd5e1'}`,
-                  background: isSelected ? 'var(--color-primary)' : 'white',
+                  border: `2px solid ${isSelected ? 'COLOR_PRIMARY' : '#cbd5e1'}`,
+                  background: isSelected ? COLOR_PRIMARY : 'white',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -201,7 +203,7 @@ export function AutobahnSelector({
                   background: 'none',
                   border: 'none',
                   cursor: 'pointer',
-                  color: 'var(--color-primary)',
+                  color: C,
                   padding: '0 2px',
                   fontSize: '14px',
                   lineHeight: 1,
