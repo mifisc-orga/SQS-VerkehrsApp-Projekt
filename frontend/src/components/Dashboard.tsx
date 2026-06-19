@@ -7,6 +7,7 @@ import { ConfirmModal } from './ConfirmModal';
 
 /** Props für das Dashboard mit gespeicherten Autobahnen */
 interface DashboardProps {
+  /** JWT-Token zur Authentifizierung */
   token: string;
   /** Wird erhöht, um das Dashboard nach dem Speichern eines Favoriten neu zu laden */
   refreshKey: number;
@@ -61,7 +62,7 @@ export function Dashboard({ token, refreshKey, onRoadSelect }: DashboardProps) {
       await deleteFavourite(token, confirmDeleteRoadId);
       setRoadData(prev => prev.filter(r => r.roadId !== confirmDeleteRoadId));
     } catch {
-      alert('Fehler beim Löschen');
+      console.error('Fehler beim Löschen');
     } finally {
       setConfirmDeleteRoadId(null);
     }
