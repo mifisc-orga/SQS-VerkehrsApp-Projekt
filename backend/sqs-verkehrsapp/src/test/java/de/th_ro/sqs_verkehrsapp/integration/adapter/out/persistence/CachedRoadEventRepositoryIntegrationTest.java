@@ -1,16 +1,16 @@
 package de.th_ro.sqs_verkehrsapp.integration.adapter.out.persistence;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import de.th_ro.sqs_verkehrsapp.adapter.out.persistence.entity.CachedRoadEventEntity;
 import de.th_ro.sqs_verkehrsapp.adapter.out.persistence.repository.CachedRoadEventRepository;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
-
-import java.time.LocalDateTime;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
 class CachedRoadEventRepositoryIntegrationTest {
@@ -53,7 +53,7 @@ class CachedRoadEventRepositoryIntegrationTest {
                 .type("WARNING")
                 .latitude(52.1)
                 .longitude(13.4)
-                .cachedAt(LocalDateTime.now())
+                .cachedAt(LocalDateTime.now(ZoneId.of("Europe/Berlin")))
                 .build();
 
         CachedRoadEventEntity eventA2 = CachedRoadEventEntity.builder()
@@ -64,7 +64,7 @@ class CachedRoadEventRepositoryIntegrationTest {
                 .type("ROADWORK")
                 .latitude(53.1)
                 .longitude(14.4)
-                .cachedAt(LocalDateTime.now())
+                .cachedAt(LocalDateTime.now(ZoneId.of("Europe/Berlin")))
                 .build();
         return List.of(eventA1, eventA2);
     }

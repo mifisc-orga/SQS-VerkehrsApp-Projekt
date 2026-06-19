@@ -1,22 +1,22 @@
 package de.th_ro.sqs_verkehrsapp.application.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import de.th_ro.sqs_verkehrsapp.application.port.out.SavedRoadPort;
 import de.th_ro.sqs_verkehrsapp.domain.model.SavedRoad;
 import de.th_ro.sqs_verkehrsapp.domain.model.SavedRoadTrafficResult;
 import de.th_ro.sqs_verkehrsapp.domain.model.TrafficEventsResult;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.List;
+import java.util.UUID;
 import org.junit.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class DashboardTrafficServiceTest {
@@ -47,10 +47,10 @@ class DashboardTrafficServiceTest {
                 .build();
 
         TrafficEventsResult a8Result =
-                new TrafficEventsResult(List.of(), true, LocalDateTime.now(),0);
+                new TrafficEventsResult(List.of(), true, LocalDateTime.now(ZoneId.of("Europe/Berlin")),0);
 
         TrafficEventsResult a3Result =
-                new TrafficEventsResult(List.of(), true, LocalDateTime.now(),0);
+                new TrafficEventsResult(List.of(), true, LocalDateTime.now(ZoneId.of("Europe/Berlin")),0);
 
         when(savedRoadPort.findByUserId(userId))
                 .thenReturn(List.of(a8, a3));

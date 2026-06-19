@@ -9,6 +9,7 @@ import de.th_ro.sqs_verkehrsapp.domain.model.TrafficEventsResult;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
@@ -49,7 +50,7 @@ public class ResilientAutobahnApiAdapter implements AutobahnApiPort {
         return new TrafficEventsResult(
                 events,
                 true,
-                LocalDateTime.now(),
+                LocalDateTime.now(ZoneId.of("Europe/Berlin")),
                 0
         );
     }
@@ -94,7 +95,7 @@ public class ResilientAutobahnApiAdapter implements AutobahnApiPort {
         return new TrafficEventsResult(
                 events,
                 true,
-                LocalDateTime.now(),
+                LocalDateTime.now(ZoneId.of("Europe/Berlin")),
                 0
         );
     }
