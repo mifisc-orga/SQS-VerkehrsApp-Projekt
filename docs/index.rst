@@ -6,33 +6,28 @@
 Verkehrsapp documentation
 =========================
 
-Add your content using ``reStructuredText`` syntax. See the
-`reStructuredText <https://www.sphinx-doc.org/en/master/usage/restructuredtext/index.html>`_
-documentation for details.
+Willkommen zur technischen Dokumentation der SQS Verkehrsapp.
+
+Die Anwendung dient zur Bereitstellung und Verwaltung von
+Verkehrsinformationen für deutsche Autobahnen.
 
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Arc42 Dokumentation:
 
-   arc42/01-einfuehrung-und-ziele
-   arc42/02-randbedingungen
-   arc42/03-kontextabgrenzung
-   arc42/04-loesungsstrategie
-   arc42/05-bausteinsicht
-   arc42/06-laufzeitsicht
-   arc42/07-verteilungssicht
-   arc42/08-querschnittliche-konzepte
-   arc42/09-architekturentscheidungen
-   arc42/10-qualitaetsanforderungen
-   arc42/11-risiken-und-technische-schulden
-   arc42/12-glossar
-
-.. toctree::
-   :maxdepth: 2
-   :caption: ADR:
-
-   adr/frontend-init-als-feature-vorlage
+   arc42/01-einfuehrung-und-ziele.md
+   arc42/02-randbedingungen.md
+   arc42/03-kontextabgrenzung.md
+   arc42/04-loesungsstrategie.md
+   arc42/05-bausteinsicht.md
+   arc42/06-laufzeitsicht.md
+   arc42/07-verteilungssicht.md
+   arc42/08-querschnittliche-konzepte.md
+   arc42/09-architekturentscheidungen.md
+   arc42/10-qualitaetsanforderungen.md
+   arc42/11-risiken-und-technische-schulden.md
+   arc42/12-glossar.md
 
 .. toctree::
    :maxdepth: 2
@@ -41,3 +36,4 @@ documentation for details.
    Teammeetings/Teammeeting
    Teammeetings/Meetings/28-04-26
    Teammeetings/Meetings/08-05-26
+   Teammeetings/Meetings/15-05-26
