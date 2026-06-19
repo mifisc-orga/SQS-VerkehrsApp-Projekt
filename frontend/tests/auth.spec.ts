@@ -100,27 +100,27 @@ async function performLogout(page: import('@playwright/test').Page): Promise<voi
 }
 
 test.beforeEach(async ({ page }) => {
-  await page.route('/api/traffic', async route => {
+  await page.route('/api/traffic', async route => 
     await route.fulfill({ json: MOCK_TRAFFIC_DATA });
-  });
-  await page.route('/api/traffic/**', async route => {
+  );
+  await page.route('/api/traffic/**', async route => 
     await route.fulfill({ json: MOCK_TRAFFIC_DATA });
-  });
-  await page.route('/api/auth/login', async route => {
+  );
+  await page.route('/api/auth/login', async route => 
     await route.fulfill({ json: MOCK_LOGIN_RESPONSE });
-  });
-  await page.route('/api/auth/register', async route => {
+  );
+  await page.route('/api/auth/register', async route => 
     await route.fulfill({ json: MOCK_REGISTER_RESPONSE });
-  });
-  await page.route('/api/auth/logout', async route => {
+  );
+  await page.route('/api/auth/logout', async route => 
     await route.fulfill({ status: 200 });
-  });
-  await page.route('/api/saved-roads', async route => {
+  );
+  await page.route('/api/saved-roads', async route => 
     await route.fulfill({ json: [] });
-  });
-  await page.route('/api/dashboard/saved-road-traffic', async route => {
+  );
+  await page.route('/api/dashboard/saved-road-traffic', async route => 
     await route.fulfill({ json: [] });
-  });
+  );
 });
 
 // ── Logout ───────────────────────────────────────────────────
@@ -222,9 +222,9 @@ test('Dashboard is displayed after registration', async ({ page }) => {
 // ── Error cases ──────────────────────────────────────────────
 
 test('Error message shown when username is already taken', async ({ page }) => {
-  await page.route('/api/auth/register', async route => {
+  await page.route('/api/auth/register', async route => 
     await route.fulfill({ status: 409, json: { message: 'Username already taken' } });
-  });
+  );
   await page.goto('/');
   await page.getByTestId('login-button').click();
   await page.getByTestId('tab-register').click();
@@ -236,9 +236,9 @@ test('Error message shown when username is already taken', async ({ page }) => {
 });
 
 test('Error message shown on wrong login credentials', async ({ page }) => {
-  await page.route('/api/auth/login', async route => {
+  await page.route('/api/auth/login', async route => 
     await route.fulfill({ status: 401, json: { message: 'Invalid credentials' } });
-  });
+  );
   await page.goto('/');
   await page.getByTestId('login-button').click();
   await page.getByTestId('username-input').fill('wronguser');
@@ -248,9 +248,9 @@ test('Error message shown on wrong login credentials', async ({ page }) => {
 });
 
 test('Error message is cleared when switching tabs', async ({ page }) => {
-  await page.route('/api/auth/login', async route => {
+  await page.route('/api/auth/login', async route => 
     await route.fulfill({ status: 401, json: {} });
-  });
+  );
   await page.goto('/');
   await page.getByTestId('login-button').click();
   await page.getByTestId('username-input').fill('wrong');
@@ -305,9 +305,9 @@ test('Submit button shows Registrieren on register tab', async ({ page }) => {
 // ── Events list ──────────────────────────────────────────────
 
 test('Events list renders event items when traffic has events', async ({ page }) => {
-  await page.route('/api/traffic', async route => {
+  await page.route('/api/traffic', async route => 
     await route.fulfill({ json: MOCK_TRAFFIC_WITH_EVENTS });
-  });
+  );
   await page.goto('/');
   await expect(page.getByTestId('event-item-ev-1')).toBeVisible();
 });
@@ -325,9 +325,9 @@ test('Live indicator is shown when traffic data is live', async ({ page }) => {
 });
 
 test('Cached indicator is shown when traffic data is not live', async ({ page }) => {
-  await page.route('/api/traffic', async route => {
+  await page.route('/api/traffic', async route => 
     await route.fulfill({ json: MOCK_TRAFFIC_CACHED });
-  });
+  );
   await page.goto('/');
   await expect(page.getByTestId('cached-indicator')).toBeVisible();
 });
@@ -340,9 +340,9 @@ test('AutobahnSelector button is visible on page load', async ({ page }) => {
 });
 
 test('AutobahnSelector shows road options when traffic data has events', async ({ page }) => {
-  await page.route('/api/traffic', async route => {
+  await page.route('/api/traffic', async route => 
     await route.fulfill({ json: MOCK_TRAFFIC_WITH_EVENTS });
-  });
+  );
   await page.goto('/');
   await page.getByTestId('autobahn-selector').click();
   await expect(page.getByTestId('autobahn-dropdown')).toBeVisible();
@@ -350,9 +350,9 @@ test('AutobahnSelector shows road options when traffic data has events', async (
 });
 
 test('AutobahnSelector chip is shown for pre-selected road', async ({ page }) => {
-  await page.route('/api/traffic', async route => {
+  await page.route('/api/traffic', async route => 
     await route.fulfill({ json: MOCK_TRAFFIC_WITH_EVENTS });
-  });
+  );
   await page.goto('/');
   await expect(page.getByTestId('selected-chip-A3')).toBeVisible();
 });
@@ -369,9 +369,9 @@ test('AutobahnSelector chip-remove deselects a road', async ({ page }) => {
 // ── RiskBadge ────────────────────────────────────────────────
 
 test('RiskBadge is shown for events with HIGH risk level', async ({ page }) => {
-  await page.route('/api/traffic', async route => {
+  await page.route('/api/traffic', async route => 
     await route.fulfill({ json: MOCK_TRAFFIC_WITH_EVENTS });
-  });
+  );
   await page.goto('/');
   await expect(page.getByTestId('risk-badge-HIGH')).toBeVisible();
 });
@@ -398,9 +398,9 @@ test('Clicking overlay of logout modal cancels logout', async ({ page }) => {
 // ── Dashboard with traffic data ───────────────────────────────
 
 test('Dashboard shows HIGH risk badge for road with HIGH risk event', async ({ page }) => {
-  await page.route('/api/dashboard/saved-road-traffic', async route => {
+  await page.route('/api/dashboard/saved-road-traffic', async route => 
     await route.fulfill({ json: MOCK_DASHBOARD_HIGH });
-  });
+  );
   await page.goto('/');
   await performLogin(page);
   await expect(page.getByTestId('dashboard-road-A3')).toBeVisible();
@@ -408,36 +408,36 @@ test('Dashboard shows HIGH risk badge for road with HIGH risk event', async ({ p
 });
 
 test('Dashboard shows MEDIUM risk badge for road with MEDIUM risk event', async ({ page }) => {
-  await page.route('/api/dashboard/saved-road-traffic', async route => {
+  await page.route('/api/dashboard/saved-road-traffic', async route => 
     await route.fulfill({ json: MOCK_DASHBOARD_MEDIUM });
-  });
+  );
   await page.goto('/');
   await performLogin(page);
   await expect(page.getByTestId('risk-badge-MEDIUM')).toBeVisible();
 });
 
 test('Dashboard shows Baustelle label for ROADWORK events', async ({ page }) => {
-  await page.route('/api/dashboard/saved-road-traffic', async route => {
+  await page.route('/api/dashboard/saved-road-traffic', async route => 
     await route.fulfill({ json: MOCK_DASHBOARD_HIGH });
-  });
+  );
   await page.goto('/');
   await performLogin(page);
   await expect(page.getByText(/Baustelle/)).toBeVisible();
 });
 
 test('Dashboard shows Sperrung label for CLOSURE events', async ({ page }) => {
-  await page.route('/api/dashboard/saved-road-traffic', async route => {
+  await page.route('/api/dashboard/saved-road-traffic', async route => 
     await route.fulfill({ json: MOCK_DASHBOARD_MEDIUM });
-  });
+  );
   await page.goto('/');
   await performLogin(page);
   await expect(page.getByText(/Sperrung/)).toBeVisible();
 });
 
 test('Dashboard shows Warnung label for WARNING events', async ({ page }) => {
-  await page.route('/api/dashboard/saved-road-traffic', async route => {
+  await page.route('/api/dashboard/saved-road-traffic', async route => 
     await route.fulfill({ json: MOCK_DASHBOARD_WARNING });
-  });
+  );
   await page.goto('/');
   await performLogin(page);
   await expect(page.getByText(/Warnung/)).toBeVisible();
@@ -446,18 +446,18 @@ test('Dashboard shows Warnung label for WARNING events', async ({ page }) => {
 // ── Save favourite ────────────────────────────────────────────
 
 test('Save favourite button is visible when logged in with selected roads', async ({ page }) => {
-  await page.route('/api/traffic', async route => {
+  await page.route('/api/traffic', async route => 
     await route.fulfill({ json: MOCK_TRAFFIC_WITH_EVENTS });
-  });
+  );
   await page.goto('/');
   await performLogin(page);
   await expect(page.getByTestId('save-favourite-button')).toBeVisible();
 });
 
 test('Clicking save favourite shows Favouriten gespeichert message', async ({ page }) => {
-  await page.route('/api/traffic', async route => {
+  await page.route('/api/traffic', async route => 
     await route.fulfill({ json: MOCK_TRAFFIC_WITH_EVENTS });
-  });
+  );
   await page.goto('/');
   await performLogin(page);
   await page.getByTestId('save-favourite-button').click();
@@ -465,9 +465,9 @@ test('Clicking save favourite shows Favouriten gespeichert message', async ({ pa
 });
 
 test('Clicking save favourite shows already-in-favourites message when roads already saved', async ({ page }) => {
-  await page.route('/api/traffic', async route => {
+  await page.route('/api/traffic', async route => 
     await route.fulfill({ json: MOCK_TRAFFIC_WITH_EVENTS });
-  });
+  );
   await page.route('/api/saved-roads', async route => {
     if (route.request().method() === 'POST') {
       await route.fulfill({ status: 409, json: { message: 'Already exists' } });

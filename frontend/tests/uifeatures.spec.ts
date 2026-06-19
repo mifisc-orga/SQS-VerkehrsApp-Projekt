@@ -42,21 +42,21 @@ const MOCK_LOGIN_RESPONSE = {
 };
 
 test.beforeEach(async ({ page }) => {
-  await page.route('/api/traffic', async (route) => {
+  await page.route('/api/traffic', async (route) => 
     await route.fulfill({ json: MOCK_TRAFFIC_DATA });
-  });
-  await page.route('/api/traffic/**', async (route) => {
+  );
+  await page.route('/api/traffic/**', async (route) => 
     await route.fulfill({ json: MOCK_TRAFFIC_DATA });
-  });
-  await page.route('/api/auth/login', async (route) => {
+  );
+  await page.route('/api/auth/login', async (route) => 
     await route.fulfill({ json: MOCK_LOGIN_RESPONSE });
-  });
-  await page.route('/api/saved-roads', async (route) => {
+  );
+  await page.route('/api/saved-roads', async (route) => 
     await route.fulfill({ json: [] });
-  });
-  await page.route('/api/dashboard/saved-road-traffic', async (route) => {
+  );
+  await page.route('/api/dashboard/saved-road-traffic', async (route) => 
     await route.fulfill({ json: MOCK_TRAFFIC_DATA });
-  });
+  );
 });
 
 // ── 1. Login Modal ──────────────────────────────────────────
@@ -91,9 +91,9 @@ test('Live-Indikator wird angezeigt wenn Daten live sind', async ({ page }) => {
 });
 
 test('Kein Live-Indikator wenn Daten gecacht sind', async ({ page }) => {
-  await page.route('/api/traffic', async (route) => {
+  await page.route('/api/traffic', async (route) => 
     await route.fulfill({ json: MOCK_TRAFFIC_DATA_CACHED });
-  });
+  );
   await page.goto('/');
   await expect(page.getByTestId('cached-indicator')).toBeVisible();
 });

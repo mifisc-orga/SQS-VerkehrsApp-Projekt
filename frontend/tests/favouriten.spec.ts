@@ -29,15 +29,15 @@ const MOCK_SAVED_ROADS = [
 ];
 
 test.beforeEach(async ({ page }) => {
-  await page.route('/api/traffic', async (route) => {
+  await page.route('/api/traffic', async (route) => 
     await route.fulfill({ json: MOCK_TRAFFIC_DATA });
-  });
-  await page.route('/api/traffic/**', async (route) => {
+  );
+  await page.route('/api/traffic/**', async (route) => 
     await route.fulfill({ json: MOCK_TRAFFIC_DATA });
-  });
-  await page.route('/api/auth/login', async (route) => {
+  );
+  await page.route('/api/auth/login', async (route) => 
     await route.fulfill({ json: MOCK_LOGIN_RESPONSE });
-  });
+  );
   await page.route('/api/saved-roads', async (route) => {
     if (route.request().method() === 'GET') {
       await route.fulfill({ json: MOCK_SAVED_ROADS });
@@ -45,9 +45,9 @@ test.beforeEach(async ({ page }) => {
       await route.fulfill({ status: 200, json: {} });
     }
   });
-  await page.route('/api/saved-roads/**', async (route) => {
+  await page.route('/api/saved-roads/**', async (route) => 
     await route.fulfill({ status: 200, json: {} });
-  });
+  );
 });
 
 test('Login-Formular wird angezeigt', async ({ page }) => {

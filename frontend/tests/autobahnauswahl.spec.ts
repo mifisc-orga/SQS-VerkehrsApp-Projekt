@@ -11,9 +11,9 @@ const MOCK_ROADS = {
 };
 
 test.beforeEach(async ({ page }) => {
-  await page.route('/api/traffic', async (route) => {
+  await page.route('/api/traffic', async (route) => 
     await route.fulfill({ json: MOCK_ROADS });
-  });
+  );
 });
 
 test('Autobahnauswahl wird angezeigt', async ({ page }) => {
