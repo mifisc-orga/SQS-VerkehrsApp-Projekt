@@ -1,10 +1,4 @@
-Techstack:
-- React / TypeScript
-- Java + Spring Boot
-- PostgresSQL Datenbank
-- Docker
-- ReadTheDocs
-- Sonarqube oder Teamscale?
+# Autobahn Safety Monitor
 
 Idee:
 Autobahn Safety Monitor mit Autobahn App API für eine automatische Gefahrenstellenerkennung.
@@ -13,6 +7,15 @@ Planung:
 - Heatmap für Unfälle und Gefahren
 - Risiko-Score für Routen
 - Persönliches Dashboard
+
+Techstack:
+- React / TypeScript
+- Java + Spring Boot
+- PostgresSQL Datenbank
+- Docker
+- ReadTheDocs
+- Sonarqube
+- Teamscale
 
 Anleitung zum Starten:
 - Gesamtes Projekt mit Docker starten: `docker compose up --build`
