@@ -28,7 +28,7 @@ Anleitung zum Starten:
 - Sonarcloud: [Sonarcloud Dashboard](https://sonarcloud.io/project/overview?id=mifisc-orga_SQS-VerkehrsApp-Projekt)
 
 Dokumentation der Teamabsprachen:
-➡️ [Teammeeting](Teammeeting/Teammeeting.md)
+➡️ [Teammeeting](docs/Teammeetings/Teammeeting.md)
 
 Projektbeteiligte:
 - Louisa Böhm
