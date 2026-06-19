@@ -7,7 +7,7 @@ interface RiskBadgeProps {
   riskLevel: RiskLevel;
 }
 
-const labels: Record<RiskLevel, string> = {
+const LABELS: Record<RiskLevel, string> = {
   LOW: 'Niedrig',
   MEDIUM: 'Mittel',
   HIGH: 'Hoch',
@@ -25,7 +25,7 @@ export function RiskBadge({ riskLevel }: RiskBadgeProps) {
         className={className}
         data-testid={`risk-badge-${riskLevel}`}
       >
-        {labels[riskLevel]}
+        {LABELS[riskLevel]}
       </span>
     </span>
   );

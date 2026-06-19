@@ -1,6 +1,6 @@
 import {expect, test} from './coverage';
 
-const mockTrafficData = {
+const MOCK_TRAFFIC_DATA = {
   live: true,
   cachedAt: null,
   events: [
@@ -29,19 +29,19 @@ const mockTrafficData = {
   ],
 };
 
-const mockLoginResponse = {
+const MOCK_LOGIN_RESPONSE = {
   token: 'mock-jwt-token',
   username: 'testuser',
 };
 
-const mockSavedRoads = [
+const MOCK_SAVED_ROADS = [
   { id: '1', userId: '1', roadId: 'A3' },
   { id: '2', userId: '1', roadId: 'A92' },
 ];
 const createSavedRoadTraffic = (roadId: string, riskScore: number) => ({
   roadId,
   trafficEvents: {
-    events: mockTrafficData.events.filter(
+    events: MOCK_TRAFFIC_DATA.events.filter(
       (event: { roadId: string }) => event.roadId === roadId
     ),
     live: true,
@@ -51,17 +51,17 @@ const createSavedRoadTraffic = (roadId: string, riskScore: number) => ({
 });
 test.beforeEach(async ({ page }) => {
   await page.route('/api/traffic', async route => {
-    await route.fulfill({ json: mockTrafficData });
+    await route.fulfill({ json: MOCK_TRAFFIC_DATA });
   });
   await page.route('/api/traffic/**', async route => {
-    await route.fulfill({ json: mockTrafficData });
+    await route.fulfill({ json: MOCK_TRAFFIC_DATA });
   });
   await page.route('/api/auth/login', async route => {
-    await route.fulfill({ json: mockLoginResponse });
+    await route.fulfill({ json: MOCK_LOGIN_RESPONSE });
   });
   await page.route('/api/saved-roads', async route => {
     if (route.request().method() === 'GET') {
-      await route.fulfill({ json: mockSavedRoads });
+      await route.fulfill({ json: MOCK_SAVED_ROADS });
     } else if (route.request().method() === 'POST') {
       await route.fulfill({ status: 200, json: {} });
     }

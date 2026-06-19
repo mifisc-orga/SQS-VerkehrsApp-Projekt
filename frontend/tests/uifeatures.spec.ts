@@ -1,6 +1,6 @@
 import {expect, test} from './coverage';
 
-const mockTrafficData = {
+const MOCK_TRAFFIC_DATA = {
   live: true,
   cachedAt: null,
   events: [
@@ -18,7 +18,7 @@ const mockTrafficData = {
   ],
 };
 
-const mockTrafficDataCached = {
+const MOCK_TRAFFIC_DATA_CACHED = {
   live: false,
   cachedAt: '2026-05-15T10:00:00Z',
   events: [
@@ -36,26 +36,26 @@ const mockTrafficDataCached = {
   ],
 };
 
-const mockLoginResponse = {
+const MOCK_LOGIN_RESPONSE = {
   token: 'mock-jwt-token',
   username: 'testuser',
 };
 
 test.beforeEach(async ({ page }) => {
   await page.route('/api/traffic', async (route) => {
-    await route.fulfill({ json: mockTrafficData });
+    await route.fulfill({ json: MOCK_TRAFFIC_DATA });
   });
   await page.route('/api/traffic/**', async (route) => {
-    await route.fulfill({ json: mockTrafficData });
+    await route.fulfill({ json: MOCK_TRAFFIC_DATA });
   });
   await page.route('/api/auth/login', async (route) => {
-    await route.fulfill({ json: mockLoginResponse });
+    await route.fulfill({ json: MOCK_LOGIN_RESPONSE });
   });
   await page.route('/api/saved-roads', async (route) => {
     await route.fulfill({ json: [] });
   });
   await page.route('/api/dashboard/saved-road-traffic', async (route) => {
-    await route.fulfill({ json: mockTrafficData });
+    await route.fulfill({ json: MOCK_TRAFFIC_DATA });
   });
 });
 
@@ -92,7 +92,7 @@ test('Live-Indikator wird angezeigt wenn Daten live sind', async ({ page }) => {
 
 test('Kein Live-Indikator wenn Daten gecacht sind', async ({ page }) => {
   await page.route('/api/traffic', async (route) => {
-    await route.fulfill({ json: mockTrafficDataCached });
+    await route.fulfill({ json: MOCK_TRAFFIC_DATA_CACHED });
   });
   await page.goto('/');
   await expect(page.getByTestId('cached-indicator')).toBeVisible();

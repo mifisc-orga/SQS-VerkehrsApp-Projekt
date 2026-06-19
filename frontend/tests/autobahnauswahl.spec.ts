@@ -1,6 +1,6 @@
 import {expect, test} from './coverage';
 
-const mockRoads = {
+const MOCK_ROADS = {
   live: true,
   cachedAt: null,
   events: [
@@ -12,7 +12,7 @@ const mockRoads = {
 
 test.beforeEach(async ({ page }) => {
   await page.route('/api/traffic', async (route) => {
-    await route.fulfill({ json: mockRoads });
+    await route.fulfill({ json: MOCK_ROADS });
   });
 });
 
