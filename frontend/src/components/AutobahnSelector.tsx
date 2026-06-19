@@ -68,7 +68,7 @@ export function AutobahnSelector({
     onSelect(selected.filter(r => r !== road));
   }
 
-  if (error) { return <p>{error}</p>; }
+  if (error) return <p>{error}</p>;
 
   return (
     <div ref={wrapperRef} style={{ position: 'relative', display: 'inline-block' }}>
