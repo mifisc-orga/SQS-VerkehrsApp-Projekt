@@ -203,7 +203,7 @@ export function AutobahnSelector({
                   background: 'none',
                   border: 'none',
                   cursor: 'pointer',
-                  color: C,
+                  color: COLOR_PRIMARY,
                   padding: '0 2px',
                   fontSize: '14px',
                   lineHeight: 1,
