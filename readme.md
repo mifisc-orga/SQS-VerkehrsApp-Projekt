@@ -24,8 +24,8 @@ Anleitung zum Starten:
   - `npm run dev`
   - Vite stellt das Frontend dann unter `http://localhost:5173` bereit
 - ReadTheDocs: `https://sqs-verkehrsapp.readthedocs.io/de/latest/`
-- Teamscale: `[Teamscale Dashboard](https://th-rosenheim.teamscale.io/)`
-- Sonarcloud: `[Sonarcloud Dashboard](https://sonarcloud.io/project/overview?id=mifisc-orga_SQS-VerkehrsApp-Projekt)`
+- Teamscale: [Teamscale Dashboard](https://th-rosenheim.teamscale.io/)
+- Sonarcloud: [Sonarcloud Dashboard](https://sonarcloud.io/project/overview?id=mifisc-orga_SQS-VerkehrsApp-Projekt)
 
 Dokumentation der Teamabsprachen:
 ➡️ [Teammeeting](Teammeeting/Teammeeting.md)
