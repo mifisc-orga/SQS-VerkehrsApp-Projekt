@@ -1,8 +1,8 @@
 import { expect, test } from './coverage';
+import { setupApiRoutes } from './setupApiRoutes';
 
-const MOCK_TRAFFIC_DATA = { live: true, cachedAt: null, events: [] };
-const MOCK_LOGIN_RESPONSE = { token: 'mock-jwt-token' };
-const MOCK_REGISTER_RESPONSE = { token: 'mock-register-token' };
+/** Default password used in register helper and related tests. */
+const TEST_PASSWORD = 'securePass123';
 
 /**
  * Helper: performs the standard login flow.
@@ -30,7 +30,7 @@ async function performLogout(page: import('@playwright/test').Page): Promise<voi
 async function performRegister(
   page: import('@playwright/test').Page,
   username = 'newuser',
-  password = 'securePass123',
+  password = TEST_PASSWORD,
 ): Promise<void> {
   await page.getByTestId('login-button').click();
   await page.getByTestId('tab-register').click();
@@ -40,27 +40,7 @@ async function performRegister(
 }
 
 test.beforeEach(async ({ page }) => {
-  await page.route('/api/traffic', async route => 
-    route.fulfill({ json: MOCK_TRAFFIC_DATA })
-  );
-  await page.route('/api/traffic/**', async route => 
-    route.fulfill({ json: MOCK_TRAFFIC_DATA })
-  );
-  await page.route('/api/auth/login', async route => 
-    route.fulfill({ json: MOCK_LOGIN_RESPONSE })
-  );
-  await page.route('/api/auth/register', async route => 
-    route.fulfill({ json: MOCK_REGISTER_RESPONSE })
-  );
-  await page.route('/api/auth/logout', async route => 
-    route.fulfill({ status: 200 })
-  );
-  await page.route('/api/saved-roads', async route => 
-    route.fulfill({ json: [] })
-  );
-  await page.route('/api/dashboard/saved-road-traffic', async route => 
-    route.fulfill({ json: [] })
-  );
+  await setupApiRoutes(page);
 });
 
 // ── Login Modal ──────────────────────────────────────────────

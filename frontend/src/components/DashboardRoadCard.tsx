@@ -27,36 +27,54 @@ function getEventTypeLabel(type: string): string {
   }
 }
 
+interface CardClickableAreaProps {
+  readonly roadId: string;
+  readonly events: DashboardRoadData['events'];
+  readonly maxRiskLevel: RiskLevel;
+  readonly uniqueTypes: string[];
+  readonly onRoadSelect: (roadId: string) => void;
+}
+
+/** The clickable main area of a dashboard card (header, stats, event types). */
+function CardClickableArea({ roadId, events, maxRiskLevel, uniqueTypes, onRoadSelect }: CardClickableAreaProps) {
+  return (
+    <button
+      className="dashboard-card__clickable-area"
+      data-testid={`dashboard-road-${roadId}`}
+      onClick={() => onRoadSelect(roadId)}
+      onKeyDown={(e) => { if (e.key === 'Enter') { onRoadSelect(roadId); } }}
+    >
+      <div className="dashboard-card__header">
+        <span className="dashboard-card__title">🛣️ {roadId}</span>
+        <RiskBadge riskLevel={maxRiskLevel} />
+      </div>
+      <div className="dashboard-card__stats">
+        <span>{events.length} {events.length === 1 ? 'Ereignis' : 'Ereignisse'}</span>
+      </div>
+      {uniqueTypes.length > 0 && (
+        <div className="dashboard-card__types">
+          {uniqueTypes.map(type => (
+            <span key={type} className="event-type-badge">{getEventTypeLabel(type)}</span>
+          ))}
+        </div>
+      )}
+      {events.length === 0 && (
+        <p className="dashboard-card__empty">Keine aktuellen Ereignisse.</p>
+      )}
+    </button>
+  );
+}
+
 /** A single road card in the dashboard */
 export function DashboardRoadCard({
   roadId, events, maxRiskLevel, uniqueTypes, onRoadSelect, onDeleteRequest
 }: DashboardRoadCardProps) {
   return (
     <div className="dashboard-card">
-      <button
-        className="dashboard-card__clickable-area"
-        data-testid={`dashboard-road-${roadId}`}
-        onClick={() => onRoadSelect(roadId)}
-        onKeyDown={(e) => { if (e.key === 'Enter') onRoadSelect(roadId); }}
-      >
-        <div className="dashboard-card__header">
-          <span className="dashboard-card__title">🛣️ {roadId}</span>
-          <RiskBadge riskLevel={maxRiskLevel} />
-        </div>
-        <div className="dashboard-card__stats">
-          <span>{events.length} {events.length === 1 ? 'Ereignis' : 'Ereignisse'}</span>
-        </div>
-        {uniqueTypes.length > 0 && (
-          <div className="dashboard-card__types">
-            {uniqueTypes.map(type => (
-              <span key={type} className="event-type-badge">{getEventTypeLabel(type)}</span>
-            ))}
-          </div>
-        )}
-        {events.length === 0 && (
-          <p className="dashboard-card__empty">Keine aktuellen Ereignisse.</p>
-        )}
-      </button>
+      <CardClickableArea
+        roadId={roadId} events={events} maxRiskLevel={maxRiskLevel}
+        uniqueTypes={uniqueTypes} onRoadSelect={onRoadSelect}
+      />
       <button
         className="btn btn-danger"
         data-testid={`delete-favourite-${roadId}`}

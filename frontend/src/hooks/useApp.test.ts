@@ -34,6 +34,14 @@ function makeMockTraffic(overrides = {}) {
   };
 }
 
+/** Renders useApp with the given mock auth and opens the login modal. */
+function setupAndOpenModal(mockAuth: ReturnType<typeof makeMockAuth>) {
+  vi.mocked(useAuth).mockReturnValue(mockAuth);
+  const { result } = renderHook(() => useApp());
+  act(() => result.current.setShowLogin(true));
+  return result;
+}
+
 describe('useApp', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -75,9 +83,7 @@ describe('useApp', () => {
   test('handleLoginSubmit closes modal on success', async () => {
     const mockAuth = makeMockAuth();
     mockAuth.handleLogin.mockResolvedValue(true);
-    vi.mocked(useAuth).mockReturnValue(mockAuth);
-    const { result } = renderHook(() => useApp());
-    act(() => result.current.setShowLogin(true));
+    const result = setupAndOpenModal(mockAuth);
     await act(async () => result.current.handleLoginSubmit());
     expect(result.current.showLogin).toBe(false);
   });
@@ -85,9 +91,7 @@ describe('useApp', () => {
   test('handleLoginSubmit keeps modal open on failure', async () => {
     const mockAuth = makeMockAuth();
     mockAuth.handleLogin.mockResolvedValue(false);
-    vi.mocked(useAuth).mockReturnValue(mockAuth);
-    const { result } = renderHook(() => useApp());
-    act(() => result.current.setShowLogin(true));
+    const result = setupAndOpenModal(mockAuth);
     await act(async () => result.current.handleLoginSubmit());
     expect(result.current.showLogin).toBe(true);
   });
@@ -97,9 +101,7 @@ describe('useApp', () => {
   test('handleRegisterSubmit closes modal on success', async () => {
     const mockAuth = makeMockAuth();
     mockAuth.handleRegister.mockResolvedValue(true);
-    vi.mocked(useAuth).mockReturnValue(mockAuth);
-    const { result } = renderHook(() => useApp());
-    act(() => result.current.setShowLogin(true));
+    const result = setupAndOpenModal(mockAuth);
     await act(async () => result.current.handleRegisterSubmit());
     expect(result.current.showLogin).toBe(false);
   });

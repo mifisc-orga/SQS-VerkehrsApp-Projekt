@@ -1,8 +1,5 @@
 import { expect, test } from './coverage';
-
-const MOCK_TRAFFIC_DATA = { live: true, cachedAt: null, events: [] };
-const MOCK_LOGIN_RESPONSE = { token: 'mock-jwt-token' };
-const MOCK_REGISTER_RESPONSE = { token: 'mock-register-token' };
+import { setupApiRoutes } from './setupApiRoutes';
 
 /** A realistic traffic event used in tests that need visible map markers and risk badges. */
 const MOCK_EVENT = {
@@ -101,27 +98,7 @@ async function gotoWithEvents(page: import('@playwright/test').Page): Promise<vo
 }
 
 test.beforeEach(async ({ page }) => {
-  await page.route('/api/traffic', async route => 
-    route.fulfill({ json: MOCK_TRAFFIC_DATA })
-  );
-  await page.route('/api/traffic/**', async route => 
-    route.fulfill({ json: MOCK_TRAFFIC_DATA })
-  );
-  await page.route('/api/auth/login', async route => 
-    route.fulfill({ json: MOCK_LOGIN_RESPONSE })
-  );
-  await page.route('/api/auth/register', async route => 
-    route.fulfill({ json: MOCK_REGISTER_RESPONSE })
-  );
-  await page.route('/api/auth/logout', async route => 
-    route.fulfill({ status: 200 })
-  );
-  await page.route('/api/saved-roads', async route => 
-    route.fulfill({ json: [] })
-  );
-  await page.route('/api/dashboard/saved-road-traffic', async route => 
-    route.fulfill({ json: [] })
-  );
+  await setupApiRoutes(page);
 });
 
 // ── Events list ──────────────────────────────────────────────

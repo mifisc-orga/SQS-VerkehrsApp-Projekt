@@ -1,6 +1,19 @@
 import { useState, useEffect, useRef } from 'react';
 import { fetchAvailableRoads } from '../services/trafficService';
 
+/** Closes dropdown when the user clicks outside the given element. */
+function useClickOutside(ref: React.RefObject<HTMLDivElement | null>, onClose: () => void): void {
+  useEffect(() => {
+    function handle(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        onClose();
+      }
+    }
+    document.addEventListener('mousedown', handle);
+    return () => document.removeEventListener('mousedown', handle);
+  }, [ref, onClose]);
+}
+
 /** Return type of the useAutobahnSelector hook */
 export interface UseAutobahnSelectorResult {
   /** List of all available motorway identifiers */
@@ -40,15 +53,7 @@ export function useAutobahnSelector(
       .catch(() => setError('Autobahnen konnten nicht geladen werden.'));
   }, []);
 
-  useEffect(() => {
-    function handleClickOutside(e: MouseEvent) {
-      if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
-        setIsOpen(false);
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+  useClickOutside(wrapperRef, () => setIsOpen(false));
 
   function toggle(road: string) {
     let next: string[];
