@@ -9,6 +9,22 @@ vi.mock('../services/trafficService', () => ({
   logout: vi.fn(),
 }));
 
+
+async function setupLoggedInTheOut() {
+  vi.mocked(login).mockResolvedValue({ token: 'test-token' });
+  vi.mocked(logout).mockResolvedValue(undefined);
+  const { result } = renderHook(() => useAuth());
+
+  await act(async () => {
+    await result.current.handleLogin('testuser', 'password');
+  });
+  await act(async () => {
+    await result.current.handleLogout();
+  });
+
+  return result;
+}
+
 describe('useAuth', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -77,33 +93,14 @@ describe('useAuth', () => {
   // ── handleLogout ──────────────────────────────────────────
 
   test('handleLogout clears token and username', async () => {
-    vi.mocked(login).mockResolvedValue({ token: 'test-token' });
-    vi.mocked(logout).mockResolvedValue(undefined);
-    const { result } = renderHook(() => useAuth());
-
-    await act(async () => {
-      await result.current.handleLogin('testuser', 'password');
-    });
-    await act(async () => {
-      await result.current.handleLogout();
-    });
+    const result = await setupLoggedInTheOut();
 
     expect(result.current.token).toBeNull();
     expect(result.current.username).toBe('');
   });
 
   test('handleLogout calls logout service with token', async () => {
-    vi.mocked(login).mockResolvedValue({ token: 'test-token' });
-    vi.mocked(logout).mockResolvedValue(undefined);
-    const { result } = renderHook(() => useAuth());
-
-    await act(async () => {
-      await result.current.handleLogin('testuser', 'password');
-    });
-    await act(async () => {
-      await result.current.handleLogout();
-    });
-
+    const result = await setupLoggedInTheOut();
     expect(logout).toHaveBeenCalledWith('test-token');
   });
 });

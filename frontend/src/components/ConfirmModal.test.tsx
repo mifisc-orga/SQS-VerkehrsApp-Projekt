@@ -2,6 +2,8 @@ import { describe, expect, test, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { ConfirmModal } from './ConfirmModal';
 
+const CONFIRM_OK = 'confirm-ok';
+
 function renderConfirmModal(overrides: Partial<Parameters<typeof ConfirmModal>[0]> = {}) {
   const props = {
     message: 'Möchtest du dich wirklich abmelden?',
@@ -20,17 +22,17 @@ describe('ConfirmModal', () => {
 
   test('shows default confirm label "Entfernen"', () => {
     renderConfirmModal();
-    expect(screen.getByTestId('confirm-ok')).toHaveTextContent('Entfernen');
+    expect(screen.getByTestId(CONFIRM_OK)).toHaveTextContent('Entfernen');
   });
 
   test('shows custom confirm label when provided', () => {
     renderConfirmModal({ confirmLabel: 'Abmelden' });
-    expect(screen.getByTestId('confirm-ok')).toHaveTextContent('Abmelden');
+    expect(screen.getByTestId(CONFIRM_OK)).toHaveTextContent('Abmelden');
   });
 
   test('calls onConfirm when confirm button is clicked', () => {
     const { props } = renderConfirmModal();
-    fireEvent.click(screen.getByTestId('confirm-ok'));
+    fireEvent.click(screen.getByTestId(CONFIRM_OK));
     expect(props.onConfirm).toHaveBeenCalledTimes(1);
   });
 

@@ -3,6 +3,7 @@
  * Returns an empty string if the input is null.
  */
 export function formatCachedAt(iso: string | null): string {
-  if (!iso) return ''; 
+  if (!iso)
+    return ''; 
   return new Date(iso).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
 }

@@ -28,34 +28,42 @@ export function useAuth(): UseAuthResult {
   const [username, setUsername] = useState('');
   const [authError, setAuthError] = useState<string | null>(null);
 
-  async function handleLogin(usernameInput: string, passwordInput: string): Promise<boolean> {
+  async function handleAuth(
+    action: () => Promise<{ token: string }>,
+    usernameInput: string,
+    errorMessage: string,
+  ): Promise<boolean> {
     try {
-      const result = await login(usernameInput, passwordInput);
+      const result = await action();
       setToken(result.token);
       setUsername(usernameInput);
       setAuthError(null);
       return true;
     } catch {
-      setAuthError('Anmeldung fehlgeschlagen. Bitte Benutzername und Passwort prüfen.');
+      setAuthError(errorMessage);
       return false;
     }
+  }
+
+  async function handleLogin(usernameInput: string, passwordInput: string): Promise<boolean> {
+    return handleAuth(
+      () => login(usernameInput, passwordInput),
+      usernameInput,
+      'Anmeldung fehlgeschlagen. Bitte Benutzername und Passwort prüfen.',
+    );
   }
 
   async function handleRegister(usernameInput: string, passwordInput: string): Promise<boolean> {
-    try {
-      const result = await register(usernameInput, passwordInput);
-      setToken(result.token);
-      setUsername(usernameInput);
-      setAuthError(null);
-      return true;
-    } catch {
-      setAuthError('Registrierung fehlgeschlagen. Benutzername möglicherweise bereits vergeben.');
-      return false;
-    }
+    return handleAuth(
+      () => register(usernameInput, passwordInput),
+      usernameInput,
+      'Registrierung fehlgeschlagen. Benutzername möglicherweise bereits vergeben.',
+    );
   }
 
   async function handleLogout(): Promise<void> {
-    if (token) await logout(token);
+    if (token)
+      await logout(token);
     setToken(null);
     setUsername('');
   }

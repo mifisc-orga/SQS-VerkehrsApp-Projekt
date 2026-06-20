@@ -19,60 +19,47 @@ function mockFetch(ok: boolean, body: unknown = {}): void {
   } as Response));
 }
 
+function testAuthEndpoint(
+  name: string,
+  endpoint: string,
+  fn: (username: string, password: string) => Promise<{ token: string }>,
+  mockToken: string,
+  username: string,
+): void {
+  describe(name, () => {
+    test(`sends POST to ${endpoint} with credentials`, async () => {
+      mockFetch(true, { token: mockToken });
+      await fn(username, 'pass');
+      expect(fetch).toHaveBeenCalledWith(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password: 'pass' }),
+      });
+    });
+
+    test('returns token on success', async () => {
+      mockFetch(true, { token: mockToken });
+      const result = await fn(username, 'pass');
+      expect(result.token).toBe(mockToken);
+    });
+    
+    test('throws on non-ok response', async () => {
+      mockFetch(false);
+      await expect(fn(username, 'wrong')).rejects.toThrow();
+    });
+  });
+}
+
 describe('trafficService', () => {
   afterEach(() => {
     vi.unstubAllGlobals();
   });
 
   // ── login ─────────────────────────────────────────────────
-
-  describe('login', () => {
-    test('sends POST to /api/auth/login with credentials', async () => {
-      mockFetch(true, { token: 'test-token' });
-      await login('user', 'pass');
-      expect(fetch).toHaveBeenCalledWith('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: 'user', password: 'pass' }),
-      });
-    });
-
-    test('returns token on success', async () => {
-      mockFetch(true, { token: 'test-token' });
-      const result = await login('user', 'pass');
-      expect(result.token).toBe('test-token');
-    });
-
-    test('throws on non-ok response', async () => {
-      mockFetch(false);
-      await expect(login('user', 'wrong')).rejects.toThrow();
-    });
-  });
+  testAuthEndpoint('login', '/api/auth/login', login, 'test-token', 'user');
 
   // ── register ──────────────────────────────────────────────
-
-  describe('register', () => {
-    test('sends POST to /api/auth/register with credentials', async () => {
-      mockFetch(true, { token: 'reg-token' });
-      await register('newuser', 'pass');
-      expect(fetch).toHaveBeenCalledWith('/api/auth/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: 'newuser', password: 'pass' }),
-      });
-    });
-
-    test('returns token on success', async () => {
-      mockFetch(true, { token: 'reg-token' });
-      const result = await register('newuser', 'pass');
-      expect(result.token).toBe('reg-token');
-    });
-
-    test('throws when username is already taken', async () => {
-      mockFetch(false);
-      await expect(register('taken', 'pass')).rejects.toThrow();
-    });
-  });
+  testAuthEndpoint('register', '/api/auth/register', register, 'reg-token', 'newuser');
 
   // ── logout ────────────────────────────────────────────────
 
