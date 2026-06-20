@@ -65,4 +65,48 @@ describe('RoadOption', () => {
     fireEvent.keyDown(screen.getByTestId(TESTID), { key: 'Enter' });
     expect(onToggle).not.toHaveBeenCalled();
   });
+
+  // ── Hover styling ─────────────────────────────────────────
+
+  test('changes background on mouse enter when not selected', () => {
+    render(<RoadOption road={ROAD} isSelected={false} isDisabled={false} onToggle={vi.fn()} />);
+    const btn = screen.getByTestId(TESTID);
+    const initialBg = btn.style.background;
+    fireEvent.mouseEnter(btn);
+    expect(btn.style.background).not.toBe(initialBg);
+  });
+
+  test('changes background on mouse enter when selected', () => {
+    render(<RoadOption road={ROAD} isSelected={true} isDisabled={false} onToggle={vi.fn()} />);
+    const btn = screen.getByTestId(TESTID);
+    const initialBg = btn.style.background;
+    fireEvent.mouseEnter(btn);
+    expect(btn.style.background).not.toBe(initialBg);
+  });
+
+  test('restores background on mouse leave when not selected', () => {
+    render(<RoadOption road={ROAD} isSelected={false} isDisabled={false} onToggle={vi.fn()} />);
+    const btn = screen.getByTestId(TESTID);
+    const initialBg = btn.style.background;
+    fireEvent.mouseEnter(btn);
+    fireEvent.mouseLeave(btn);
+    expect(btn.style.background).toBe(initialBg);
+  });
+
+  test('restores background on mouse leave when selected', () => {
+    render(<RoadOption road={ROAD} isSelected={true} isDisabled={false} onToggle={vi.fn()} />);
+    const btn = screen.getByTestId(TESTID);
+    const initialBg = btn.style.background;
+    fireEvent.mouseEnter(btn);
+    fireEvent.mouseLeave(btn);
+    expect(btn.style.background).toBe(initialBg);
+  });
+
+  test('does not change background on hover when disabled', () => {
+    render(<RoadOption road={ROAD} isSelected={false} isDisabled={true} onToggle={vi.fn()} />);
+    const btn = screen.getByTestId(TESTID);
+    const initialBg = btn.style.background;
+    fireEvent.mouseEnter(btn);
+    expect(btn.style.background).toBe(initialBg);
+  });
 });
