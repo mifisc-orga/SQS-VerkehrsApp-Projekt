@@ -87,12 +87,12 @@ function onHoverEnter(e: React.MouseEvent<HTMLButtonElement>, isDisabled: boolea
   }
 }
 
-function onHoverLeave(e: React.MouseEvent<HTMLButtonElement>, isSelected: boolean): void {
-  if (isSelected) {
-    (e.currentTarget as HTMLElement).style.background = '#f0fdf9';
-  } else {
-    (e.currentTarget as HTMLElement).style.background = 'white';
-  }
+function onHoverLeaveSelected(e: React.MouseEvent<HTMLButtonElement>): void {
+  (e.currentTarget as HTMLElement).style.background = '#f0fdf9';
+}
+
+function onHoverLeaveDeselected(e: React.MouseEvent<HTMLButtonElement>): void {
+  (e.currentTarget as HTMLElement).style.background = 'white';
 }
 
 /** A single selectable motorway row with checkbox, keyboard support, and hover styling. */
@@ -110,7 +110,7 @@ export function RoadOption({ road, isSelected, isDisabled, onToggle }: RoadOptio
         onClick={() => handleClick(isDisabled, road, onToggle)}
         onKeyDown={(e) => handleKeyDown(e, isDisabled, road, onToggle)}
         onMouseEnter={(e) => onHoverEnter(e, isDisabled, isSelected)}
-        onMouseLeave={(e) => onHoverLeave(e, isSelected)}
+        onMouseLeave={isSelected ? onHoverLeaveSelected : onHoverLeaveDeselected}
       >
         <div style={checkboxStyle}>
           {isSelected && <i className="ti ti-check" style={{ fontSize: '10px', color: 'white' }} aria-hidden="true"></i>}
