@@ -15,22 +15,19 @@ interface ConfirmModalProps {
  */
 export function ConfirmModal({ message, confirmLabel = 'Entfernen', onConfirm, onCancel }: ConfirmModalProps) {
   return (
-    <div
-      className="modal-overlay"
-      data-testid="confirm-modal-overlay"
-      role="button"
-      tabIndex={0}
-      aria-label="Abbrechen"
-      onClick={onCancel}
-      onKeyDown={(e) => { if (e.key === 'Escape') { onCancel(); } }}
-    >
-      <div
+    <>
+      <button
+        className="modal-overlay"
+        data-testid="confirm-modal-overlay"
+        aria-label="Abbrechen"
+        onClick={onCancel}
+        onKeyDown={(e) => { if (e.key === 'Escape') { onCancel(); } }}
+      />
+      <dialog
         className="modal"
         data-testid="confirm-modal"
-        role="dialog"
+        open
         aria-modal="true"
-        onClick={(e) => e.stopPropagation()}
-        onKeyDown={(e) => e.stopPropagation()}
       >
         <p style={{ marginBottom: '1.25rem', fontSize: '1rem' }}>{message}</p>
         <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'flex-end' }}>
@@ -41,7 +38,7 @@ export function ConfirmModal({ message, confirmLabel = 'Entfernen', onConfirm, o
             {confirmLabel}
           </button>
         </div>
-      </div>
-    </div>
+      </dialog>
+    </>
   );
 }

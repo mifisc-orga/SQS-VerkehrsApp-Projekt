@@ -222,20 +222,19 @@ export function AuthModal({
   onTabSwitch, onUsernameChange, onPasswordChange, onTogglePassword, onLogin, onRegister,
 }: AuthModalProps) {
   return (
-    <div
-      data-testid="login-modal-overlay" className="modal-overlay"
-      role="button"
-      tabIndex={0}
-      aria-label="Modal schließen"
-      onClick={onClose}
-      onKeyDown={(e) => { if (e.key === 'Escape') { onClose(); } }}
-    >
-      <div
-        data-testid="login-modal" className="modal"
-        role="dialog"
+    <>
+      <button
+        data-testid="login-modal-overlay"
+        className="modal-overlay"
+        aria-label="Modal schließen"
+        onClick={onClose}
+        onKeyDown={(e) => { if (e.key === 'Escape') { onClose(); } }}
+      />
+      <dialog
+        data-testid="login-modal"
+        className="modal"
+        open
         aria-modal="true"
-        onClick={(e) => e.stopPropagation()}
-        onKeyDown={(e) => e.stopPropagation()}
       >
         <button data-testid="login-modal-close" className="modal-close" onClick={onClose} aria-label="Schließen">×</button>
         <AuthTabs authMode={authMode} onTabSwitch={onTabSwitch} />
@@ -245,7 +244,7 @@ export function AuthModal({
           onUsernameChange={onUsernameChange} onPasswordChange={onPasswordChange}
           onTogglePassword={onTogglePassword} onLogin={onLogin} onRegister={onRegister}
         />
-      </div>
-    </div>
+      </dialog>
+    </>
   );
 }

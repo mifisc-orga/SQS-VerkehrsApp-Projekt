@@ -27,6 +27,7 @@ function getEventTypeLabel(type: string): string {
   }
 }
 
+/** Props for the clickable main area of a dashboard road card. */
 interface CardClickableAreaProps {
   /** Motorway identifier, e.g. "A3" */
   readonly roadId: string;

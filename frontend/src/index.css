@@ -245,19 +245,24 @@ body {
   inset: 0;
   background: rgba(0, 0, 0, 0.45);
   z-index: 2000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   backdrop-filter: blur(2px);
+  border: none;
+  cursor: default;
+  padding: 0;
 }
 
 .modal {
   background: white;
+  border: none;
   border-radius: var(--radius-lg);
   padding: 2rem;
   width: 90%;
   max-width: 400px;
-  position: relative;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2001;
   box-shadow: 0 20px 60px rgba(0,0,0,0.25);
   animation: modal-in 0.18s ease;
 }

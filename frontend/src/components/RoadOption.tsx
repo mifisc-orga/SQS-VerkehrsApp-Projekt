@@ -16,7 +16,9 @@ interface RoadOptionProps {
 
 const BaseOptionStyle: React.CSSProperties = {
   display: 'flex', alignItems: 'center', gap: '10px', padding: '9px 14px',
-  borderBottom: '0.5px solid var(--color-border)', fontSize: '13px', transition: 'background 0.15s',
+  border: 'none', borderBottom: '0.5px solid var(--color-border)',
+  fontSize: '13px', transition: 'background 0.15s',
+  width: '100%', textAlign: 'left',
 };
 
 const CheckboxBaseStyle: React.CSSProperties = {
@@ -61,7 +63,7 @@ function handleClick(isDisabled: boolean, road: string, onToggle: (r: string) =>
 }
 
 function handleKeyDown(
-  e: React.KeyboardEvent<HTMLLIElement>,
+  e: React.KeyboardEvent<HTMLButtonElement>,
   isDisabled: boolean,
   road: string,
   onToggle: (r: string) => void,
@@ -74,7 +76,7 @@ function handleKeyDown(
   }
 }
 
-function onHoverEnter(e: React.MouseEvent<HTMLLIElement>, isDisabled: boolean, isSelected: boolean): void {
+function onHoverEnter(e: React.MouseEvent<HTMLButtonElement>, isDisabled: boolean, isSelected: boolean): void {
   if (isDisabled) {
     return;
   }
@@ -85,7 +87,7 @@ function onHoverEnter(e: React.MouseEvent<HTMLLIElement>, isDisabled: boolean, i
   }
 }
 
-function onHoverLeave(e: React.MouseEvent<HTMLLIElement>, isSelected: boolean): void {
+function onHoverLeave(e: React.MouseEvent<HTMLButtonElement>, isSelected: boolean): void {
   if (isSelected) {
     (e.currentTarget as HTMLElement).style.background = '#f0fdf9';
   } else {
@@ -98,20 +100,23 @@ export function RoadOption({ road, isSelected, isDisabled, onToggle }: RoadOptio
   const optionStyle = buildOptionStyle(isDisabled, isSelected);
   const checkboxStyle = buildCheckboxStyle(isSelected);
   return (
-    <li
-      data-testid={`road-option-${road}`}
-      data-selected={String(isSelected)}
-      tabIndex={getTabIndex(isDisabled)}
-      style={optionStyle}
-      onClick={() => handleClick(isDisabled, road, onToggle)}
-      onKeyDown={(e) => handleKeyDown(e, isDisabled, road, onToggle)}
-      onMouseEnter={(e) => onHoverEnter(e, isDisabled, isSelected)}
-      onMouseLeave={(e) => onHoverLeave(e, isSelected)}
-    >
-      <div style={checkboxStyle}>
-        {isSelected && <i className="ti ti-check" style={{ fontSize: '10px', color: 'white' }} aria-hidden="true"></i>}
-      </div>
-      {road}
+    <li>
+      <button
+        data-testid={`road-option-${road}`}
+        data-selected={String(isSelected)}
+        disabled={isDisabled}
+        tabIndex={getTabIndex(isDisabled)}
+        style={optionStyle}
+        onClick={() => handleClick(isDisabled, road, onToggle)}
+        onKeyDown={(e) => handleKeyDown(e, isDisabled, road, onToggle)}
+        onMouseEnter={(e) => onHoverEnter(e, isDisabled, isSelected)}
+        onMouseLeave={(e) => onHoverLeave(e, isSelected)}
+      >
+        <div style={checkboxStyle}>
+          {isSelected && <i className="ti ti-check" style={{ fontSize: '10px', color: 'white' }} aria-hidden="true"></i>}
+        </div>
+        {road}
+      </button>
     </li>
   );
 }
