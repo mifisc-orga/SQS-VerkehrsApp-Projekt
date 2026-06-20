@@ -28,6 +28,14 @@ const MOCK_SAVED_ROADS = [
   { id: '2', userId: '1', roadId: 'A3' },
 ];
 
+async function performLogin(page: import('@playwright/test').Page): Promise<void> {
+  await page.goto('/');
+  await page.getByTestId('login-button').click();
+  await page.getByTestId('username-input').fill('testuser');
+  await page.getByTestId('password-input').fill('password');
+  await page.getByTestId('submit-login').click();
+}
+
 test.beforeEach(async ({ page }) => {
   await page.route('/api/traffic', async (route) => 
     await route.fulfill({ json: MOCK_TRAFFIC_DATA });
@@ -56,20 +64,12 @@ test('Login-Formular wird angezeigt', async ({ page }) => {
 });
 
 test('Benutzer kann sich einloggen', async ({ page }) => {
-  await page.goto('/');
-  await page.getByTestId('login-button').click();
-  await page.getByTestId('username-input').fill('testuser');
-  await page.getByTestId('password-input').fill('password');
-  await page.getByTestId('submit-login').click();
+  await performLogin(page);
   await expect(page.getByTestId('user-info')).toBeVisible();
 });
 
 test('Autobahn kann als Favourit gespeichert werden', async ({ page }) => {
-  await page.goto('/');
-  await page.getByTestId('login-button').click();
-  await page.getByTestId('username-input').fill('testuser');
-  await page.getByTestId('password-input').fill('password');
-  await page.getByTestId('submit-login').click();
+  await performLogin(page);
   // A1 ist standardmäßig vorausgewählt
   await page.getByTestId('save-favourite-button').click();
   await expect(page.getByTestId('favourite-saved-message')).toBeVisible();
@@ -96,11 +96,7 @@ test('Gespeicherter Favourit wird im Dashboard angezeigt', async ({ page }) => {
     });
   });
 
-  await page.goto('/');
-  await page.getByTestId('login-button').click();
-  await page.getByTestId('username-input').fill('testuser');
-  await page.getByTestId('password-input').fill('password');
-  await page.getByTestId('submit-login').click();
+  await performLogin(page);
   await expect(page.getByTestId('dashboard-road-A1')).not.toBeVisible();
   await page.getByTestId('save-favourite-button').click();
   await expect(page.getByTestId('favourite-saved-message')).toBeVisible();
@@ -116,11 +112,7 @@ test('Hinweis wenn alle Autobahnen bereits gespeichert sind', async ({ page }) =
     }
   });
 
-  await page.goto('/');
-  await page.getByTestId('login-button').click();
-  await page.getByTestId('username-input').fill('testuser');
-  await page.getByTestId('password-input').fill('password');
-  await page.getByTestId('submit-login').click();
+  await performLogin(page);
   await page.getByTestId('save-favourite-button').click();
   await expect(page.getByTestId('favourite-saved-message')).toBeVisible();
   await expect(page.getByTestId('favourite-saved-message')).toContainText('bereits');

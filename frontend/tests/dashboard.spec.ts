@@ -49,6 +49,15 @@ const createSavedRoadTraffic = (roadId: string, riskScore: number) => ({
     riskScore,
   },
 });
+
+async function performLogin(page: import('@playwright/test').Page): Promise<void> {
+  await page.goto('/');
+  await page.getByTestId('login-button').click();
+  await page.getByTestId('username-input').fill('testuser');
+  await page.getByTestId('password-input').fill('password');
+  await page.getByTestId('submit-login').click();
+}
+
 test.beforeEach(async ({ page }) => {
   await page.route('/api/traffic', async route => 
     await route.fulfill({ json: MOCK_TRAFFIC_DATA });
@@ -85,30 +94,18 @@ test('Dashboard ist nicht sichtbar wenn nicht eingeloggt', async ({ page }) => {
 });
 
 test('Dashboard wird nach Login angezeigt', async ({ page }) => {
-  await page.goto('/');
-  await page.getByTestId('login-button').click();
-  await page.getByTestId('username-input').fill('testuser');
-  await page.getByTestId('password-input').fill('password');
-  await page.getByTestId('submit-login').click();
+  await performLogin(page);
   await expect(page.getByTestId('dashboard')).toBeVisible();
 });
 
 test('Gespeicherte Autobahnen werden im Dashboard angezeigt', async ({ page }) => {
-  await page.goto('/');
-  await page.getByTestId('login-button').click();
-  await page.getByTestId('username-input').fill('testuser');
-  await page.getByTestId('password-input').fill('password');
-  await page.getByTestId('submit-login').click();
+  await performLogin(page);
   await expect(page.getByTestId('dashboard-road-A3')).toBeVisible();
   await expect(page.getByTestId('dashboard-road-A92')).toBeVisible();
 });
 
 test('Nutzer kann Favorit aus Dashboard löschen', async ({ page }) => {
-  await page.goto('/');
-  await page.getByTestId('login-button').click();
-  await page.getByTestId('username-input').fill('testuser');
-  await page.getByTestId('password-input').fill('password');
-  await page.getByTestId('submit-login').click();
+  await performLogin(page);
   await expect(page.getByTestId('dashboard-road-A3')).toBeVisible();
   await page.getByTestId('delete-favourite-A3').click();
   await expect(page.getByTestId('confirm-modal')).toBeVisible();
