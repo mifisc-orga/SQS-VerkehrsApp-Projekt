@@ -14,53 +14,96 @@ interface RoadOptionProps {
   readonly onToggle: (road: string) => void;
 }
 
-const BASE_OPTION_STYLE: React.CSSProperties = {
+const BaseOptionStyle: React.CSSProperties = {
   display: 'flex', alignItems: 'center', gap: '10px', padding: '9px 14px',
   borderBottom: '0.5px solid var(--color-border)', fontSize: '13px', transition: 'background 0.15s',
 };
 
-const CHECKBOX_BASE_STYLE: React.CSSProperties = {
+const CheckboxBaseStyle: React.CSSProperties = {
   width: '16px', height: '16px', borderRadius: '4px', display: 'flex',
   alignItems: 'center', justifyContent: 'center', flexShrink: 0,
 };
 
+function buildOptionStyle(isDisabled: boolean, isSelected: boolean): React.CSSProperties {
+  const style: React.CSSProperties = { ...BaseOptionStyle, opacity: 1, cursor: 'pointer', fontWeight: 400, color: 'var(--color-text)', background: 'white' };
+  if (isDisabled) {
+    style.cursor = 'not-allowed';
+    style.opacity = 0.4;
+  }
+  if (isSelected) {
+    style.background = '#f0fdf9';
+    style.fontWeight = 600;
+    style.color = 'var(--color-primary-dk)';
+  }
+  return style;
+}
+
+function buildCheckboxStyle(isSelected: boolean): React.CSSProperties {
+  const style: React.CSSProperties = { ...CheckboxBaseStyle, border: '2px solid #cbd5e1', background: 'white' };
+  if (isSelected) {
+    style.border = `2px solid ${COLOR_PRIMARY}`;
+    style.background = COLOR_PRIMARY;
+  }
+  return style;
+}
+
+function getTabIndex(isDisabled: boolean): number {
+  if (isDisabled) {
+    return -1;
+  }
+  return 0;
+}
+
+function handleClick(isDisabled: boolean, road: string, onToggle: (r: string) => void): void {
+  if (!isDisabled) {
+    onToggle(road);
+  }
+}
+
+function handleKeyDown(
+  e: React.KeyboardEvent<HTMLLIElement>,
+  isDisabled: boolean,
+  road: string,
+  onToggle: (r: string) => void,
+): void {
+  if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    if (!isDisabled) {
+      onToggle(road);
+    }
+  }
+}
+
 function onHoverEnter(e: React.MouseEvent<HTMLLIElement>, isDisabled: boolean, isSelected: boolean): void {
-  if (!isDisabled) { (e.currentTarget as HTMLElement).style.background = isSelected ? '#e0fdf4' : '#f8fafc'; }
+  if (isDisabled) {
+    return;
+  }
+  if (isSelected) {
+    (e.currentTarget as HTMLElement).style.background = '#e0fdf4';
+  } else {
+    (e.currentTarget as HTMLElement).style.background = '#f8fafc';
+  }
 }
 
 function onHoverLeave(e: React.MouseEvent<HTMLLIElement>, isSelected: boolean): void {
-  (e.currentTarget as HTMLElement).style.background = isSelected ? '#f0fdf9' : 'white';
+  if (isSelected) {
+    (e.currentTarget as HTMLElement).style.background = '#f0fdf9';
+  } else {
+    (e.currentTarget as HTMLElement).style.background = 'white';
+  }
 }
 
 /** A single selectable motorway row with checkbox, keyboard support, and hover styling. */
 export function RoadOption({ road, isSelected, isDisabled, onToggle }: RoadOptionProps) {
-  const optionStyle: React.CSSProperties = {
-    ...BASE_OPTION_STYLE,
-    cursor: isDisabled ? 'not-allowed' : 'pointer',
-    background: isSelected ? '#f0fdf9' : 'white',
-    opacity: isDisabled ? 0.4 : 1,
-    fontWeight: isSelected ? 600 : 400,
-    color: isSelected ? 'var(--color-primary-dk)' : 'var(--color-text)',
-  };
-  const checkboxStyle: React.CSSProperties = {
-    ...CHECKBOX_BASE_STYLE,
-    border: `2px solid ${isSelected ? COLOR_PRIMARY : '#cbd5e1'}`,
-    background: isSelected ? COLOR_PRIMARY : 'white',
-  };
+  const optionStyle = buildOptionStyle(isDisabled, isSelected);
+  const checkboxStyle = buildCheckboxStyle(isSelected);
   return (
     <li
       data-testid={`road-option-${road}`}
-      onClick={() => !isDisabled && onToggle(road)}
-      role="option"
-      aria-selected={isSelected}
-      tabIndex={isDisabled ? -1 : 0}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          if (!isDisabled) { onToggle(road); }
-        }
-      }}
+      tabIndex={getTabIndex(isDisabled)}
       style={optionStyle}
+      onClick={() => handleClick(isDisabled, road, onToggle)}
+      onKeyDown={(e) => handleKeyDown(e, isDisabled, road, onToggle)}
       onMouseEnter={(e) => onHoverEnter(e, isDisabled, isSelected)}
       onMouseLeave={(e) => onHoverLeave(e, isSelected)}
     >

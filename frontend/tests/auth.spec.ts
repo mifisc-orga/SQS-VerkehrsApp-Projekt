@@ -2,7 +2,7 @@ import { expect, test } from './coverage';
 import { setupApiRoutes } from './setupApiRoutes';
 
 /** Default password used in register helper and related tests. */
-const TEST_PASSWORD = 'securePass123';
+const TEST_PASSWORD = 'testonly';
 
 /**
  * Helper: performs the standard login flow.

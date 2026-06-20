@@ -35,12 +35,16 @@ function useAuthHandlers(auth: UseAuthResult, form: AuthFormState) {
 
   async function handleLoginSubmit(): Promise<void> {
     const ok = await auth.handleLogin(form.usernameInput, form.passwordInput);
-    if (ok) { handleCloseModal(); }
+    if (ok) {
+      handleCloseModal();
+    }
   }
 
   async function handleRegisterSubmit(): Promise<void> {
     const ok = await auth.handleRegister(form.usernameInput, form.passwordInput);
-    if (ok) { handleCloseModal(); }
+    if (ok) {
+      handleCloseModal();
+    }
   }
 
   return { handleTabSwitch, handleCloseModal, handleLoginSubmit, handleRegisterSubmit };

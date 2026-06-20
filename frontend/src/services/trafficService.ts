@@ -4,7 +4,7 @@ const API_BASE = '/api';
 
 /** Sends a fetch request and throws if the response status is not OK. */
 async function checkedFetch(url: string, errorMessage: string, options?: RequestInit): Promise<Response> {
-  const response = options !== undefined ? await fetch(url, options) : await fetch(url);
+  const response = options === undefined ? await fetch(url) : await fetch(url, options);
   if (!response.ok) {
     throw new Error(errorMessage);
   }

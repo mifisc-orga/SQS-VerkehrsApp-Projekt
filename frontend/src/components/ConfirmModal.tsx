@@ -18,12 +18,17 @@ export function ConfirmModal({ message, confirmLabel = 'Entfernen', onConfirm, o
     <div
       className="modal-overlay"
       data-testid="confirm-modal-overlay"
+      role="button"
+      tabIndex={0}
+      aria-label="Abbrechen"
       onClick={onCancel}
-      onKeyDown={(e) => { if (e.key === 'Escape') onCancel(); }}
+      onKeyDown={(e) => { if (e.key === 'Escape') { onCancel(); } }}
     >
       <div
         className="modal"
         data-testid="confirm-modal"
+        role="dialog"
+        aria-modal="true"
         onClick={(e) => e.stopPropagation()}
         onKeyDown={(e) => e.stopPropagation()}
       >

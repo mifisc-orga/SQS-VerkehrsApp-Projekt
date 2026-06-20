@@ -2,7 +2,9 @@ import type { Page } from '@playwright/test';
 
 /** Standard mock data shared across Playwright test files. */
 export const MOCK_TRAFFIC_DATA = { live: true, cachedAt: null, events: [] };
+/** Mock response returned by the /api/auth/login route. */
 export const MOCK_LOGIN_RESPONSE = { token: 'mock-jwt-token' };
+/** Mock response returned by the /api/auth/register route. */
 export const MOCK_REGISTER_RESPONSE = { token: 'mock-register-token' };
 
 /**

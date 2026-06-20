@@ -28,10 +28,15 @@ function getEventTypeLabel(type: string): string {
 }
 
 interface CardClickableAreaProps {
+  /** Motorway identifier, e.g. "A3" */
   readonly roadId: string;
+  /** Traffic events currently active on this motorway */
   readonly events: DashboardRoadData['events'];
+  /** Highest risk level among all events */
   readonly maxRiskLevel: RiskLevel;
+  /** Deduplicated list of event types on this motorway */
   readonly uniqueTypes: string[];
+  /** Called when the clickable area is activated */
   readonly onRoadSelect: (roadId: string) => void;
 }
 

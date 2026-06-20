@@ -224,11 +224,16 @@ export function AuthModal({
   return (
     <div
       data-testid="login-modal-overlay" className="modal-overlay"
+      role="button"
+      tabIndex={0}
+      aria-label="Modal schließen"
       onClick={onClose}
-      onKeyDown={(e) => { if (e.key === 'Escape') onClose(); }}
+      onKeyDown={(e) => { if (e.key === 'Escape') { onClose(); } }}
     >
       <div
         data-testid="login-modal" className="modal"
+        role="dialog"
+        aria-modal="true"
         onClick={(e) => e.stopPropagation()}
         onKeyDown={(e) => e.stopPropagation()}
       >

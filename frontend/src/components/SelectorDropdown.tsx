@@ -13,7 +13,7 @@ interface SelectorDropdownProps {
   readonly onToggle: (road: string) => void;
 }
 
-const DROPDOWN_STYLE: React.CSSProperties = {
+const DropdownStyle: React.CSSProperties = {
   listStyle: 'none', margin: 0, padding: 0, position: 'absolute',
   top: 'calc(100% + 6px)', left: 0, background: 'white',
   border: '1px solid var(--color-border)', borderRadius: '10px',
@@ -21,7 +21,7 @@ const DROPDOWN_STYLE: React.CSSProperties = {
   overflowY: 'auto', zIndex: 1000,
 };
 
-const MAX_WARNING_STYLE: React.CSSProperties = {
+const MaxWarningStyle: React.CSSProperties = {
   padding: '8px 12px', background: '#fef9c3', color: '#854d0e',
   fontSize: '11px', fontWeight: 600, borderBottom: '1px solid #fde68a',
 };
@@ -32,9 +32,9 @@ const MAX_WARNING_STYLE: React.CSSProperties = {
  */
 export function SelectorDropdown({ roads, selected, max, onToggle }: SelectorDropdownProps) {
   return (
-    <ul role="listbox" aria-multiselectable="true" data-testid="autobahn-dropdown" style={DROPDOWN_STYLE}>
+    <ul aria-label="Autobahn auswählen" data-testid="autobahn-dropdown" style={DropdownStyle}>
       {selected.length >= max && (
-        <li role="presentation" style={MAX_WARNING_STYLE}>Maximum {max} Autobahnen erreicht</li>
+        <li style={MaxWarningStyle}>Maximum {max} Autobahnen erreicht</li>
       )}
       {roads.map((road) => {
         const isSelected = selected.includes(road);
