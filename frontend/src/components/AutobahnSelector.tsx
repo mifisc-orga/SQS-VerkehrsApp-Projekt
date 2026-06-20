@@ -3,6 +3,14 @@ import { SelectorDropdown } from './SelectorDropdown';
 import { SelectedChips } from './SelectedChips';
 
 const COLOR_PRIMARY = 'var(--color-primary)';
+const BADGE_STYLE = {
+  background: COLOR_PRIMARY,
+  color: 'white',
+  borderRadius: '999px',
+  padding: '1px 7px',
+  fontSize: '11px',
+  fontWeight: 700,
+} as const;
 
 /** Props for the motorway multi-select dropdown */
 interface AutobahnSelectorProps {
@@ -36,16 +44,7 @@ export function AutobahnSelector({
         <i className="ti ti-road" aria-hidden="true"></i>
         Autobahn wählen
         {selected.length > 0 && (
-          <span style={{
-            background: COLOR_PRIMARY,
-            color: 'white',
-            borderRadius: '999px',
-            padding: '1px 7px',
-            fontSize: '11px',
-            fontWeight: 700,
-          }}>
-            {selected.length}/{max}
-          </span>
+          <span style={BADGE_STYLE}>{selected.length}/{max}</span>
         )}
         <i className={`ti ti-chevron-${isOpen ? 'up' : 'down'}`} aria-hidden="true"></i>
       </button>
