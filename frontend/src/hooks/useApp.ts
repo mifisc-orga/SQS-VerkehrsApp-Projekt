@@ -37,15 +37,17 @@ export function useApp() {
   /** Submits the login form; closes the modal on success. */
   async function handleLoginSubmit(): Promise<void> {
     const ok = await auth.handleLogin(usernameInput, passwordInput);
-    if (ok)
+    if (ok) {
       handleCloseModal();
+    }
   }
 
   /** Submits the register form; closes the modal on success. */
   async function handleRegisterSubmit(): Promise<void> {
     const ok = await auth.handleRegister(usernameInput, passwordInput);
-    if (ok)
+    if (ok) {
       handleCloseModal();
+    }
   }
 
   /** Confirms logout, clears auth state, and hides the confirm dialog. */
@@ -56,8 +58,9 @@ export function useApp() {
 
   /** Saves the currently selected motorways as favourites for the logged-in user. */
   async function handleSaveFavourite(): Promise<void> {
-    if (!auth.token || traffic.selectedRoads.length === 0)
+    if (!auth.token || traffic.selectedRoads.length === 0) {
       return;
+    }
     const results = await Promise.allSettled(
       traffic.selectedRoads.map(road => saveFavourite(auth.token as string, road)),
     );

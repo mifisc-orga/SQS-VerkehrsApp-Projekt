@@ -15,7 +15,7 @@ interface RoadOptionProps {
 /** A single selectable motorway row with checkbox, keyboard support, and hover styling. */
 export function RoadOption({ road, isSelected, isDisabled, onToggle }: RoadOptionProps) {
   return (
-    <div
+    <li
       key={road}
       data-testid={`road-option-${road}`}
       onClick={() => !isDisabled && onToggle(road)}
@@ -25,7 +25,7 @@ export function RoadOption({ road, isSelected, isDisabled, onToggle }: RoadOptio
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
-          if (!isDisabled) onToggle(road);
+          if (!isDisabled) { onToggle(road); }
         }
       }}
       style={{
@@ -43,7 +43,7 @@ export function RoadOption({ road, isSelected, isDisabled, onToggle }: RoadOptio
         transition: 'background 0.15s',
       }}
       onMouseEnter={(e) => {
-        if (!isDisabled) (e.currentTarget as HTMLElement).style.background = isSelected ? '#e0fdf4' : '#f8fafc';
+        if (!isDisabled) { (e.currentTarget as HTMLElement).style.background = isSelected ? '#e0fdf4' : '#f8fafc'; }
       }}
       onMouseLeave={(e) => {
         (e.currentTarget as HTMLElement).style.background = isSelected ? '#f0fdf9' : 'white';
@@ -63,6 +63,6 @@ export function RoadOption({ road, isSelected, isDisabled, onToggle }: RoadOptio
         {isSelected && <i className="ti ti-check" style={{ fontSize: '10px', color: 'white' }} aria-hidden="true"></i>}
       </div>
       {road}
-    </div>
+    </li>
   );
 }

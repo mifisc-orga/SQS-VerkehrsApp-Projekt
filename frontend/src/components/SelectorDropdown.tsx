@@ -18,9 +18,11 @@ interface SelectorDropdownProps {
  */
 export function SelectorDropdown({ roads, selected, max, onToggle }: SelectorDropdownProps) {
   return (
-    <div
+    <ul
+      role="listbox"
+      aria-multiselectable="true"
       data-testid="autobahn-dropdown"
-      style={{
+      style={{ listStyle: 'none', margin: 0, padding: 0,
         position: 'absolute',
         top: 'calc(100% + 6px)',
         left: 0,
@@ -35,7 +37,7 @@ export function SelectorDropdown({ roads, selected, max, onToggle }: SelectorDro
       }}
     >
       {selected.length >= max && (
-        <div style={{
+        <li role="presentation" style={{
           padding: '8px 12px',
           background: '#fef9c3',
           color: '#854d0e',
@@ -44,7 +46,7 @@ export function SelectorDropdown({ roads, selected, max, onToggle }: SelectorDro
           borderBottom: '1px solid #fde68a',
         }}>
           Maximum {max} Autobahnen erreicht
-        </div>
+        </li>
       )}
       {roads.map((road) => {
         const isSelected = selected.includes(road);
@@ -59,6 +61,6 @@ export function SelectorDropdown({ roads, selected, max, onToggle }: SelectorDro
           />
         );
       })}
-    </div>
+    </ul>
   );
 }

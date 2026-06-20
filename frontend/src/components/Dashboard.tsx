@@ -16,10 +16,12 @@ interface DashboardProps {
 
 /** Returns the highest risk level among all events on a road, defaulting to LOW. */
 function getMaxRiskLevel(events: DashboardRoadData['events']): RiskLevel {
-  if (events.some(e => e.riskLevel === 'HIGH'))
+  if (events.some(e => e.riskLevel === 'HIGH')) {
     return 'HIGH';
-  if (events.some(e => e.riskLevel === 'MEDIUM'))
+  }
+  if (events.some(e => e.riskLevel === 'MEDIUM')) {
     return 'MEDIUM';
+  }
   return 'LOW';
 }
 

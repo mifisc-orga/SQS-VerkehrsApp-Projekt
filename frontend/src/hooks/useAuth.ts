@@ -62,8 +62,9 @@ export function useAuth(): UseAuthResult {
   }
 
   async function handleLogout(): Promise<void> {
-    if (token)
+    if (token) {
       await logout(token);
+    }
     setToken(null);
     setUsername('');
   }

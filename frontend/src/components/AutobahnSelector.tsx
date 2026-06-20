@@ -30,8 +30,9 @@ export function AutobahnSelector({
 }: AutobahnSelectorProps) {
   const { roads, isOpen, setIsOpen, error, wrapperRef, toggle, remove } = useAutobahnSelector(selected, onSelect, max);
 
-  if (error)
+  if (error) {
     return <p>{error}</p>;
+  }
 
   return (
     <div ref={wrapperRef} style={{ position: 'relative', display: 'inline-block' }}>

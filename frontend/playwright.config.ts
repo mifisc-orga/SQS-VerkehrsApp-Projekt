@@ -1,17 +1,17 @@
 import { defineConfig, devices } from '@playwright/test';
 
-const isCI = !!process.env.CI;
+const IS_CI = !!process.env.CI;
 
 let retries = 0;
-if (process.env.CI) retries = 2;
+if (process.env.CI) { retries = 2; }
 
 let workers: number | undefined;
-if (process.env.CI) workers = 1;
+if (process.env.CI) { workers = 1; }
 
 export default defineConfig({
   testDir: './tests',
   fullyParallel: true,
-  forbidOnly: isCI,
+  forbidOnly: IS_CI,
   retries,
   workers,
   reporter: 'html',
@@ -31,6 +31,6 @@ export default defineConfig({
   webServer: {
     command: 'npm run dev',
     url: 'http://localhost:5173',
-    reuseExistingServer: !isCI,
+    reuseExistingServer: !IS_CI,
   },
 });

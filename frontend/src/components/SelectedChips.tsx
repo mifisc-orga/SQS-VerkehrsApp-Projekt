@@ -10,7 +10,7 @@ interface SelectedChipsProps {
 
 /** Displays a row of removable chips for each selected motorway. */
 export function SelectedChips({ selected, onRemove }: SelectedChipsProps) {
-  if (selected.length === 0) return null;
+  if (selected.length === 0) { return null; }
 
   return (
     <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginTop: '8px' }}>

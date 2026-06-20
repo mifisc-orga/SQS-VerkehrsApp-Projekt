@@ -33,8 +33,9 @@ export function useDashboard(token: string, refreshKey: number): UseDashboardRes
   }
 
   async function handleDeleteConfirm(): Promise<void> {
-    if (!confirmDeleteRoadId)
+    if (!confirmDeleteRoadId) {
       return;
+    }
     try {
       await deleteFavourite(token, confirmDeleteRoadId);
       setRoadData(prev => prev.filter(r => r.roadId !== confirmDeleteRoadId));

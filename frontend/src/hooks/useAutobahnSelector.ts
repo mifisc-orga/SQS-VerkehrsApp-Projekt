@@ -42,8 +42,9 @@ export function useAutobahnSelector(
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
-      if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node))
+      if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
         setIsOpen(false);
+      }
     }
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
@@ -51,12 +52,13 @@ export function useAutobahnSelector(
 
   function toggle(road: string) {
     let next: string[];
-    if (selected.includes(road))
+    if (selected.includes(road)) {
       next = selected.filter(r => r !== road);
-    else if (selected.length < max)
+    } else if (selected.length < max) {
       next = [...selected, road];
-    else
+    } else {
       return;
+    }
     onSelect(next);
   }
 
