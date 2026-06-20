@@ -100,7 +100,7 @@ describe('useAuth', () => {
   });
 
   test('handleLogout calls logout service with token', async () => {
-    const result = await setupLoggedInTheOut();
+    await setupLoggedInTheOut();
     expect(logout).toHaveBeenCalledWith('test-token');
   });
 });

@@ -4,7 +4,6 @@ import { useApp } from './useApp';
 import { useAuth } from './useAuth';
 import { useTraffic } from './useTraffic';
 import { saveFavourite } from '../services/trafficService';
-import { buildSavedMessage } from '../utils/buildSavedMessage';
 
 vi.mock('./useAuth');
 vi.mock('./useTraffic');
