@@ -3,15 +3,15 @@ import { AutobahnSelector } from './AutobahnSelector';
 /** Props for the motorway selector card */
 interface SelectorCardProps {
   /** JWT token, or null if not authenticated */
-  token: string | null;
+  readonly token: string | null;
   /** Currently selected motorway identifiers */
-  selectedRoads: string[];
+  readonly selectedRoads: string[];
   /** Feedback message after saving a favourite, or null */
-  savedMessage: string | null;
+  readonly savedMessage: string | null;
   /** Called when the motorway selection changes */
-  onSelect: (roads: string[]) => void;
+  readonly onSelect: (roads: string[]) => void;
   /** Called when the user clicks the save button */
-  onSave: () => void;
+  readonly onSave: () => void;
 }
 
 /** Card containing the AutobahnSelector and a save-favourite button. */

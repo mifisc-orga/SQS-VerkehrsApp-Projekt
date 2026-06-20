@@ -20,37 +20,43 @@ describe('useAutobahnSelector', () => {
     expect(result.current.roads).toEqual(['A1', 'A3', 'A9']);
   });
 
-  test('isOpen is false initially', () => {
+  test('isOpen is false initially', async () => {
     const { result } = renderHook(() => useAutobahnSelector([], ON_SELECT, 5));
+    await act(async () => {});
     expect(result.current.isOpen).toBe(false);
   });
 
-  test('setIsOpen toggles the dropdown', () => {
+  test('setIsOpen toggles the dropdown', async () => {
     const { result } = renderHook(() => useAutobahnSelector([], ON_SELECT, 5));
+    await act(async () => {});
     act(() => result.current.setIsOpen(true));
     expect(result.current.isOpen).toBe(true);
   });
 
-  test('toggle adds a road when under max', () => {
+  test('toggle adds a road when under max', async () => {
     const { result } = renderHook(() => useAutobahnSelector([], ON_SELECT, 5));
+    await act(async () => {});
     act(() => result.current.toggle('A3'));
     expect(ON_SELECT).toHaveBeenCalledWith(['A3']);
   });
 
-  test('toggle removes a road when already selected', () => {
+  test('toggle removes a road when already selected', async () => {
     const { result } = renderHook(() => useAutobahnSelector(['A3'], ON_SELECT, 5));
+    await act(async () => {});
     act(() => result.current.toggle('A3'));
     expect(ON_SELECT).toHaveBeenCalledWith([]);
   });
 
-  test('toggle does nothing when max is reached and road not selected', () => {
+  test('toggle does nothing when max is reached and road not selected', async () => {
     const { result } = renderHook(() => useAutobahnSelector(['A1', 'A3'], ON_SELECT, 2));
+    await act(async () => {});
     act(() => result.current.toggle('A9'));
     expect(ON_SELECT).not.toHaveBeenCalled();
   });
 
-  test('remove calls onSelect without the road', () => {
+  test('remove calls onSelect without the road', async () => {
     const { result } = renderHook(() => useAutobahnSelector(['A1', 'A3'], ON_SELECT, 5));
+    await act(async () => {});
     act(() => result.current.remove('A1'));
     expect(ON_SELECT).toHaveBeenCalledWith(['A3']);
   });

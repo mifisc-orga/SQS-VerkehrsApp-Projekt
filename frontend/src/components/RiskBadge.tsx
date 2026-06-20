@@ -2,7 +2,7 @@ import type { RiskLevel } from '../types';
 /** Props for the RiskBadge component */
 interface RiskBadgeProps {
   /** Risk level of the motorway: LOW, MEDIUM, or HIGH */
-  riskLevel: RiskLevel;
+   readonly riskLevel: RiskLevel;
 }
 
 const LABELS: Record<RiskLevel, string> = {

@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import { describe, expect, test, vi, beforeEach } from 'vitest';
 import { AutobahnSelector } from './AutobahnSelector';
 import { fetchAvailableRoads } from '../services/trafficService';
@@ -24,6 +24,7 @@ describe('AutobahnSelector', () => {
 
   test('renders the selector button', async () => {
     render(<AutobahnSelector selected={[]} onSelect={vi.fn()} />);
+    await act(async () => {});
     expect(screen.getByTestId(SELECTOR)).toBeInTheDocument();
   });
 
@@ -93,14 +94,16 @@ describe('AutobahnSelector', () => {
 
   // ── chip remove ───────────────────────────────────────────
 
-  test('shows chip for selected road', () => {
+  test('shows chip for selected road', async () => {
     render(<AutobahnSelector selected={['A3']} onSelect={vi.fn()} />);
+    await act(async () => {});
     expect(screen.getByTestId('selected-chip-A3')).toBeInTheDocument();
   });
 
-  test('calls onSelect with road removed when chip remove is clicked', () => {
+  test('calls onSelect with road removed when chip remove is clicked', async () => {
     const onSelect = vi.fn();
     render(<AutobahnSelector selected={['A3', 'A9']} onSelect={onSelect} />);
+    await act(async () => {});
     fireEvent.click(screen.getByTestId('chip-remove-A3'));
     expect(onSelect).toHaveBeenCalledWith(['A9']);
   });

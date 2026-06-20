@@ -3,9 +3,9 @@ const COLOR_PRIMARY = 'var(--color-primary)';
 /** Props for the selected motorway chips bar */
 interface SelectedChipsProps {
   /** Currently selected motorway identifiers */
-  selected: string[];
+  readonly selected: string[];
   /** Called when a chip's remove button is clicked */
-  onRemove: (road: string) => void;
+  readonly onRemove: (road: string) => void;
 }
 
 /** Displays a row of removable chips for each selected motorway. */

@@ -1,9 +1,9 @@
 /** Props for the authentication tab navigation */
 interface AuthTabsProps {
   /** Currently active tab */
-  authMode: 'login' | 'register';
+   readonly authMode: 'login' | 'register';
   /** Called when the user selects a different tab */
-  onTabSwitch: (mode: 'login' | 'register') => void;
+  readonly onTabSwitch: (mode: 'login' | 'register') => void;
 }
 
 /** Tab navigation bar between login and register forms. */
@@ -31,9 +31,9 @@ function AuthTabs({ authMode, onTabSwitch }: AuthTabsProps) {
 /** Props for the password visibility toggle button */
 interface EyeToggleButtonProps {
   /** Whether the password is currently visible */
-  showPassword: boolean;
+   readonly showPassword: boolean;
   /** Called when the button is clicked */
-  onToggle: () => void;
+  readonly onToggle: () => void;
 }
 
 /** Button that toggles password field visibility with an eye icon. */
@@ -65,19 +65,19 @@ function EyeToggleButton({ showPassword, onToggle }: EyeToggleButtonProps) {
 /** Props for the password input field with visibility toggle */
 interface PasswordFieldProps {
   /** Current password value */
-  value: string;
+   readonly value: string;
   /** Whether the password is shown as plain text */
-  showPassword: boolean;
+  readonly showPassword: boolean;
   /** Active auth tab — determines which action Enter triggers */
-  authMode: 'login' | 'register';
+  readonly authMode: 'login' | 'register';
   /** Called when the input value changes */
-  onChange: (value: string) => void;
+  readonly onChange: (value: string) => void;
   /** Called when the visibility toggle is clicked */
-  onToggle: () => void;
+  readonly onToggle: () => void;
   /** Called when login is submitted via Enter */
-  onLogin: () => Promise<void>;
+  readonly onLogin: () => Promise<void>;
   /** Called when registration is submitted via Enter */
-  onRegister: () => Promise<void>;
+  readonly onRegister: () => Promise<void>;
 }
 
 /** Password input with a show/hide toggle button. */
@@ -111,11 +111,11 @@ function PasswordField({ value, showPassword, authMode, onChange, onToggle, onLo
 /** Props for the login/register submit button */
 interface SubmitButtonsProps {
   /** Currently active form */
-  authMode: 'login' | 'register';
+  readonly authMode: 'login' | 'register';
   /** Called when login is submitted */
-  onLogin: () => Promise<void>;
+  readonly onLogin: () => Promise<void>;
   /** Called when registration is submitted */
-  onRegister: () => Promise<void>;
+  readonly onRegister: () => Promise<void>;
 }
 
 /** Submit button that switches label based on the active auth tab. */
@@ -137,23 +137,23 @@ function SubmitButtons({ authMode, onLogin, onRegister }: SubmitButtonsProps) {
 /** Props for the login/register form fields section */
 interface AuthFormFieldsProps {
   /** Currently active form */
-  authMode: 'login' | 'register';
+  readonly authMode: 'login' | 'register';
   /** Current username input value */
-  usernameInput: string;
+  readonly usernameInput: string;
   /** Current password input value */
-  passwordInput: string;
+  readonly passwordInput: string;
   /** Whether the password is shown as plain text */
-  showPassword: boolean;
+  readonly showPassword: boolean;
   /** Called when the username input changes */
-  onUsernameChange: (value: string) => void;
+  readonly onUsernameChange: (value: string) => void;
   /** Called when the password input changes */
-  onPasswordChange: (value: string) => void;
+  readonly onPasswordChange: (value: string) => void;
   /** Called when the password visibility toggle is clicked */
-  onTogglePassword: () => void;
+  readonly onTogglePassword: () => void;
   /** Called when login is submitted */
-  onLogin: () => Promise<void>;
+  readonly onLogin: () => Promise<void>;
   /** Called when registration is submitted */
-  onRegister: () => Promise<void>;
+  readonly onRegister: () => Promise<void>;
 }
 
 /** Username field, password field, and submit button for the auth form. */
@@ -188,29 +188,29 @@ function AuthFormFields({ authMode, usernameInput, passwordInput, showPassword, 
 /** Props for the authentication modal */
 interface AuthModalProps {
   /** Which tab is currently active */
-  authMode: 'login' | 'register';
+  readonly authMode: 'login' | 'register';
   /** Error message to display, or null if no error */
-  authError: string | null;
+  readonly authError: string | null;
   /** Current value of the username input */
-  usernameInput: string;
+  readonly usernameInput: string;
   /** Current value of the password input */
-  passwordInput: string;
+  readonly passwordInput: string;
   /** Whether the password is shown as plain text */
-  showPassword: boolean;
+  readonly showPassword: boolean;
   /** Called when the modal should close */
-  onClose: () => void;
+  readonly onClose: () => void;
   /** Called when the user switches between login and register tabs */
-  onTabSwitch: (mode: 'login' | 'register') => void;
+  readonly onTabSwitch: (mode: 'login' | 'register') => void;
   /** Called when the username input value changes */
-  onUsernameChange: (value: string) => void;
+  readonly onUsernameChange: (value: string) => void;
   /** Called when the password input value changes */
-  onPasswordChange: (value: string) => void;
+  readonly onPasswordChange: (value: string) => void;
   /** Called when the password visibility toggle is clicked */
-  onTogglePassword: () => void;
+  readonly onTogglePassword: () => void;
   /** Called when the login form is submitted */
-  onLogin: () => Promise<void>;
+  readonly onLogin: () => Promise<void>;
   /** Called when the registration form is submitted */
-  onRegister: () => Promise<void>;
+  readonly onRegister: () => Promise<void>;
 }
 
 /**
@@ -226,13 +226,11 @@ export function AuthModal({
       data-testid="login-modal-overlay" className="modal-overlay"
       onClick={onClose}
       onKeyDown={(e) => { if (e.key === 'Escape') onClose(); }}
-      role="presentation"
     >
       <div
         data-testid="login-modal" className="modal"
         onClick={(e) => e.stopPropagation()}
         onKeyDown={(e) => e.stopPropagation()}
-        role="presentation"
       >
         <button data-testid="login-modal-close" className="modal-close" onClick={onClose} aria-label="Schließen">×</button>
         <AuthTabs authMode={authMode} onTabSwitch={onTabSwitch} />

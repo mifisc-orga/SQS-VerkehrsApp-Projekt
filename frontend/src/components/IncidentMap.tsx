@@ -21,7 +21,7 @@ L.Icon.Default.mergeOptions({
 /** Props for the IncidentMap component */
 interface IncidentMapProps {
   /** List of traffic events to display */
-  events: TrafficEvent[];
+   readonly events: TrafficEvent[];
 }
 
 /**

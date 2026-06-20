@@ -6,11 +6,11 @@ import type { TrafficEvent } from '../types';
 /** Props for the traffic view panel */
 interface TrafficViewProps {
   /** Whether the data was fetched live */
-  isLive: boolean;
+  readonly isLive: boolean;
   /** ISO timestamp of the cached response, or null if live */
-  cachedAt: string | null;
+  readonly cachedAt: string | null;
   /** List of traffic events to display */
-  events: TrafficEvent[];
+  readonly events: TrafficEvent[];
 }
 
 /** Displays the live/cached status indicator, the incident map, and the events list. */
@@ -22,7 +22,7 @@ export function TrafficView({ isLive, cachedAt, events }: TrafficViewProps) {
           {isLive ? (
             <span data-testid="live-indicator" className="status-live">
               <span className="live-dot" aria-hidden="true"></span>
-              Live-Daten
+              {' '}Live-Daten
             </span>
           ) : (
             <span data-testid="cached-indicator" className="status-cached">
@@ -41,7 +41,7 @@ export function TrafficView({ isLive, cachedAt, events }: TrafficViewProps) {
         <div className="card" style={{ display: 'flex', flexDirection: 'column', minHeight: 0 }}>
           <div className="section-title">
             Aktuelle Ereignisse
-            <span style={{ marginLeft: 'auto', fontSize: '11px', fontWeight: 400, color: 'var(--color-text-muted)' }}>
+            {' '}<span  style={{ marginLeft: 'auto', fontSize: '11px', fontWeight: 400, color: 'var(--color-text-muted)' }}>
               {events.length} Ereignisse
             </span>
           </div>

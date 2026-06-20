@@ -7,11 +7,11 @@ import type { RiskLevel } from '../types';
 /** Props for the dashboard showing saved motorways */
 interface DashboardProps {
   /** JWT token for authentication */
-  token: string;
+  readonly token: string;
   /** Incremented to trigger a dashboard refresh after saving a favourite */
-  refreshKey: number;
+  readonly refreshKey: number;
   /** Called when the user clicks a motorway card */
-  onRoadSelect: (roadId: string) => void;
+  readonly onRoadSelect: (roadId: string) => void;
 }
 
 /** Returns the highest risk level among all events on a road, defaulting to LOW. */

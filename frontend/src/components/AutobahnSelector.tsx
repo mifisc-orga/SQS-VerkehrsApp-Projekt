@@ -15,11 +15,11 @@ const BADGE_STYLE = {
 /** Props for the motorway multi-select dropdown */
 interface AutobahnSelectorProps {
   /** Currently selected motorway identifiers */
-  selected: string[];
+  readonly selected: string[];
   /** Called when the selection changes */
-  onSelect: (roadIds: string[]) => void;
+  readonly onSelect: (roadIds: string[]) => void;
   /** Maximum number of selectable motorways. Default: 5 */
-  max?: number;
+  readonly max?: number;
 }
 
 /** Dropdown component for selecting multiple motorways. */

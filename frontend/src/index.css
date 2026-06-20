@@ -80,7 +80,7 @@ body {
 }
 
 .user-chip {
-  background: rgba(255,255,255,0.15);
+  background: rgba(0, 0, 0, 0.25);
   border: 1px solid rgba(255,255,255,0.3);
   color: white;
   padding: 0.35rem 0.9rem;
@@ -486,15 +486,6 @@ body {
   margin-bottom: 0.5rem;
 }
 
-.dashboard-card--clickable {
-  cursor: pointer;
-  transition: box-shadow 0.15s ease;
-}
-
-.dashboard-card--clickable:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-}
-
 .event-type-badge {
   font-size: 0.75rem;
   background: var(--color-bg-subtle);
@@ -511,6 +502,17 @@ body {
   font-weight: 600;
 }
 
+.dashboard-card__clickable-area {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  padding: 0;
+}
 /* ─────────────────────────────────────────
    Map
 ───────────────────────────────────────── */

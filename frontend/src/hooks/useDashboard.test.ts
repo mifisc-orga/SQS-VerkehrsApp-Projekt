@@ -24,8 +24,9 @@ describe('useDashboard', () => {
     expect(result.current.roadData[0].roadId).toBe('A3');
   });
 
-  test('confirmDeleteRoadId is null initially', () => {
+  test('confirmDeleteRoadId is null initially', async () => {
     const { result } = renderHook(() => useDashboard(TOKEN, 0));
+    await act(async () => {});
     expect(result.current.confirmDeleteRoadId).toBeNull();
   });
 

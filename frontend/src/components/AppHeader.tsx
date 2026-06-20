@@ -1,13 +1,13 @@
 /** Props for the application header */
 interface AppHeaderProps {
   /** JWT token, or null if not authenticated */
-  token: string | null;
+  readonly token: string | null;
   /** Display name of the authenticated user */
-  username: string;
+  readonly username: string;
   /** Called when the user clicks the Login button */
-  onLoginClick: () => void;
+  readonly onLoginClick: () => void;
   /** Called when the user clicks the Logout button */
-  onLogoutClick: () => void;
+  readonly onLogoutClick: () => void;
 }
 
 /**
