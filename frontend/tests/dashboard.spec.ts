@@ -60,13 +60,13 @@ async function performLogin(page: import('@playwright/test').Page): Promise<void
 
 test.beforeEach(async ({ page }) => {
   await page.route('/api/traffic', async route => 
-    await route.fulfill({ json: MOCK_TRAFFIC_DATA });
+    route.fulfill({ json: MOCK_TRAFFIC_DATA })
   );
   await page.route('/api/traffic/**', async route => 
-    await route.fulfill({ json: MOCK_TRAFFIC_DATA });
+    route.fulfill({ json: MOCK_TRAFFIC_DATA })
   );
   await page.route('/api/auth/login', async route => 
-    await route.fulfill({ json: MOCK_LOGIN_RESPONSE });
+    route.fulfill({ json: MOCK_LOGIN_RESPONSE })
   );
   await page.route('/api/saved-roads', async route => {
     if (route.request().method() === 'GET') {
@@ -76,7 +76,7 @@ test.beforeEach(async ({ page }) => {
     }
   });
   await page.route('/api/saved-roads/**', async route => 
-    await route.fulfill({ status: 200, json: {} });
+    route.fulfill({ status: 200, json: {} })
   );
   await page.route('/api/dashboard/saved-road-traffic', async route => {
     await route.fulfill({

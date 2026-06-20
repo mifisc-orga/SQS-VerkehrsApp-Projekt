@@ -2,7 +2,7 @@ import { expect, test } from './coverage';
 
 const MOCK_TRAFFIC_DATA = { live: true, cachedAt: null, events: [] };
 const MOCK_LOGIN_RESPONSE = { token: 'mock-jwt-token' };
-const MOCK_REGISTER_RESPONSE = { token: 'mock-register-token' }; і
+const MOCK_REGISTER_RESPONSE = { token: 'mock-register-token' };
 
 /** A realistic traffic event used in tests that need visible map markers and risk badges. */
 const MOCK_EVENT = {
@@ -102,25 +102,25 @@ async function gotoWithEvents(page: import('@playwright/test').Page): Promise<vo
 
 test.beforeEach(async ({ page }) => {
   await page.route('/api/traffic', async route => 
-    await route.fulfill({ json: MOCK_TRAFFIC_DATA });
+    route.fulfill({ json: MOCK_TRAFFIC_DATA })
   );
   await page.route('/api/traffic/**', async route => 
-    await route.fulfill({ json: MOCK_TRAFFIC_DATA });
+    route.fulfill({ json: MOCK_TRAFFIC_DATA })
   );
   await page.route('/api/auth/login', async route => 
-    await route.fulfill({ json: MOCK_LOGIN_RESPONSE });
+    route.fulfill({ json: MOCK_LOGIN_RESPONSE })
   );
   await page.route('/api/auth/register', async route => 
-    await route.fulfill({ json: MOCK_REGISTER_RESPONSE });
+    route.fulfill({ json: MOCK_REGISTER_RESPONSE })
   );
   await page.route('/api/auth/logout', async route => 
-    await route.fulfill({ status: 200 });
+    route.fulfill({ status: 200 })
   );
   await page.route('/api/saved-roads', async route => 
-    await route.fulfill({ json: [] });
+    route.fulfill({ json: [] })
   );
   await page.route('/api/dashboard/saved-road-traffic', async route => 
-    await route.fulfill({ json: [] });
+    route.fulfill({ json: [] })
   );
 });
 
@@ -145,7 +145,7 @@ test('Live indicator is shown when traffic data is live', async ({ page }) => {
 
 test('Cached indicator is shown when traffic data is not live', async ({ page }) => {
   await page.route('/api/traffic', async route => 
-    await route.fulfill({ json: MOCK_TRAFFIC_CACHED });
+    route.fulfill({ json: MOCK_TRAFFIC_CACHED })
   );
   await page.goto('/');
   await expect(page.getByTestId('cached-indicator')).toBeVisible();
@@ -206,7 +206,7 @@ test('Clicking overlay of logout modal cancels logout', async ({ page }) => {
 
 test('Dashboard shows HIGH risk badge for road with HIGH risk event', async ({ page }) => {
   await page.route('/api/dashboard/saved-road-traffic', async route => 
-    await route.fulfill({ json: MOCK_DASHBOARD_HIGH });
+    route.fulfill({ json: MOCK_DASHBOARD_HIGH })
   );
   await page.goto('/');
   await performLogin(page);
@@ -216,7 +216,7 @@ test('Dashboard shows HIGH risk badge for road with HIGH risk event', async ({ p
 
 test('Dashboard shows MEDIUM risk badge for road with MEDIUM risk event', async ({ page }) => {
   await page.route('/api/dashboard/saved-road-traffic', async route => 
-    await route.fulfill({ json: MOCK_DASHBOARD_MEDIUM });
+    route.fulfill({ json: MOCK_DASHBOARD_MEDIUM })
   );
   await page.goto('/');
   await performLogin(page);
@@ -225,7 +225,7 @@ test('Dashboard shows MEDIUM risk badge for road with MEDIUM risk event', async 
 
 test('Dashboard shows Baustelle label for ROADWORK events', async ({ page }) => {
   await page.route('/api/dashboard/saved-road-traffic', async route => 
-    await route.fulfill({ json: MOCK_DASHBOARD_HIGH });
+    route.fulfill({ json: MOCK_DASHBOARD_HIGH })
   );
   await page.goto('/');
   await performLogin(page);
@@ -234,7 +234,7 @@ test('Dashboard shows Baustelle label for ROADWORK events', async ({ page }) => 
 
 test('Dashboard shows Sperrung label for CLOSURE events', async ({ page }) => {
   await page.route('/api/dashboard/saved-road-traffic', async route => 
-    await route.fulfill({ json: MOCK_DASHBOARD_MEDIUM });
+    route.fulfill({ json: MOCK_DASHBOARD_MEDIUM })
   );
   await page.goto('/');
   await performLogin(page);
@@ -243,7 +243,7 @@ test('Dashboard shows Sperrung label for CLOSURE events', async ({ page }) => {
 
 test('Dashboard shows Warnung label for WARNING events', async ({ page }) => {
   await page.route('/api/dashboard/saved-road-traffic', async route => 
-    await route.fulfill({ json: MOCK_DASHBOARD_WARNING });
+    route.fulfill({ json: MOCK_DASHBOARD_WARNING })
   );
   await page.goto('/');
   await performLogin(page);
@@ -267,7 +267,7 @@ test('Clicking save favourite shows Favouriten gespeichert message', async ({ pa
 
 test('Clicking save favourite shows already-in-favourites message when roads already saved', async ({ page }) => {
   await page.route('/api/traffic', async route => 
-    route.fulfill({ json: MOCK_TRAFFIC_WITH_EVENTS });
+    route.fulfill({ json: MOCK_TRAFFIC_WITH_EVENTS })
   );
   await page.route('/api/saved-roads', async route => {
     if (route.request().method() === 'POST') {

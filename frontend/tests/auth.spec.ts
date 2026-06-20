@@ -41,25 +41,25 @@ async function performRegister(
 
 test.beforeEach(async ({ page }) => {
   await page.route('/api/traffic', async route => 
-    await route.fulfill({ json: MOCK_TRAFFIC_DATA });
+    route.fulfill({ json: MOCK_TRAFFIC_DATA })
   );
   await page.route('/api/traffic/**', async route => 
-    await route.fulfill({ json: MOCK_TRAFFIC_DATA });
+    route.fulfill({ json: MOCK_TRAFFIC_DATA })
   );
   await page.route('/api/auth/login', async route => 
-    await route.fulfill({ json: MOCK_LOGIN_RESPONSE });
+    route.fulfill({ json: MOCK_LOGIN_RESPONSE })
   );
   await page.route('/api/auth/register', async route => 
-    await route.fulfill({ json: MOCK_REGISTER_RESPONSE });
+    route.fulfill({ json: MOCK_REGISTER_RESPONSE })
   );
   await page.route('/api/auth/logout', async route => 
-    await route.fulfill({ status: 200 });
+    route.fulfill({ status: 200 })
   );
   await page.route('/api/saved-roads', async route => 
-    await route.fulfill({ json: [] });
+    route.fulfill({ json: [] })
   );
   await page.route('/api/dashboard/saved-road-traffic', async route => 
-    await route.fulfill({ json: [] });
+    route.fulfill({ json: [] })
   );
 });
 
@@ -175,7 +175,7 @@ test('Dashboard is displayed after registration', async ({ page }) => {
 
 test('Error message shown when username is already taken', async ({ page }) => {
   await page.route('/api/auth/register', async route => 
-    await route.fulfill({ status: 409, json: { message: 'Username already taken' } });
+    route.fulfill({ status: 409, json: { message: 'Username already taken' } })
   );
   await page.goto('/');
   await page.getByTestId('login-button').click();
@@ -189,7 +189,7 @@ test('Error message shown when username is already taken', async ({ page }) => {
 
 test('Error message shown on wrong login credentials', async ({ page }) => {
   await page.route('/api/auth/login', async route => 
-    await route.fulfill({ status: 401, json: { message: 'Invalid credentials' } });
+    route.fulfill({ status: 401, json: { message: 'Invalid credentials' } })
   );
   await page.goto('/');
   await page.getByTestId('login-button').click();
@@ -201,7 +201,7 @@ test('Error message shown on wrong login credentials', async ({ page }) => {
 
 test('Error message is cleared when switching tabs', async ({ page }) => {
   await page.route('/api/auth/login', async route => 
-    await route.fulfill({ status: 401, json: {} });
+    route.fulfill({ status: 401, json: {} })
   );
   await page.goto('/');
   await page.getByTestId('login-button').click();
