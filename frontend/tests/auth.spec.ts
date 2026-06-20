@@ -63,6 +63,30 @@ test.beforeEach(async ({ page }) => {
   );
 });
 
+// ── Login Modal ──────────────────────────────────────────────
+
+test('Login-Modal öffnet sich beim Klick auf Login', async ({ page }) => {
+  await page.goto('/');
+  await page.getByTestId('login-button').click();
+  await expect(page.getByTestId('login-modal')).toBeVisible();
+});
+
+test('Login-Modal kann mit X-Button geschlossen werden', async ({ page }) => {
+  await page.goto('/');
+  await page.getByTestId('login-button').click();
+  await expect(page.getByTestId('login-modal')).toBeVisible();
+  await page.getByTestId('login-modal-close').click();
+  await expect(page.getByTestId('login-modal')).not.toBeVisible();
+});
+
+test('Login-Modal kann durch Klick auf Overlay geschlossen werden', async ({ page }) => {
+  await page.goto('/');
+  await page.getByTestId('login-button').click();
+  await expect(page.getByTestId('login-modal')).toBeVisible();
+  await page.getByTestId('login-modal-overlay').click({ position: { x: 5, y: 5 } });
+  await expect(page.getByTestId('login-modal')).not.toBeVisible();
+});
+
 // ── Logout ───────────────────────────────────────────────────
 
 test('Logout button is visible after login', async ({ page }) => {

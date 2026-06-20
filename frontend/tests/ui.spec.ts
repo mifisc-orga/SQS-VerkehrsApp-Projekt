@@ -2,6 +2,7 @@ import { expect, test } from './coverage';
 
 const MOCK_TRAFFIC_DATA = { live: true, cachedAt: null, events: [] };
 const MOCK_LOGIN_RESPONSE = { token: 'mock-jwt-token' };
+const MOCK_REGISTER_RESPONSE = { token: 'mock-register-token' }; і
 
 /** A realistic traffic event used in tests that need visible map markers and risk badges. */
 const MOCK_EVENT = {
