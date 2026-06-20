@@ -1,6 +1,6 @@
 import {useEffect, useRef, useState} from 'react';
 import {fetchAvailableRoads} from '../services/trafficService';
-import { RoadOption } from './RoadOption';
+import { SelectorDropdown } from './SelectorDropdown';
 import { SelectedChips } from './SelectedChips';
 
 /**
@@ -101,48 +101,7 @@ export function AutobahnSelector({
       </button>
 
       {isOpen && (
-        <div
-          data-testid="autobahn-dropdown"
-          style={{
-            position: 'absolute',
-            top: 'calc(100% + 6px)',
-            left: 0,
-            background: 'white',
-            border: '1px solid var(--color-border)',
-            borderRadius: '10px',
-            boxShadow: 'var(--shadow-md)',
-            minWidth: '220px',
-            maxHeight: '260px',
-            overflowY: 'auto',
-            zIndex: 1000,
-          }}
-        >
-          {selected.length >= max && (
-            <div style={{
-              padding: '8px 12px',
-              background: '#fef9c3',
-              color: '#854d0e',
-              fontSize: '11px',
-              fontWeight: 600,
-              borderBottom: '1px solid #fde68a',
-            }}>
-              Maximum {max} Autobahnen erreicht
-            </div>
-          )}
-          {roads.map((road) => {
-            const isSelected = selected.includes(road);
-            const isDisabled = !isSelected && selected.length >= max;
-            return (
-              <RoadOption
-                key={road}
-                road={road}
-                isSelected={isSelected}
-                isDisabled={isDisabled}
-                onToggle={toggle}
-              />
-            );
-          })}
-        </div>
+        <SelectorDropdown roads={roads} selected={selected} max={max} onToggle={toggle} />
       )}
 
       <SelectedChips selected={selected} onRemove={remove} />

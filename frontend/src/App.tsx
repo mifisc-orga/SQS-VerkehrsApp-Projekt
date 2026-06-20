@@ -1,79 +1,29 @@
-import { useState } from 'react';
 import { Dashboard } from './components/Dashboard';
 import { ConfirmModal } from './components/ConfirmModal';
 import { AuthModal } from './components/AuthModal';
 import { AppHeader } from './components/AppHeader';
-import { saveFavourite } from './services/trafficService';
-import { useAuth } from './hooks/useAuth';
-import { useTraffic } from './hooks/useTraffic';
-import { buildSavedMessage } from './utils/buildSavedMessage';
 import { TrafficView } from './components/TrafficView';
 import { SelectorCard } from './components/SelectorCard';
+import { useApp } from './hooks/useApp';
 
 /**
  * Root component of the application.
  * Manages UI state and composes auth, traffic, and layout sub-components.
  */
 function App() {
-  const auth = useAuth();
-  const traffic = useTraffic();
-
-  const [showLogin, setShowLogin] = useState(false);
-  const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
-  const [usernameInput, setUsernameInput] = useState('');
-  const [passwordInput, setPasswordInput] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
-  const [savedMessage, setSavedMessage] = useState<string | null>(null);
-  const [refreshKey, setRefreshKey] = useState(0);
-
-  /** Switches the auth tab and clears any error. */
-  function handleTabSwitch(mode: 'login' | 'register'): void {
-    setAuthMode(mode);
-    auth.setAuthError(null);
-  }
-
-  /** Closes the auth modal and resets all input fields. */
-  function handleCloseModal(): void {
-    setShowLogin(false);
-    setAuthMode('login');
-    auth.setAuthError(null);
-    setUsernameInput('');
-    setPasswordInput('');
-    setShowPassword(false);
-  }
-
-  /** Submits the login form; closes the modal on success. */
-  async function handleLoginSubmit(): Promise<void> {
-    const ok = await auth.handleLogin(usernameInput, passwordInput);
-    if (ok) 
-      handleCloseModal();
-  }
-
-  /** Submits the register form; closes the modal on success. */
-  async function handleRegisterSubmit(): Promise<void> {
-    const ok = await auth.handleRegister(usernameInput, passwordInput);
-    if (ok) 
-      handleCloseModal();
-  }
-
-  /** Confirms logout, clears auth state, and hides the confirm dialog. */
-  async function handleLogoutConfirmed(): Promise<void> {
-    await auth.handleLogout();
-    setShowLogoutConfirm(false);
-  }
-
-  /** Saves the currently selected motorways as favourites for the logged-in user. */
-  async function handleSaveFavourite(): Promise<void> {
-    if (!auth.token || traffic.selectedRoads.length === 0) 
-      return;
-    const results = await Promise.allSettled(
-      traffic.selectedRoads.map(road => saveFavourite(auth.token as string, road)),
-    );
-    setSavedMessage(buildSavedMessage(results));
-    setRefreshKey(prev => prev + 1);
-    setTimeout(() => setSavedMessage(null), 4000);
-  }
+  const {
+    auth, traffic,
+    showLogin, setShowLogin,
+    authMode,
+    usernameInput, setUsernameInput,
+    passwordInput, setPasswordInput,
+    showPassword, setShowPassword,
+    showLogoutConfirm, setShowLogoutConfirm,
+    savedMessage, refreshKey,
+    handleTabSwitch, handleCloseModal,
+    handleLoginSubmit, handleRegisterSubmit,
+    handleLogoutConfirmed, handleSaveFavourite,
+  } = useApp();
 
   return (
     <>
