@@ -1,13 +1,20 @@
 import { AutobahnSelector } from './AutobahnSelector';
 
+/** Props for the motorway selector card */
 interface SelectorCardProps {
+  /** JWT token, or null if not authenticated */
   token: string | null;
+  /** Currently selected motorway identifiers */
   selectedRoads: string[];
+  /** Feedback message after saving a favourite, or null */
   savedMessage: string | null;
+  /** Called when the motorway selection changes */
   onSelect: (roads: string[]) => void;
+  /** Called when the user clicks the save button */
   onSave: () => void;
 }
 
+/** Card containing the AutobahnSelector and a save-favourite button. */
 export function SelectorCard({ token, selectedRoads, savedMessage, onSelect, onSave }: SelectorCardProps) {
   return (
     <div className="card">

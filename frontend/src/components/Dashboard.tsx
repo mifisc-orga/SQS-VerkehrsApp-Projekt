@@ -1,21 +1,21 @@
 import { useState, useEffect } from 'react';
 import { fetchDashboardTraffic, deleteFavourite } from '../services/trafficService';
-import type { DashboardRoadData } from '../services/trafficService';
-import type { RiskLevel } from './RiskBadge';
+import type { DashboardRoadData, RiskLevel } from '../types';
 import { ConfirmModal } from './ConfirmModal';
 import { DashboardRoadCard } from './DashboardRoadCard';
 
-/** Props für das Dashboard mit gespeicherten Autobahnen */
+/** Props for the dashboard showing saved motorways */
 interface DashboardProps {
-  /** JWT-Token zur Authentifizierung */
+  /** JWT token for authentication */
   token: string;
-  /** Wird erhöht, um das Dashboard nach dem Speichern eines Favoriten neu zu laden */
+  /** Incremented to trigger a dashboard refresh after saving a favourite */
   refreshKey: number;
-  /** Wird aufgerufen, wenn der Nutzer eine Autobahn-Karte anklickt */
+  /** Called when the user clicks a motorway card */
   onRoadSelect: (roadId: string) => void;
 }
 
-function getMaxRiskLevel(events: DashboardRoadData['events']): RiskLevel | 'NONE' {
+/** Returns the highest risk level among all events on a road, defaulting to LOW. */
+function getMaxRiskLevel(events: DashboardRoadData['events']): RiskLevel {
   if (events.length === 0) {
     return 'LOW';
   }
@@ -28,13 +28,13 @@ function getMaxRiskLevel(events: DashboardRoadData['events']): RiskLevel | 'NONE
   return 'LOW';
 }
 
-/** Dashboard mit Übersicht der gespeicherten Autobahnen */
+/** Dashboard showing an overview of the user's saved motorways */
 export function Dashboard({ token, refreshKey, onRoadSelect }: DashboardProps) {
   const [roadData, setRoadData] = useState<DashboardRoadData[]>([]);
   const [confirmDeleteRoadId, setConfirmDeleteRoadId] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchDashboardTraffic(token).then(setRoadData).catch(console.error);
+    fetchDashboardTraffic(token).then(setRoadData).catch(() => {});
   }, [token, refreshKey]);
 
   function handleDeleteRequest(roadId: string) {
@@ -49,7 +49,7 @@ export function Dashboard({ token, refreshKey, onRoadSelect }: DashboardProps) {
       await deleteFavourite(token, confirmDeleteRoadId);
       setRoadData(prev => prev.filter(r => r.roadId !== confirmDeleteRoadId));
     } catch {
-      console.error('Fehler beim Löschen');
+      // ignore
     } finally {
       setConfirmDeleteRoadId(null);
     }

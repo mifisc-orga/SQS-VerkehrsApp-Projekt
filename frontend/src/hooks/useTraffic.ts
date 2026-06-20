@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { fetchTrafficEvents } from '../services/trafficService';
-import { type TrafficEvent } from '../components/IncidentMap';
+import type { TrafficEvent } from '../types';
 
 /** Return type of the useTraffic hook */
 export interface UseTrafficResult {

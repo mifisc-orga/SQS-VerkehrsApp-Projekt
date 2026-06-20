@@ -1,3 +1,4 @@
+import type { TrafficEvent } from '../types';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
@@ -16,28 +17,6 @@ L.Icon.Default.mergeOptions({
   iconRetinaUrl: markerIcon2x,
   shadowUrl: markerShadow,
 });
-
-/** Represents a single traffic event on the map */
-export interface TrafficEvent {
-  /** Unique event ID */
-  id: string;
-  /** Motorway identifier, e.g. "A3" */
-  roadId: string;
-  /** Short title of the event */
-  title: string;
-  /** Subtitle with additional information */
-  subtitle: string;
-  /** Full description of the event */
-  description: string;
-  /** Event type, e.g. "CONSTRUCTION" or "ACCIDENT" */
-  type: string;
-  /** Latitude of the event location */
-  latitude: number;
-  /** Longitude of the event location */
-  longitude: number;
-  /** Calculated risk level of the event */
-  riskLevel: 'LOW' | 'MEDIUM' | 'HIGH';
-}
 
 /** Props for the IncidentMap component */
 interface IncidentMapProps {

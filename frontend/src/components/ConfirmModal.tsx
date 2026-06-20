@@ -19,7 +19,7 @@ export function ConfirmModal({ message, confirmLabel = 'Entfernen', onConfirm, o
       className="modal-overlay"
       data-testid="confirm-modal-overlay"
       onClick={onCancel}
-      onKeyDown={(e) => { if (e.key === 'Escape') { onCancel(); } }}
+      onKeyDown={(e) => { if (e.key === 'Escape') onCancel(); }}
       role="presentation"
     >
       <div

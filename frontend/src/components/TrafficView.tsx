@@ -3,12 +3,17 @@ import { RiskBadge } from './RiskBadge';
 import { formatCachedAt } from '../utils/formatCachedAt';
 import type { TrafficEvent } from '../types';
 
+/** Props for the traffic view panel */
 interface TrafficViewProps {
+  /** Whether the data was fetched live */
   isLive: boolean;
+  /** ISO timestamp of the cached response, or null if live */
   cachedAt: string | null;
+  /** List of traffic events to display */
   events: TrafficEvent[];
 }
 
+/** Displays the live/cached status indicator, the incident map, and the events list. */
 export function TrafficView({ isLive, cachedAt, events }: TrafficViewProps) {
   return (
     <div className="map-events-layout">

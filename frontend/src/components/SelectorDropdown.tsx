@@ -1,9 +1,14 @@
 import { RoadOption } from './RoadOption';
 
+/** Props for the motorway selector dropdown list */
 interface SelectorDropdownProps {
+  /** List of available motorway identifiers to display */
   roads: string[];
+  /** Currently selected motorway identifiers */
   selected: string[];
+  /** Maximum number of selectable motorways */
   max: number;
+  /** Called when a motorway option is toggled */
   onToggle: (road: string) => void;
 }
 

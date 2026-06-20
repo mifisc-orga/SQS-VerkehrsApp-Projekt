@@ -1,4 +1,4 @@
-import type { TrafficEvent } from '../components/IncidentMap';
+import type { TrafficEvent, DashboardRoadData } from '../types';
 
 const API_BASE = '/api';
 
@@ -108,16 +108,6 @@ export async function fetchSavedRoads(token: string): Promise<string[]> {
   }
   const data = await response.json();
   return data.map((item: { roadId: string }) => item.roadId);
-}
-
-/** Traffic data for a saved motorway used in the dashboard */
-export interface DashboardRoadData {
-  /** Motorway ID, e.g. "A3" */
-  roadId: string;
-  /** List of current traffic events */
-  events: TrafficEvent[];
-  /** Calculated risk score for the motorway */
-  riskScore: number;
 }
 
 /** Fetches dashboard data for all saved motorways of the logged-in user */

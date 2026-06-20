@@ -1,12 +1,18 @@
 const COLOR_PRIMARY = 'var(--color-primary)';
 
+/** Props for a single selectable motorway option */
 interface RoadOptionProps {
+  /** Motorway identifier, e.g. "A3" */
   road: string;
+  /** Whether this option is currently selected */
   isSelected: boolean;
+  /** Whether this option is disabled (selection limit reached) */
   isDisabled: boolean;
+  /** Called when the option is toggled */
   onToggle: (road: string) => void;
 }
 
+/** A single selectable motorway row with checkbox, keyboard support, and hover styling. */
 export function RoadOption({ road, isSelected, isDisabled, onToggle }: RoadOptionProps) {
   return (
     <div

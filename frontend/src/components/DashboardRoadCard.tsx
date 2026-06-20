@@ -1,16 +1,23 @@
 import { RiskBadge } from './RiskBadge';
-import type { DashboardRoadData } from '../types';
-import type { RiskLevel } from '../types';
+import type { DashboardRoadData, RiskLevel } from '../types';
 
+/** Props for a single saved-motorway card in the dashboard */
 interface DashboardRoadCardProps {
-    roadId: string;
-    events: DashboardRoadData['events'];
-    maxRiskLevel: RiskLevel;
-    uniqueTypes: string[];
-    onRoadSelect: (roadId: string) => void;
-    onDeleteRequest: (roadId: string) => void;
+  /** Motorway identifier, e.g. "A3" */
+  roadId: string;
+  /** Traffic events currently active on this motorway */
+  events: DashboardRoadData['events'];
+  /** Highest risk level among all events */
+  maxRiskLevel: RiskLevel;
+  /** Deduplicated list of event types on this motorway */
+  uniqueTypes: string[];
+  /** Called when the card is clicked to select the motorway */
+  onRoadSelect: (roadId: string) => void;
+  /** Called when the delete button is clicked */
+  onDeleteRequest: (roadId: string) => void;
 }
 
+/** Maps an event type key to a human-readable German label with emoji. */
 function getEventTypeLabel(type: string): string {
   switch (type) {
     case 'ROADWORK': return '🚧 Baustelle';

@@ -93,7 +93,11 @@ function PasswordField({ value, showPassword, authMode, onChange, onToggle, onLo
           onChange={(e) => onChange(e.target.value)}
           onKeyDown={async (e) => {
             if (e.key === 'Enter') {
-              await (authMode === 'login' ? onLogin() : onRegister());
+              if (authMode === 'login') {
+                await onLogin();
+              } else {
+                await onRegister();
+              }
             }
           }}
           style={{ width: '100%', paddingRight: '2.5rem' }}
@@ -164,7 +168,11 @@ function AuthFormFields({ authMode, usernameInput, passwordInput, showPassword, 
           onChange={(e) => onUsernameChange(e.target.value)}
           onKeyDown={async (e) => {
             if (e.key === 'Enter') {
-              await (authMode === 'login' ? onLogin() : onRegister());
+              if (authMode === 'login') {
+                await onLogin();
+              } else {
+                await onRegister();
+              }
             }
           }}
           style={{ width: '100%' }}
@@ -217,7 +225,7 @@ export function AuthModal({
     <div
       data-testid="login-modal-overlay" className="modal-overlay"
       onClick={onClose}
-      onKeyDown={(e) => { if (e.key === 'Escape') { onClose(); } }}
+      onKeyDown={(e) => { if (e.key === 'Escape') onClose(); }}
       role="presentation"
     >
       <div

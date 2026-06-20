@@ -3,33 +3,19 @@ import {fetchAvailableRoads} from '../services/trafficService';
 import { SelectorDropdown } from './SelectorDropdown';
 import { SelectedChips } from './SelectedChips';
 
-/**
- * Eigenschaften für den AutobahnSelector.
- */
+/** Props for the motorway multi-select dropdown */
 interface AutobahnSelectorProps {
-
-  /**
-   * Aktuell ausgewählte Autobahnen.
-   */
+  /** Currently selected motorway identifiers */
   selected: string[];
-
-  /**
-   * Callback zum Aktualisieren der Auswahl.
-   */
+  /** Called when the selection changes */
   onSelect: (roadIds: string[]) => void;
-
-  /**
-   * Maximale Anzahl auswählbarer Autobahnen.
-   * Standardwert: 5.
-   */
+  /** Maximum number of selectable motorways. Default: 5 */
   max?: number;
 }
 
 const COLOR_PRIMARY = 'var(--color-primary)';
 
-/**
- * Dropdown-Komponente zur Auswahl mehrerer Autobahnen.
- */
+/** Props for the motorway multi-select dropdown */
 export function AutobahnSelector({
                                    selected,
                                    onSelect,

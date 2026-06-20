@@ -1,6 +1,4 @@
-/** Possible risk levels for a motorway */
-export type RiskLevel = 'LOW' | 'MEDIUM' | 'HIGH';
-
+import type { RiskLevel } from '../types';
 /** Props for the RiskBadge component */
 interface RiskBadgeProps {
   /** Risk level of the motorway: LOW, MEDIUM, or HIGH */
