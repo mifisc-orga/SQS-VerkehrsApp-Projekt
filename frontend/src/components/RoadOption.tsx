@@ -100,6 +100,7 @@ export function RoadOption({ road, isSelected, isDisabled, onToggle }: RoadOptio
   return (
     <li
       data-testid={`road-option-${road}`}
+      data-selected={String(isSelected)}
       tabIndex={getTabIndex(isDisabled)}
       style={optionStyle}
       onClick={() => handleClick(isDisabled, road, onToggle)}

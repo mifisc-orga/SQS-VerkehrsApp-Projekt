@@ -14,14 +14,14 @@ describe('RoadOption', () => {
     expect(screen.getByTestId(TESTID)).toHaveTextContent(ROAD);
   });
 
-  test('has aria-selected false when not selected', () => {
+  test('has data-selected false when not selected', () => {
     render(<RoadOption road={ROAD} isSelected={false} isDisabled={false} onToggle={vi.fn()} />);
-    expect(screen.getByTestId(TESTID)).toHaveAttribute('aria-selected', 'false');
+    expect(screen.getByTestId(TESTID)).toHaveAttribute('data-selected', 'false');
   });
 
-  test('has aria-selected true when selected', () => {
+  test('has data-selected true when selected', () => {
     render(<RoadOption road={ROAD} isSelected={true} isDisabled={false} onToggle={vi.fn()} />);
-    expect(screen.getByTestId(TESTID)).toHaveAttribute('aria-selected', 'true');
+    expect(screen.getByTestId(TESTID)).toHaveAttribute('data-selected', 'true');
   });
 
   test('has tabIndex -1 when disabled', () => {
