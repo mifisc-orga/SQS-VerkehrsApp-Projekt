@@ -9,21 +9,37 @@ import { useApp } from './hooks/useApp';
 
 /** Props for the logout confirmation and authentication modals. */
 interface AppModalsProps {
+  /** Whether the logout confirmation modal is visible */
   readonly showLogoutConfirm: boolean;
+  /** Whether the authentication modal is visible */
   readonly showLogin: boolean;
+  /** Current tab in the auth modal */
   readonly authMode: 'login' | 'register';
+  /** Current authentication error message, or null */
   readonly authError: string | null;
+  /** Current value of the username input field */
   readonly usernameInput: string;
+  /** Current value of the password input field */
   readonly passwordInput: string;
+  /** Whether the password is shown in plain text */
   readonly showPassword: boolean;
+  /** Called when the user confirms logout */
   readonly onLogoutConfirm: () => void;
+  /** Called when the user cancels logout */
   readonly onLogoutCancel: () => void;
+  /** Called when the auth modal is closed */
   readonly onClose: () => void;
+  /** Called when the auth tab is switched */
   readonly onTabSwitch: (mode: 'login' | 'register') => void;
+  /** Called when the username input changes */
   readonly onUsernameChange: (value: string) => void;
+  /** Called when the password input changes */
   readonly onPasswordChange: (value: string) => void;
+  /** Called to toggle password visibility */
   readonly onTogglePassword: () => void;
+  /** Called to submit the login form */
   readonly onLogin: () => Promise<void>;
+  /** Called to submit the registration form */
   readonly onRegister: () => Promise<void>;
 }
 
@@ -71,14 +87,23 @@ function PageHero() {
 
 /** Props for the main content section of the app. */
 interface AppMainProps {
+  /** JWT token of the authenticated user, or null */
   readonly token: string | null;
+  /** Currently selected motorway identifiers */
   readonly selectedRoads: string[];
-  readonly savedMessage: string;
+  /** Feedback message after saving a favourite, or null */
+  readonly savedMessage: string | null;
+  /** Increments to trigger a dashboard refresh */
   readonly refreshKey: number;
+  /** Whether the traffic data is live */
   readonly isLive: boolean;
+  /** Cache timestamp of the traffic data, or null if live */
   readonly cachedAt: string | null;
+  /** List of current traffic events */
   readonly events: TrafficEvent[];
+  /** Called when the road selection changes */
   readonly onRoadSelect: (roads: string[]) => void;
+  /** Called to save the current selection as favourites */
   readonly onSaveFavourite: () => void;
 }
 

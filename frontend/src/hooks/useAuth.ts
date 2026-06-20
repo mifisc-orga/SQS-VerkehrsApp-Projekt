@@ -21,8 +21,11 @@ export interface UseAuthResult {
 
 /** State setter functions required by auth action helpers. */
 interface AuthSetters {
+  /** Sets the JWT token (null on logout) */
   readonly setToken: (t: string | null) => void;
+  /** Sets the authenticated user's display name */
   readonly setUsername: (u: string) => void;
+  /** Sets the current auth error message (null to clear) */
   readonly setAuthError: (e: string | null) => void;
 }
 
