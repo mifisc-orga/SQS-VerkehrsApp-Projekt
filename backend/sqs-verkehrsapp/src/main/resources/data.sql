@@ -5,6 +5,7 @@ VALUES (
            '11111111-1111-1111-1111-111111111111',
            'A3'
        )
+ON CONFLICT DO NOTHING;
 
 INSERT INTO saved_roads (id, user_id, road_id)
 VALUES (
@@ -12,3 +13,4 @@ VALUES (
            '11111111-1111-1111-1111-111111111111',
            'A92'
        )
+ON CONFLICT DO NOTHING;
