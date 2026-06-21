@@ -11,7 +11,7 @@ vi.mock('../services/trafficService', () => ({ saveFavourite: vi.fn() }));
 vi.mock('../utils/buildSavedMessage', () => ({ buildSavedMessage: vi.fn(() => 'Favouriten gespeichert!') }));
 
 const TEST_USERNAME = 'user';
-const TEST_PASSWORD = 'pass12';
+const TEST_CREDENTIALS = 'pass12';
 
 function makeMockAuth(overrides = {}) {
   return {
@@ -49,7 +49,7 @@ function setupAndOpenModal(mockAuth: ReturnType<typeof makeMockAuth>) {
 function setupWithCredentials(mockAuth: ReturnType<typeof makeMockAuth>) {
   const result = setupAndOpenModal(mockAuth);
   act(() => result.current.setUsernameInput(TEST_USERNAME));
-  act(() => result.current.setPasswordInput(TEST_PASSWORD));
+  act(() => result.current.setPasswordInput(TEST_CREDENTIALS));
   return result;
 }
 
