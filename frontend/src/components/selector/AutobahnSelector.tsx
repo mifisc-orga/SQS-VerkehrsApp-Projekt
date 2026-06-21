@@ -54,7 +54,9 @@ export function AutobahnSelector({ selected, onSelect, max = 5 }: AutobahnSelect
   const { roads, error, toggle } = useAutobahnSelector(selected, onSelect, max);
   const [expanded, setExpanded] = useState(false);
 
-  if (error) return <p>{error}</p>;
+  if (error) {
+    return <p>{error}</p>;
+  }
 
   const atMax = selected.length >= max;
   const visible = expanded ? roads : roads.slice(0, INITIAL_VISIBLE);

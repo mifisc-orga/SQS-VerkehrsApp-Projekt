@@ -15,6 +15,7 @@ const MANY_ROADS = ['A1','A2','A3','A4','A5','A6','A7','A8','A9','A10','A11','A1
 const CHIP_A3 = 'road-chip-A3';
 const CHIP_A9 = 'road-chip-A9';
 const CHIP_A99 = 'road-chip-A99';
+const SHOW_MORE_BTN = 'show-more-button';
 
 describe('AutobahnSelector', () => {
   beforeEach(() => {
@@ -91,14 +92,14 @@ describe('AutobahnSelector', () => {
   test('shows show-more button when roads exceed initial limit', async () => {
     vi.mocked(fetchAvailableRoads).mockResolvedValue(MANY_ROADS);
     render(<AutobahnSelector selected={[]} onSelect={vi.fn()} />);
-    await waitFor(() => expect(screen.getByTestId('show-more-button')).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByTestId(SHOW_MORE_BTN)).toBeInTheDocument());
   });
 
   test('shows all roads after clicking show-more button', async () => {
     vi.mocked(fetchAvailableRoads).mockResolvedValue(MANY_ROADS);
     render(<AutobahnSelector selected={[]} onSelect={vi.fn()} />);
-    await waitFor(() => expect(screen.getByTestId('show-more-button')).toBeInTheDocument());
-    fireEvent.click(screen.getByTestId('show-more-button'));
+    await waitFor(() => expect(screen.getByTestId(SHOW_MORE_BTN)).toBeInTheDocument());
+    fireEvent.click(screen.getByTestId(SHOW_MORE_BTN));
     expect(screen.getByTestId('road-chip-A11')).toBeInTheDocument();
     expect(screen.getByTestId('road-chip-A12')).toBeInTheDocument();
   });

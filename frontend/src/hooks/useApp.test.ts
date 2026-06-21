@@ -10,6 +10,9 @@ vi.mock('./useTraffic');
 vi.mock('../services/trafficService', () => ({ saveFavourite: vi.fn() }));
 vi.mock('../utils/buildSavedMessage', () => ({ buildSavedMessage: vi.fn(() => 'Favouriten gespeichert!') }));
 
+const TEST_USERNAME = 'user';
+const TEST_PASSWORD = 'pass12';
+
 function makeMockAuth(overrides = {}) {
   return {
     token: null as string | null,
@@ -39,6 +42,14 @@ function setupAndOpenModal(mockAuth: ReturnType<typeof makeMockAuth>) {
   vi.mocked(useAuth).mockReturnValue(mockAuth);
   const { result } = renderHook(() => useApp());
   act(() => result.current.setShowLogin(true));
+  return result;
+}
+
+/** Opens modal and fills in valid credentials. */
+function setupWithCredentials(mockAuth: ReturnType<typeof makeMockAuth>) {
+  const result = setupAndOpenModal(mockAuth);
+  act(() => result.current.setUsernameInput(TEST_USERNAME));
+  act(() => result.current.setPasswordInput(TEST_PASSWORD));
   return result;
 }
 
@@ -83,8 +94,7 @@ describe('useApp', () => {
   test('handleLoginSubmit closes modal on success', async () => {
     const mockAuth = makeMockAuth();
     mockAuth.handleLogin.mockResolvedValue(true);
-    const result = setupAndOpenModal(mockAuth);
-    act(() => { result.current.setUsernameInput('user'); result.current.setPasswordInput('pass12'); });
+    const result = setupWithCredentials(mockAuth);
     await act(async () => result.current.handleLoginSubmit());
     expect(result.current.showLogin).toBe(false);
   });
@@ -92,8 +102,7 @@ describe('useApp', () => {
   test('handleLoginSubmit keeps modal open on failure', async () => {
     const mockAuth = makeMockAuth();
     mockAuth.handleLogin.mockResolvedValue(false);
-    const result = setupAndOpenModal(mockAuth);
-    act(() => { result.current.setUsernameInput('user'); result.current.setPasswordInput('pass12'); });
+    const result = setupWithCredentials(mockAuth);
     await act(async () => result.current.handleLoginSubmit());
     expect(result.current.showLogin).toBe(true);
   });
@@ -111,8 +120,7 @@ describe('useApp', () => {
   test('handleRegisterSubmit closes modal on success', async () => {
     const mockAuth = makeMockAuth();
     mockAuth.handleRegister.mockResolvedValue(true);
-    const result = setupAndOpenModal(mockAuth);
-    act(() => { result.current.setUsernameInput('user'); result.current.setPasswordInput('pass12'); });
+    const result = setupWithCredentials(mockAuth);
     await act(async () => result.current.handleRegisterSubmit());
     expect(result.current.showLogin).toBe(false);
   });
@@ -120,7 +128,7 @@ describe('useApp', () => {
   test('handleRegisterSubmit sets error when password is empty', async () => {
     const mockAuth = makeMockAuth();
     const result = setupAndOpenModal(mockAuth);
-    act(() => { result.current.setUsernameInput('user'); });
+    act(() => result.current.setUsernameInput(TEST_USERNAME));
     await act(async () => result.current.handleRegisterSubmit());
     expect(mockAuth.setAuthError).toHaveBeenCalledWith('Bitte Benutzername und Passwort eingeben.');
     expect(mockAuth.handleRegister).not.toHaveBeenCalled();
