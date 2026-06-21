@@ -16,7 +16,7 @@ const LABELS: Record<RiskLevel, string> = {
  * LOW = green, MEDIUM = yellow, HIGH = red.
  */
 export function RiskBadge({ riskLevel }: RiskBadgeProps) {
-  const className = `risk-badge risk-${riskLevel.toLowerCase()}`;
+  const className = `risk-badge risk-${riskLevel?.toLowerCase() ?? 'low'}`;
   return (
     <span data-testid="risk-badge">
       <span

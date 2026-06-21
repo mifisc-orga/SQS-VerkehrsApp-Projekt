@@ -26,17 +26,6 @@ describe('useAutobahnSelector', () => {
     expect(result.current.roads).toEqual(['A1', 'A3', 'A9']);
   });
 
-  test('isOpen is false initially', async () => {
-    const result = await setup([]);
-    expect(result.current.isOpen).toBe(false);
-  });
-
-  test('setIsOpen toggles the dropdown', async () => {
-    const result = await setup([]);
-    act(() => result.current.setIsOpen(true));
-    expect(result.current.isOpen).toBe(true);
-  });
-
   test('toggle adds a road when under max', async () => {
     const result = await setup([]);
     act(() => result.current.toggle('A3'));

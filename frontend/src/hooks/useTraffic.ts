@@ -34,7 +34,7 @@ export function useTraffic(): UseTrafficResult {
         setAllEvents(result.events);
         setIsLive(result.live);
         setCachedAt(result.cachedAt);
-        const available = [...new Set(result.events.map(e => e.roadId))].sort((a, b) => a.localeCompare(b));
+        const available = [...new Set(result.events.map(e => e.roadId).filter(Boolean))].sort((a, b) => a.localeCompare(b));
         const defaults = available.slice(0, 3);
         setSelectedRoads(defaults);
         setEvents(result.events.filter(e => defaults.includes(e.roadId)));

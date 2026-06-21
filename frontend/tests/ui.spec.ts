@@ -130,27 +130,25 @@ test('Cached indicator is shown when traffic data is not live', async ({ page })
 
 // ── AutobahnSelector ─────────────────────────────────────────
 
-test('AutobahnSelector button is visible on page load', async ({ page }) => {
-  await page.goto('/');
-  await expect(page.getByTestId('autobahn-selector')).toBeVisible();
+test('AutobahnSelector chip grid is shown when roads are available', async ({ page }) => {
+  await gotoWithEvents(page);
+  await expect(page.getByTestId('road-chip-A3')).toBeVisible();
 });
 
-test('AutobahnSelector shows road options when traffic data has events', async ({ page }) => {
+test('AutobahnSelector shows road chips when traffic data has events', async ({ page }) => {
   await gotoWithEvents(page);
-  await page.getByTestId('autobahn-selector').click();
-  await expect(page.getByTestId('autobahn-dropdown')).toBeVisible();
-  await expect(page.getByTestId('road-option-A3')).toBeVisible();
+  await expect(page.getByTestId('road-chip-A3')).toBeVisible();
 });
 
-test('AutobahnSelector chip is shown for pre-selected road', async ({ page }) => {
+test('AutobahnSelector pre-selected road chip has selected state', async ({ page }) => {
   await gotoWithEvents(page);
-  await expect(page.getByTestId('selected-chip-A3')).toBeVisible();
+  await expect(page.getByTestId('road-chip-A3')).toHaveAttribute('aria-pressed', 'true');
 });
 
-test('AutobahnSelector chip-remove deselects a road', async ({ page }) => {
+test('AutobahnSelector clicking selected chip deselects a road', async ({ page }) => {
   await gotoWithEvents(page);
-  await page.getByTestId('chip-remove-A3').click();
-  await expect(page.getByTestId('selected-chip-A3')).not.toBeVisible();
+  await page.getByTestId('road-chip-A3').click();
+  await expect(page.getByTestId('road-chip-A3')).toHaveAttribute('aria-pressed', 'false');
 });
 
 // ── RiskBadge ────────────────────────────────────────────────

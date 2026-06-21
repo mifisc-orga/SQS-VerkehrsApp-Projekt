@@ -10,11 +10,11 @@ vi.mock('../../services/trafficService', () => ({
 const ROAD_A3 = 'A3';
 const ROAD_A9 = 'A9';
 const ROADS = ['A1', ROAD_A3, 'A8', ROAD_A9, 'A92', 'A99'];
+const MANY_ROADS = ['A1','A2','A3','A4','A5','A6','A7','A8','A9','A10','A11','A12'];
 
-const SELECTOR = 'autobahn-selector';
-const OPTION_A3 = 'road-option-A3';
-const OPTION_A9 = 'road-option-A9';
-const OPTION_A99 = 'road-option-A99';
+const CHIP_A3 = 'road-chip-A3';
+const CHIP_A9 = 'road-chip-A9';
+const CHIP_A99 = 'road-chip-A99';
 
 describe('AutobahnSelector', () => {
   beforeEach(() => {
@@ -24,90 +24,83 @@ describe('AutobahnSelector', () => {
 
   // ── basic rendering ───────────────────────────────────────
 
-  test('renders the selector button', async () => {
+  test('renders chip grid on mount', async () => {
     render(<AutobahnSelector selected={[]} onSelect={vi.fn()} />);
     await act(async () => {});
-    expect(screen.getByTestId(SELECTOR)).toBeInTheDocument();
+    expect(screen.getByTestId('autobahn-selector')).toBeInTheDocument();
   });
 
-  test('opens dropdown when selector button is clicked', async () => {
+  test('shows all available roads as chips', async () => {
     render(<AutobahnSelector selected={[]} onSelect={vi.fn()} />);
-    fireEvent.click(screen.getByTestId(SELECTOR));
     await waitFor(() => {
-      expect(screen.getByTestId('autobahn-dropdown')).toBeInTheDocument();
+      expect(screen.getByTestId(CHIP_A3)).toBeInTheDocument();
     });
-  });
-
-  test('shows all available roads in dropdown', async () => {
-    render(<AutobahnSelector selected={[]} onSelect={vi.fn()} />);
-    fireEvent.click(screen.getByTestId(SELECTOR));
-    await waitFor(() => {
-      expect(screen.getByTestId(OPTION_A3)).toBeInTheDocument();
-    });
-    expect(screen.getByTestId(OPTION_A9)).toBeInTheDocument();
+    expect(screen.getByTestId(CHIP_A9)).toBeInTheDocument();
   });
 
   // ── selection ─────────────────────────────────────────────
 
-  test('calls onSelect with added road when a road is clicked', async () => {
+  test('calls onSelect with road added when unselected chip is clicked', async () => {
     const onSelect = vi.fn();
     render(<AutobahnSelector selected={[ROAD_A3]} onSelect={onSelect} />);
-    fireEvent.click(screen.getByTestId(SELECTOR));
-    await waitFor(() => {
-      expect(screen.getByTestId(OPTION_A9)).toBeInTheDocument();
-    });
-    fireEvent.click(screen.getByTestId(OPTION_A9));
+    await waitFor(() => expect(screen.getByTestId(CHIP_A9)).toBeInTheDocument());
+    fireEvent.click(screen.getByTestId(CHIP_A9));
     expect(onSelect).toHaveBeenCalledWith([ROAD_A3, ROAD_A9]);
   });
 
-  test('calls onSelect with road removed when already selected road is clicked', async () => {
+  test('calls onSelect with road removed when selected chip is clicked', async () => {
     const onSelect = vi.fn();
     render(<AutobahnSelector selected={[ROAD_A3, ROAD_A9]} onSelect={onSelect} />);
-    fireEvent.click(screen.getByTestId(SELECTOR));
-    await waitFor(() => {
-      expect(screen.getByTestId(OPTION_A3)).toBeInTheDocument();
-    });
-    fireEvent.click(screen.getByTestId(OPTION_A3));
+    await waitFor(() => expect(screen.getByTestId(CHIP_A3)).toBeInTheDocument());
+    fireEvent.click(screen.getByTestId(CHIP_A3));
     expect(onSelect).toHaveBeenCalledWith([ROAD_A9]);
+  });
+
+  test('selected chip has aria-pressed true', async () => {
+    render(<AutobahnSelector selected={[ROAD_A3]} onSelect={vi.fn()} />);
+    await waitFor(() => expect(screen.getByTestId(CHIP_A3)).toBeInTheDocument());
+    expect(screen.getByTestId(CHIP_A3)).toHaveAttribute('aria-pressed', 'true');
   });
 
   // ── max selection limit ───────────────────────────────────
 
-  test('does not add road when max selection is reached', async () => {
-    const onSelect = vi.fn();
-    const maxSelected = ['A1', 'A3', 'A8', 'A9', 'A92'];
-    render(<AutobahnSelector selected={maxSelected} onSelect={onSelect} max={5} />);
-    fireEvent.click(screen.getByTestId(SELECTOR));
-    await waitFor(() => {
-      expect(screen.getByTestId(OPTION_A99)).toBeInTheDocument();
-    });
-    fireEvent.click(screen.getByTestId(OPTION_A99));
-    expect(onSelect).not.toHaveBeenCalled();
-  });
-
-  test('shows max-reached warning when selection limit is hit', async () => {
+  test('unselected chips are disabled when max is reached', async () => {
     const maxSelected = ['A1', 'A3', 'A8', 'A9', 'A92'];
     render(<AutobahnSelector selected={maxSelected} onSelect={vi.fn()} max={5} />);
-    fireEvent.click(screen.getByTestId(SELECTOR));
+    await waitFor(() => expect(screen.getByTestId(CHIP_A99)).toBeInTheDocument());
+    expect(screen.getByTestId(CHIP_A99)).toBeDisabled();
+  });
+
+  test('shows max-reached hint when selection limit is hit', async () => {
+    const maxSelected = ['A1', 'A3', 'A8', 'A9', 'A92'];
+    render(<AutobahnSelector selected={maxSelected} onSelect={vi.fn()} max={5} />);
     await waitFor(() => {
-      expect(screen.getByText(/Maximum 5 Autobahnen erreicht/)).toBeInTheDocument();
+      expect(screen.getByTestId('max-reached-hint')).toBeInTheDocument();
     });
   });
 
-  // ── chip remove ───────────────────────────────────────────
+  // ── show more / collapse ──────────────────────────────────
 
-  test('shows chip for selected road', async () => {
-    render(<AutobahnSelector selected={[ROAD_A3]} onSelect={vi.fn()} />);
-    await act(async () => {});
-    expect(screen.getByTestId(`selected-chip-${ROAD_A3}`)).toBeInTheDocument();
+  test('shows only first 10 roads initially when more are available', async () => {
+    vi.mocked(fetchAvailableRoads).mockResolvedValue(MANY_ROADS);
+    render(<AutobahnSelector selected={[]} onSelect={vi.fn()} />);
+    await waitFor(() => expect(screen.getByTestId('road-chip-A10')).toBeInTheDocument());
+    expect(screen.queryByTestId('road-chip-A11')).not.toBeInTheDocument();
   });
 
-  test('calls onSelect with road removed when chip remove is clicked', async () => {
-    const onSelect = vi.fn();
-    render(<AutobahnSelector selected={[ROAD_A3, ROAD_A9]} onSelect={onSelect} />);
-    await act(async () => {});
-    fireEvent.click(screen.getByTestId(`chip-remove-${ROAD_A3}`));
-    expect(onSelect).toHaveBeenCalledWith([ROAD_A9]);
+  test('shows show-more button when roads exceed initial limit', async () => {
+    vi.mocked(fetchAvailableRoads).mockResolvedValue(MANY_ROADS);
+    render(<AutobahnSelector selected={[]} onSelect={vi.fn()} />);
+    await waitFor(() => expect(screen.getByTestId('show-more-button')).toBeInTheDocument());
+  });
+
+  test('shows all roads after clicking show-more button', async () => {
+    vi.mocked(fetchAvailableRoads).mockResolvedValue(MANY_ROADS);
+    render(<AutobahnSelector selected={[]} onSelect={vi.fn()} />);
+    await waitFor(() => expect(screen.getByTestId('show-more-button')).toBeInTheDocument());
+    fireEvent.click(screen.getByTestId('show-more-button'));
+    expect(screen.getByTestId('road-chip-A11')).toBeInTheDocument();
+    expect(screen.getByTestId('road-chip-A12')).toBeInTheDocument();
   });
 
   // ── error state ───────────────────────────────────────────

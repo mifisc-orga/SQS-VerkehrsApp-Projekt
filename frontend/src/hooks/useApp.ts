@@ -4,6 +4,7 @@ import type { UseAuthResult } from './useAuth';
 import { useTraffic } from './useTraffic';
 import { saveFavourite } from '../services/trafficService';
 import { buildSavedMessage } from '../utils/buildSavedMessage';
+import { validateAuthForm } from '../utils/validateAuthForm';
 
 /** Manages the auth modal form inputs and visibility state. */
 function useAuthFormState() {
@@ -34,6 +35,11 @@ function useAuthHandlers(auth: UseAuthResult, form: AuthFormState) {
   }
 
   async function handleLoginSubmit(): Promise<void> {
+    const error = validateAuthForm(form.usernameInput, form.passwordInput);
+    if (error) {
+      auth.setAuthError(error);
+      return;
+    }
     const ok = await auth.handleLogin(form.usernameInput, form.passwordInput);
     if (ok) {
       handleCloseModal();
@@ -41,6 +47,11 @@ function useAuthHandlers(auth: UseAuthResult, form: AuthFormState) {
   }
 
   async function handleRegisterSubmit(): Promise<void> {
+    const error = validateAuthForm(form.usernameInput, form.passwordInput);
+    if (error) {
+      auth.setAuthError(error);
+      return;
+    }
     const ok = await auth.handleRegister(form.usernameInput, form.passwordInput);
     if (ok) {
       handleCloseModal();
@@ -72,9 +83,12 @@ export function useApp() {
     const results = await Promise.allSettled(
       traffic.selectedRoads.map(road => saveFavourite(auth.token as string, road)),
     );
-    setSavedMessage(buildSavedMessage(results));
     setRefreshKey(prev => prev + 1);
-    setTimeout(() => setSavedMessage(null), 4000);
+    const msg = buildSavedMessage(results);
+    setTimeout(() => {
+      setSavedMessage(msg);
+      setTimeout(() => setSavedMessage(null), 4000);
+    }, 700);
   }
 
   return { auth, traffic, ...form, ...handlers, showLogoutConfirm, setShowLogoutConfirm, savedMessage, refreshKey, handleLogoutConfirmed, handleSaveFavourite };

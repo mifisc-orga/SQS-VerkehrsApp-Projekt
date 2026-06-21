@@ -65,4 +65,5 @@ describe('SelectorCard', () => {
     render(<SelectorCard token="tok" selectedRoads={['A3']} savedMessage="bereits vorhanden" onSelect={vi.fn()} onSave={vi.fn()} />);
     expect(screen.getByTestId(SAVED_MSG)).toHaveClass('banner-warning');
   });
+
 });
