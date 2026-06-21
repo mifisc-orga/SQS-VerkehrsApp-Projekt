@@ -14,23 +14,26 @@ interface SelectorCardProps {
   readonly onSave: () => void;
 }
 
+/** Button to save the current motorway selection as favourites. */
+function SaveFavouriteButton({ selectedRoads, onSave }: { readonly selectedRoads: string[]; readonly onSave: () => void }) {
+  const label = selectedRoads.length === 1 ? selectedRoads[0] : `${selectedRoads.length} Autobahnen`;
+  return (
+    <div style={{ textAlign: 'center', marginTop: '12px' }}>
+      <button className="btn btn-success" data-testid="save-favourite-button" onClick={onSave}>
+        <i className="ti ti-star" aria-hidden="true"></i>
+        {label} speichern
+      </button>
+    </div>
+  );
+}
+
 /** Card containing the AutobahnSelector and a save-favourite button. */
 export function SelectorCard({ token, selectedRoads, savedMessage, onSelect, onSave }: SelectorCardProps) {
   return (
     <div className="card">
       <div className="section-title">Autobahn auswählen</div>
       <AutobahnSelector selected={selectedRoads} onSelect={onSelect} max={5} />
-      {token && selectedRoads.length > 0 && (
-        <button
-          className="btn btn-success"
-          data-testid="save-favourite-button"
-          onClick={onSave}
-          style={{ marginTop: '12px' }}
-        >
-          <i className="ti ti-star" aria-hidden="true"></i>
-          {selectedRoads.length === 1 ? selectedRoads[0] : `${selectedRoads.length} Autobahnen`} speichern
-        </button>
-      )}
+      {token && selectedRoads.length > 0 && <SaveFavouriteButton selectedRoads={selectedRoads} onSave={onSave} />}
       {savedMessage && (
         <div
           className={savedMessage.includes('bereits') ? 'banner-warning' : 'banner-success'}

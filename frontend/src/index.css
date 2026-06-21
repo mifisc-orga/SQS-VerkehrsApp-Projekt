@@ -49,15 +49,23 @@ body {
 .app-header {
   background: linear-gradient(135deg, #0f766e 0%, #1d4ed8 100%);
   color: white;
-  padding: 0 2rem;
   height: 64px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   box-shadow: var(--shadow-md);
   position: sticky;
   top: 0;
   z-index: 100;
+}
+
+.app-header__inner {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .app-header__logo {
@@ -517,12 +525,23 @@ body {
   text-align: left;
   cursor: pointer;
   padding: 0;
+  flex: 1;
+}
+
+.selector-login-hint {
+  font-size: 0.83rem;
+  color: var(--color-text-muted);
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 /* ─────────────────────────────────────────
    Map
 ───────────────────────────────────────── */
 .map-container {
-  height: 560px;
+  flex: 1;
+  min-height: 420px;
   border-radius: var(--radius-lg);
   overflow: hidden;
   box-shadow: var(--shadow-md);
@@ -578,6 +597,91 @@ body {
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: #d1fae5 transparent;
+}
+
+/* ─────────────────────────────────────────
+   Road chip grid (AutobahnSelector)
+───────────────────────────────────────── */
+.road-chip-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.road-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0.4rem 0.85rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: 999px;
+  border: 1.5px solid var(--color-primary);
+  background: transparent;
+  color: var(--color-primary);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  line-height: 1;
+}
+
+.road-chip:hover:not(:disabled) {
+  background: rgba(15, 118, 110, 0.08);
+}
+
+.road-chip--selected {
+  background: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+/* Must come after the generic :hover rule to win on specificity tie */
+.road-chip--selected:hover:not(:disabled) {
+  background: var(--color-primary-dk);
+  border-color: var(--color-primary-dk);
+  color: white;
+}
+
+.road-chip--disabled {
+  border-color: var(--color-border);
+  color: var(--color-text-muted);
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.selector-max-hint {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin: 0 0 8px 0;
+}
+
+.show-more-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-primary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.3rem 0.7rem;
+  border-radius: var(--radius-sm);
+  transition: background 0.15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.show-more-btn:hover {
+  background: rgba(15, 118, 110, 0.08);
+}
+
+.login-callout {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  background: linear-gradient(135deg, rgba(15,118,110,0.06), rgba(29,78,216,0.06));
+  border: 1px solid rgba(15,118,110,0.2);
+  border-radius: var(--radius-md);
+  color: var(--color-text);
 }
 
 /* ─────────────────────────────────────────
@@ -638,7 +742,7 @@ body {
   display: grid;
   grid-template-columns: 3fr 2fr;
   gap: 1rem;
-  align-items: start;
+  align-items: stretch;
 }
 
 @media (max-width: 900px) {
@@ -653,7 +757,7 @@ body {
 @media (max-width: 640px) {
   .app-header { padding: 0 1rem; }
   .app-main   { padding: 1rem 1rem 3rem; gap: 1.25rem; }
-  .map-container { height: 280px; }
+  .map-container { min-height: 280px; flex: none; height: 280px; }
   .dashboard-grid { grid-template-columns: 1fr; }
   .login-panel { flex-direction: column; }
   .form-field input { min-width: unset; width: 100%; }

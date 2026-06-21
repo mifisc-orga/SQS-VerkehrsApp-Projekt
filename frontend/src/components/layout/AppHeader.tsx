@@ -40,6 +40,7 @@ function AuthControls({ token, username, onLoginClick, onLogoutClick }: AppHeade
 export function AppHeader({ token, username, onLoginClick, onLogoutClick }: AppHeaderProps) {
   return (
     <header className="app-header">
+      <div className="app-header__inner">
       <div className="app-header__logo">
         <i className="ti ti-road" style={{ fontSize: '1.3rem' }} aria-hidden="true"></i>
         <h1 style={{ fontSize: '1.15rem', fontWeight: 700, margin: 0, color: 'white' }}>
@@ -48,6 +49,7 @@ export function AppHeader({ token, username, onLoginClick, onLogoutClick }: AppH
       </div>
       <div className="app-header__auth">
         <AuthControls token={token} username={username} onLoginClick={onLoginClick} onLogoutClick={onLogoutClick} />
+      </div>
       </div>
     </header>
   );

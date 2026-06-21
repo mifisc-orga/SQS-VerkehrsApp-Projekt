@@ -36,4 +36,14 @@ describe('AppMain', () => {
     render(<AppMain {...BASE_PROPS} token="test-token" />);
     expect(screen.getByTestId('mock-dashboard')).toBeInTheDocument();
   });
+
+  test('shows login callout when not authenticated', () => {
+    render(<AppMain {...BASE_PROPS} token={null} />);
+    expect(screen.getByTestId('login-callout')).toBeInTheDocument();
+  });
+
+  test('hides login callout when authenticated', () => {
+    render(<AppMain {...BASE_PROPS} token="test-token" />);
+    expect(screen.queryByTestId('login-callout')).not.toBeInTheDocument();
+  });
 });

@@ -10,6 +10,9 @@ vi.mock('./useTraffic');
 vi.mock('../services/trafficService', () => ({ saveFavourite: vi.fn() }));
 vi.mock('../utils/buildSavedMessage', () => ({ buildSavedMessage: vi.fn(() => 'Favouriten gespeichert!') }));
 
+const TEST_USERNAME = 'user';
+const TEST_CREDENTIALS = 'pass12';
+
 function makeMockAuth(overrides = {}) {
   return {
     token: null as string | null,
@@ -39,6 +42,14 @@ function setupAndOpenModal(mockAuth: ReturnType<typeof makeMockAuth>) {
   vi.mocked(useAuth).mockReturnValue(mockAuth);
   const { result } = renderHook(() => useApp());
   act(() => result.current.setShowLogin(true));
+  return result;
+}
+
+/** Opens modal and fills in valid credentials. */
+function setupWithCredentials(mockAuth: ReturnType<typeof makeMockAuth>) {
+  const result = setupAndOpenModal(mockAuth);
+  act(() => result.current.setUsernameInput(TEST_USERNAME));
+  act(() => result.current.setPasswordInput(TEST_CREDENTIALS));
   return result;
 }
 
@@ -83,7 +94,7 @@ describe('useApp', () => {
   test('handleLoginSubmit closes modal on success', async () => {
     const mockAuth = makeMockAuth();
     mockAuth.handleLogin.mockResolvedValue(true);
-    const result = setupAndOpenModal(mockAuth);
+    const result = setupWithCredentials(mockAuth);
     await act(async () => result.current.handleLoginSubmit());
     expect(result.current.showLogin).toBe(false);
   });
@@ -91,9 +102,17 @@ describe('useApp', () => {
   test('handleLoginSubmit keeps modal open on failure', async () => {
     const mockAuth = makeMockAuth();
     mockAuth.handleLogin.mockResolvedValue(false);
-    const result = setupAndOpenModal(mockAuth);
+    const result = setupWithCredentials(mockAuth);
     await act(async () => result.current.handleLoginSubmit());
     expect(result.current.showLogin).toBe(true);
+  });
+
+  test('handleLoginSubmit sets error when fields are empty', async () => {
+    const mockAuth = makeMockAuth();
+    const result = setupAndOpenModal(mockAuth);
+    await act(async () => result.current.handleLoginSubmit());
+    expect(mockAuth.setAuthError).toHaveBeenCalledWith('Bitte Benutzername und Passwort eingeben.');
+    expect(mockAuth.handleLogin).not.toHaveBeenCalled();
   });
 
   // ── handleRegisterSubmit ──────────────────────────────────
@@ -101,9 +120,18 @@ describe('useApp', () => {
   test('handleRegisterSubmit closes modal on success', async () => {
     const mockAuth = makeMockAuth();
     mockAuth.handleRegister.mockResolvedValue(true);
-    const result = setupAndOpenModal(mockAuth);
+    const result = setupWithCredentials(mockAuth);
     await act(async () => result.current.handleRegisterSubmit());
     expect(result.current.showLogin).toBe(false);
+  });
+
+  test('handleRegisterSubmit sets error when password is empty', async () => {
+    const mockAuth = makeMockAuth();
+    const result = setupAndOpenModal(mockAuth);
+    act(() => result.current.setUsernameInput(TEST_USERNAME));
+    await act(async () => result.current.handleRegisterSubmit());
+    expect(mockAuth.setAuthError).toHaveBeenCalledWith('Bitte Benutzername und Passwort eingeben.');
+    expect(mockAuth.handleRegister).not.toHaveBeenCalled();
   });
 
   // ── handleLogoutConfirmed ─────────────────────────────────
@@ -128,11 +156,14 @@ describe('useApp', () => {
   });
 
   test('handleSaveFavourite sets savedMessage on success', async () => {
+    vi.useFakeTimers({ toFake: ['setTimeout'] });
     vi.mocked(useAuth).mockReturnValue(makeMockAuth({ token: 'test-token' }));
     vi.mocked(useTraffic).mockReturnValue(makeMockTraffic({ selectedRoads: ['A3'] }));
     vi.mocked(saveFavourite).mockResolvedValue(undefined);
     const { result } = renderHook(() => useApp());
     await act(async () => result.current.handleSaveFavourite());
+    act(() => vi.advanceTimersByTime(700));
     expect(result.current.savedMessage).toBe('Favouriten gespeichert!');
+    vi.useRealTimers();
   });
 });

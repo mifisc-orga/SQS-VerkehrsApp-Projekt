@@ -15,7 +15,7 @@ async function checkedFetch(url: string, errorMessage: string, options?: Request
 export async function fetchAvailableRoads(): Promise<string[]> {
   const response = await checkedFetch(`${API_BASE}/traffic`, 'Failed to load motorways');
   const data = await response.json();
-  const roads: string[] = [...new Set<string>((data.events ?? []).map((e: { roadId: string }) => e.roadId))];
+  const roads: string[] = [...new Set<string>((data.events ?? []).map((e: { roadId: string }) => e.roadId).filter(Boolean))];
   return roads.sort((a, b) => a.localeCompare(b));
 }
 

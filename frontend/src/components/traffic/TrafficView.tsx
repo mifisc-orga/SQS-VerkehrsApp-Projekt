@@ -39,25 +39,25 @@ function EventsList({ events }: { readonly events: TrafficEvent[] }) {
 /** Displays the live/cached status indicator, the incident map, and the events list. */
 export function TrafficView({ isLive, cachedAt, events }: TrafficViewProps) {
   return (
-    <div className="map-events-layout">
-      <div>
-        <div className="data-status" style={{ marginBottom: '6px' }}>
-          {isLive ? (
-            <span data-testid="live-indicator" className="status-live">
-              <span className="live-dot" aria-hidden="true"></span>
-              {' '}Live-Daten
-            </span>
-          ) : (
-            <span data-testid="cached-indicator" className="status-cached">
-              Gecacht · {formatCachedAt(cachedAt)}
-            </span>
-          )}
-        </div>
-        <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
+    <div>
+      <div className="data-status" style={{ marginBottom: '6px' }}>
+        {isLive ? (
+          <span data-testid="live-indicator" className="status-live">
+            <span className="live-dot" aria-hidden="true"></span>
+            {' '}Live-Daten
+          </span>
+        ) : (
+          <span data-testid="cached-indicator" className="status-cached">
+            Gecacht · {formatCachedAt(cachedAt)}
+          </span>
+        )}
+      </div>
+      <div className="map-events-layout">
+        <div className="card" style={{ padding: 0, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
           <div className="map-container"><IncidentMap events={events} /></div>
         </div>
+        {events.length > 0 && <EventsList events={events} />}
       </div>
-      {events.length > 0 && <EventsList events={events} />}
     </div>
   );
 }

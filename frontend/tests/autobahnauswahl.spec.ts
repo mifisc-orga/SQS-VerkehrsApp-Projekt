@@ -11,27 +11,26 @@ const MOCK_ROADS = {
 };
 
 test.beforeEach(async ({ page }) => {
-  await page.route('/api/traffic', async route => 
+  await page.route('/api/traffic', async route =>
     route.fulfill({ json: MOCK_ROADS })
   );
 });
 
 test('Autobahnauswahl wird angezeigt', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByTestId('autobahn-selector')).toBeVisible();
+  await expect(page.getByTestId('road-chip-A1')).toBeVisible();
 });
 
 test('Autobahnen werden in der Liste angezeigt', async ({ page }) => {
   await page.goto('/');
-  await page.getByTestId('autobahn-selector').click();
-  await expect(page.getByTestId('road-option-A1')).toBeVisible();
+  await expect(page.getByTestId('road-chip-A1')).toBeVisible();
+  await expect(page.getByTestId('road-chip-A3')).toBeVisible();
 });
 
 test('Autobahn kann ausgewählt werden', async ({ page }) => {
   await page.goto('/');
-  await page.getByTestId('autobahn-selector').click();
-  await page.getByTestId('road-option-A1').click(); // deselect (war vorausgewählt)
-  await page.getByTestId('road-option-A1').click(); // re-select
-  await page.getByTestId('autobahn-selector').click(); // Dropdown schließen
-  await expect(page.getByTestId('selected-chip-A1')).toBeVisible();
+  await expect(page.getByTestId('road-chip-A1')).toBeVisible();
+  await page.getByTestId('road-chip-A1').click(); // deselect (war vorausgewählt)
+  await page.getByTestId('road-chip-A1').click(); // re-select
+  await expect(page.getByTestId('road-chip-A1')).toHaveAttribute('aria-pressed', 'true');
 });
