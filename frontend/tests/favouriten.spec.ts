@@ -37,23 +37,23 @@ async function performLogin(page: import('@playwright/test').Page): Promise<void
 }
 
 test.beforeEach(async ({ page }) => {
-  await page.route('/api/traffic', async (route) => 
+  await page.route('/api/traffic', async route => 
     route.fulfill({ json: MOCK_TRAFFIC_DATA })
   );
-  await page.route('/api/traffic/**', async (route) => 
+  await page.route('/api/traffic/**', async route => 
     route.fulfill({ json: MOCK_TRAFFIC_DATA })
   );
-  await page.route('/api/auth/login', async (route) => 
+  await page.route('/api/auth/login', async route => 
     route.fulfill({ json: MOCK_LOGIN_RESPONSE })
   );
-  await page.route('/api/saved-roads', async (route) => {
+  await page.route('/api/saved-roads', async route => {
     if (route.request().method() === 'GET') {
       await route.fulfill({ json: MOCK_SAVED_ROADS });
     } else if (route.request().method() === 'POST') {
       await route.fulfill({ status: 200, json: {} });
     }
   });
-  await page.route('/api/saved-roads/**', async (route) => 
+  await page.route('/api/saved-roads/**', async route => 
     route.fulfill({ status: 200, json: {} })
   );
 });

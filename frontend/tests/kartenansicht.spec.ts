@@ -30,10 +30,10 @@ const MOCK_TRAFFIC_DATA = {
 };
 
 test.beforeEach(async ({ page }) => {
-  await page.route('/api/traffic', async (route) => 
+  await page.route('/api/traffic', async route => 
     route.fulfill({ json: MOCK_TRAFFIC_DATA })
   );
-  await page.route('/api/traffic/**', async (route) => 
+  await page.route('/api/traffic/**', async route => 
     route.fulfill({ json: MOCK_TRAFFIC_DATA })
   );
 });
