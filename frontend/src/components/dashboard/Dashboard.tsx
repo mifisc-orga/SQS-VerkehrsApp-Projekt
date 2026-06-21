@@ -1,7 +1,7 @@
-import { useDashboard } from '../hooks/useDashboard';
-import { ConfirmModal } from './ConfirmModal';
+import { useDashboard } from '../../hooks/useDashboard';
+import { ConfirmModal } from '../modals/ConfirmModal';
 import { DashboardRoadCard } from './DashboardRoadCard';
-import type { DashboardRoadData, RiskLevel } from '../types';
+import type { DashboardRoadData, RiskLevel } from '../../types';
 
 /** Props for the dashboard showing saved motorways */
 interface DashboardProps {

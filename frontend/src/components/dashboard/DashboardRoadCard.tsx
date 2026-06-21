@@ -1,5 +1,5 @@
-import { RiskBadge } from './RiskBadge';
-import type { DashboardRoadData, RiskLevel } from '../types';
+import { RiskBadge } from '../traffic/RiskBadge';
+import type { DashboardRoadData, RiskLevel } from '../../types';
 
 /** Props for a single saved-motorway card in the dashboard */
 interface DashboardRoadCardProps {

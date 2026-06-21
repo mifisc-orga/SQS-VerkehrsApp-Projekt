@@ -1,9 +1,9 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, expect, test, vi, beforeEach } from 'vitest';
 import { Dashboard } from './Dashboard';
-import { fetchDashboardTraffic, deleteFavourite } from '../services/trafficService';
+import { fetchDashboardTraffic, deleteFavourite } from '../../services/trafficService';
 
-vi.mock('../services/trafficService', () => ({
+vi.mock('../../services/trafficService', () => ({
   fetchDashboardTraffic: vi.fn(),
   deleteFavourite: vi.fn(),
 }));

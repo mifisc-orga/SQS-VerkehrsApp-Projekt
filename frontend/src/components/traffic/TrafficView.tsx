@@ -1,7 +1,7 @@
 import { IncidentMap } from './IncidentMap';
 import { RiskBadge } from './RiskBadge';
-import { formatCachedAt } from '../utils/formatCachedAt';
-import type { TrafficEvent } from '../types';
+import { formatCachedAt } from '../../utils/formatCachedAt';
+import type { TrafficEvent } from '../../types';
 
 /** Props for the traffic view panel */
 interface TrafficViewProps {

@@ -1,9 +1,9 @@
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import { describe, expect, test, vi, beforeEach } from 'vitest';
 import { AutobahnSelector } from './AutobahnSelector';
-import { fetchAvailableRoads } from '../services/trafficService';
+import { fetchAvailableRoads } from '../../services/trafficService';
 
-vi.mock('../services/trafficService', () => ({
+vi.mock('../../services/trafficService', () => ({
   fetchAvailableRoads: vi.fn(),
 }));
 

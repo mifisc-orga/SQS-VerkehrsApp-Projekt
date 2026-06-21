@@ -1,4 +1,4 @@
-import { useAutobahnSelector } from '../hooks/useAutobahnSelector';
+import { useAutobahnSelector } from '../../hooks/useAutobahnSelector';
 import { SelectorDropdown } from './SelectorDropdown';
 import { SelectedChips } from './SelectedChips';
 
