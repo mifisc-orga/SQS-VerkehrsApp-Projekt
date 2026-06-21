@@ -1,6 +1,6 @@
 import {expect, test} from './coverage';
 
-const mockTrafficData = {
+const MOCK_TRAFFIC_DATA = {
   live: true,
   cachedAt: null,
   events: [
@@ -30,12 +30,12 @@ const mockTrafficData = {
 };
 
 test.beforeEach(async ({ page }) => {
-  await page.route('/api/traffic', async (route) => {
-    await route.fulfill({ json: mockTrafficData });
-  });
-  await page.route('/api/traffic/**', async (route) => {
-    await route.fulfill({ json: mockTrafficData });
-  });
+  await page.route('/api/traffic', async route => 
+    route.fulfill({ json: MOCK_TRAFFIC_DATA })
+  );
+  await page.route('/api/traffic/**', async route => 
+    route.fulfill({ json: MOCK_TRAFFIC_DATA })
+  );
 });
 
 test('Karte wird angezeigt', async ({ page }) => {

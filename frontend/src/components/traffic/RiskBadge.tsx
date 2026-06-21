@@ -1,13 +1,11 @@
-/** Possible risk levels for a motorway */
-export type RiskLevel = 'LOW' | 'MEDIUM' | 'HIGH';
-
+import type { RiskLevel } from '../../types';
 /** Props for the RiskBadge component */
 interface RiskBadgeProps {
   /** Risk level of the motorway: LOW, MEDIUM, or HIGH */
-  riskLevel: RiskLevel;
+   readonly riskLevel: RiskLevel;
 }
 
-const labels: Record<RiskLevel, string> = {
+const LABELS: Record<RiskLevel, string> = {
   LOW: 'Niedrig',
   MEDIUM: 'Mittel',
   HIGH: 'Hoch',
@@ -18,14 +16,14 @@ const labels: Record<RiskLevel, string> = {
  * LOW = green, MEDIUM = yellow, HIGH = red.
  */
 export function RiskBadge({ riskLevel }: RiskBadgeProps) {
-  const className = `risk-badge risk-${riskLevel.toLowerCase()}`;
+  const className = `risk-badge risk-${riskLevel?.toLowerCase() ?? 'low'}`;
   return (
     <span data-testid="risk-badge">
       <span
         className={className}
         data-testid={`risk-badge-${riskLevel}`}
       >
-        {labels[riskLevel]}
+        {LABELS[riskLevel]}
       </span>
     </span>
   );

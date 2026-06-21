@@ -1,9 +1,9 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, expect, test, vi, beforeEach } from 'vitest';
 import { Dashboard } from './Dashboard';
-import { fetchDashboardTraffic, deleteFavourite } from '../services/trafficService';
+import { fetchDashboardTraffic, deleteFavourite } from '../../services/trafficService';
 
-vi.mock('../services/trafficService', () => ({
+vi.mock('../../services/trafficService', () => ({
   fetchDashboardTraffic: vi.fn(),
   deleteFavourite: vi.fn(),
 }));
@@ -13,6 +13,9 @@ const DEFAULT_PROPS = {
   refreshKey: 0,
   onRoadSelect: vi.fn(),
 };
+
+const ROAD_A3 = 'dashboard-road-A3';
+const DELETE_A3 = 'delete-favourite-A3';
 
 /** Builds a minimal TrafficEvent for dashboard tests. */
 function buildEvent(overrides: {
@@ -56,7 +59,7 @@ describe('Dashboard', () => {
     ]);
     render(<Dashboard {...DEFAULT_PROPS} />);
     await waitFor(() => {
-      expect(screen.getByTestId('dashboard-road-A3')).toBeInTheDocument();
+      expect(screen.getByTestId(ROAD_A3)).toBeInTheDocument();
     });
   });
 
@@ -193,9 +196,9 @@ describe('Dashboard', () => {
     ]);
     render(<Dashboard {...DEFAULT_PROPS} onRoadSelect={onRoadSelect} />);
     await waitFor(() => {
-      expect(screen.getByTestId('dashboard-road-A3')).toBeInTheDocument();
+      expect(screen.getByTestId(ROAD_A3)).toBeInTheDocument();
     });
-    fireEvent.click(screen.getByTestId('dashboard-road-A3'));
+    fireEvent.click(screen.getByTestId(ROAD_A3));
     expect(onRoadSelect).toHaveBeenCalledWith('A3');
   });
 
@@ -206,9 +209,9 @@ describe('Dashboard', () => {
     ]);
     render(<Dashboard {...DEFAULT_PROPS} onRoadSelect={onRoadSelect} />);
     await waitFor(() => {
-      expect(screen.getByTestId('dashboard-road-A3')).toBeInTheDocument();
+      expect(screen.getByTestId(ROAD_A3)).toBeInTheDocument();
     });
-    fireEvent.keyDown(screen.getByTestId('dashboard-road-A3'), { key: 'Enter' });
+    fireEvent.keyDown(screen.getByTestId(ROAD_A3), { key: 'Enter' });
     expect(onRoadSelect).toHaveBeenCalledWith('A3');
   });
 
@@ -220,9 +223,9 @@ describe('Dashboard', () => {
     ]);
     render(<Dashboard {...DEFAULT_PROPS} />);
     await waitFor(() => {
-      expect(screen.getByTestId('delete-favourite-A3')).toBeInTheDocument();
+      expect(screen.getByTestId(DELETE_A3)).toBeInTheDocument();
     });
-    fireEvent.click(screen.getByTestId('delete-favourite-A3'));
+    fireEvent.click(screen.getByTestId(DELETE_A3));
     expect(screen.getByTestId('confirm-ok')).toBeInTheDocument();
   });
 
@@ -233,12 +236,12 @@ describe('Dashboard', () => {
     vi.mocked(deleteFavourite).mockResolvedValue(undefined);
     render(<Dashboard {...DEFAULT_PROPS} />);
     await waitFor(() => {
-      expect(screen.getByTestId('delete-favourite-A3')).toBeInTheDocument();
+      expect(screen.getByTestId(DELETE_A3)).toBeInTheDocument();
     });
-    fireEvent.click(screen.getByTestId('delete-favourite-A3'));
+    fireEvent.click(screen.getByTestId(DELETE_A3));
     fireEvent.click(screen.getByTestId('confirm-ok'));
     await waitFor(() => {
-      expect(screen.queryByTestId('dashboard-road-A3')).not.toBeInTheDocument();
+      expect(screen.queryByTestId(ROAD_A3)).not.toBeInTheDocument();
     });
   });
 
@@ -248,10 +251,10 @@ describe('Dashboard', () => {
     ]);
     render(<Dashboard {...DEFAULT_PROPS} />);
     await waitFor(() => {
-      expect(screen.getByTestId('delete-favourite-A3')).toBeInTheDocument();
+      expect(screen.getByTestId(DELETE_A3)).toBeInTheDocument();
     });
-    fireEvent.click(screen.getByTestId('delete-favourite-A3'));
+    fireEvent.click(screen.getByTestId(DELETE_A3));
     fireEvent.click(screen.getByTestId('confirm-cancel'));
-    expect(screen.getByTestId('dashboard-road-A3')).toBeInTheDocument();
+    expect(screen.getByTestId(ROAD_A3)).toBeInTheDocument();
   });
 });

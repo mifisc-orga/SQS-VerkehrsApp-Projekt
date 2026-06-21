@@ -12,6 +12,19 @@ const EVENT_A9 = { roadId: 'A9', type: 'JAM', lat: 48.2, lng: 11.6 };
 const EVENT_A8 = { roadId: 'A8', type: 'JAM', lat: 48.3, lng: 11.7 };
 const EVENT_A1 = { roadId: 'A1', type: 'JAM', lat: 48.4, lng: 11.8 };
 
+async function setupWithTwoEvents() {
+  vi.mocked(fetchTrafficEvents).mockResolvedValue({
+    events: [EVENT_A3, EVENT_A9],
+    live: true,
+    cachedAt: null,
+  });
+  const { result } = renderHook(() => useTraffic());
+  await waitFor(() => {
+    expect(result.current.events.length).toBeGreaterThan(0);
+  });
+  return result;
+}
+
 describe('useTraffic', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -20,17 +33,7 @@ describe('useTraffic', () => {
   // ── initial load ──────────────────────────────────────────
 
   test('loads traffic events on mount', async () => {
-    vi.mocked(fetchTrafficEvents).mockResolvedValue({
-      events: [EVENT_A3, EVENT_A9],
-      live: true,
-      cachedAt: null,
-    });
-    const { result } = renderHook(() => useTraffic());
-
-    await waitFor(() => {
-      expect(result.current.events.length).toBeGreaterThan(0);
-    });
-
+    const result = await setupWithTwoEvents();
     expect(result.current.isLive).toBe(true);
     expect(result.current.cachedAt).toBeNull();
   });
@@ -51,17 +54,7 @@ describe('useTraffic', () => {
   });
 
   test('shows only events for selected roads after load', async () => {
-    vi.mocked(fetchTrafficEvents).mockResolvedValue({
-      events: [EVENT_A3, EVENT_A9],
-      live: true,
-      cachedAt: null,
-    });
-    const { result } = renderHook(() => useTraffic());
-
-    await waitFor(() => {
-      expect(result.current.selectedRoads).toHaveLength(2);
-    });
-
+    const result = await setupWithTwoEvents();
     expect(result.current.events.every(e => result.current.selectedRoads.includes(e.roadId))).toBe(true);
   });
 
@@ -80,16 +73,7 @@ describe('useTraffic', () => {
   // ── handleRoadSelect ──────────────────────────────────────
 
   test('handleRoadSelect filters events to selected roads', async () => {
-    vi.mocked(fetchTrafficEvents).mockResolvedValue({
-      events: [EVENT_A3, EVENT_A9],
-      live: true,
-      cachedAt: null,
-    });
-    const { result } = renderHook(() => useTraffic());
-
-    await waitFor(() => {
-      expect(result.current.events.length).toBeGreaterThan(0);
-    });
+    const result = await setupWithTwoEvents();
 
     act(() => {
       result.current.handleRoadSelect(['A3']);
@@ -100,16 +84,7 @@ describe('useTraffic', () => {
   });
 
   test('handleRoadSelect with empty array shows all events', async () => {
-    vi.mocked(fetchTrafficEvents).mockResolvedValue({
-      events: [EVENT_A3, EVENT_A9],
-      live: true,
-      cachedAt: null,
-    });
-    const { result } = renderHook(() => useTraffic());
-
-    await waitFor(() => {
-      expect(result.current.events.length).toBeGreaterThan(0);
-    });
+    const result = await setupWithTwoEvents();
 
     act(() => {
       result.current.handleRoadSelect([]);

@@ -1,6 +1,6 @@
 import { renderHook, act } from '@testing-library/react';
 import { describe, expect, test, vi, beforeEach } from 'vitest';
-import { useAuth } from './useAuth';
+import { useAuth, UseAuthResult } from './useAuth';
 import { login, register, logout } from '../services/trafficService';
 
 vi.mock('../services/trafficService', () => ({
@@ -8,6 +8,28 @@ vi.mock('../services/trafficService', () => ({
   register: vi.fn(),
   logout: vi.fn(),
 }));
+
+async function runAuthHook(
+  action: (result: { current: UseAuthResult }) => Promise<boolean>
+): Promise<{ success: boolean; result: { current: UseAuthResult } }> {
+  const { result } = renderHook(() => useAuth());
+  let success = false;
+  await act(async () => {
+    success = await action(result);
+  });
+  return { success, result };
+}
+
+async function setupLoggedInThenOut() {
+  vi.mocked(login).mockResolvedValue({ token: 'test-token' });
+  vi.mocked(logout).mockResolvedValue(undefined);
+  const { result } = renderHook(() => useAuth());
+
+  await act(async () => { await result.current.handleLogin('testuser', 'password'); });
+  await act(async () => { await result.current.handleLogout(); });
+
+  return result;
+}
 
 describe('useAuth', () => {
   beforeEach(() => {
@@ -18,13 +40,7 @@ describe('useAuth', () => {
 
   test('handleLogin returns true and sets token on success', async () => {
     vi.mocked(login).mockResolvedValue({ token: 'test-token' });
-    const { result } = renderHook(() => useAuth());
-
-    let success: boolean = false;
-    await act(async () => {
-      success = await result.current.handleLogin('testuser', 'password');
-    });
-
+    const { success, result } = await runAuthHook(r => r.current.handleLogin('testuser', 'password'));
     expect(success).toBe(true);
     expect(result.current.token).toBe('test-token');
     expect(result.current.username).toBe('testuser');
@@ -33,13 +49,7 @@ describe('useAuth', () => {
 
   test('handleLogin returns false and sets authError on failure', async () => {
     vi.mocked(login).mockRejectedValue(new Error('Login failed'));
-    const { result } = renderHook(() => useAuth());
-
-    let success: boolean = true;
-    await act(async () => {
-      success = await result.current.handleLogin('user', 'wrong');
-    });
-
+    const { success, result } = await runAuthHook(r => r.current.handleLogin('user', 'wrong'));
     expect(success).toBe(false);
     expect(result.current.token).toBeNull();
     expect(result.current.authError).toBeTruthy();
@@ -49,13 +59,7 @@ describe('useAuth', () => {
 
   test('handleRegister returns true and sets token on success', async () => {
     vi.mocked(register).mockResolvedValue({ token: 'reg-token' });
-    const { result } = renderHook(() => useAuth());
-
-    let success: boolean = false;
-    await act(async () => {
-      success = await result.current.handleRegister('newuser', 'password');
-    });
-
+    const { success, result } = await runAuthHook(r => r.current.handleRegister('newuser', 'password'));
     expect(success).toBe(true);
     expect(result.current.token).toBe('reg-token');
     expect(result.current.username).toBe('newuser');
@@ -63,13 +67,7 @@ describe('useAuth', () => {
 
   test('handleRegister returns false and sets authError on failure', async () => {
     vi.mocked(register).mockRejectedValue(new Error('Username taken'));
-    const { result } = renderHook(() => useAuth());
-
-    let success: boolean = true;
-    await act(async () => {
-      success = await result.current.handleRegister('taken', 'password');
-    });
-
+    const { success, result } = await runAuthHook(r => r.current.handleRegister('taken', 'password'));
     expect(success).toBe(false);
     expect(result.current.authError).toBeTruthy();
   });
@@ -77,33 +75,13 @@ describe('useAuth', () => {
   // ── handleLogout ──────────────────────────────────────────
 
   test('handleLogout clears token and username', async () => {
-    vi.mocked(login).mockResolvedValue({ token: 'test-token' });
-    vi.mocked(logout).mockResolvedValue(undefined);
-    const { result } = renderHook(() => useAuth());
-
-    await act(async () => {
-      await result.current.handleLogin('testuser', 'password');
-    });
-    await act(async () => {
-      await result.current.handleLogout();
-    });
-
+    const result = await setupLoggedInThenOut();
     expect(result.current.token).toBeNull();
     expect(result.current.username).toBe('');
   });
 
   test('handleLogout calls logout service with token', async () => {
-    vi.mocked(login).mockResolvedValue({ token: 'test-token' });
-    vi.mocked(logout).mockResolvedValue(undefined);
-    const { result } = renderHook(() => useAuth());
-
-    await act(async () => {
-      await result.current.handleLogin('testuser', 'password');
-    });
-    await act(async () => {
-      await result.current.handleLogout();
-    });
-
+    await setupLoggedInThenOut();
     expect(logout).toHaveBeenCalledWith('test-token');
   });
 });
