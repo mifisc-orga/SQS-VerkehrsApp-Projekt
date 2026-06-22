@@ -417,6 +417,27 @@ Niedrig
 
 ---
 
+### TS-08 Nicht alle API-Felder werden im Frontend angezeigt
+
+#### Beschreibung
+
+Das Backend liefert für jedes Verkehrsereignis die Felder `subtitle` (Fahrtrichtung) und `description` (detaillierte Informationen wie Länge, Höchstgeschwindigkeit, Durchfahrtsbreite und Zeiträume). Diese Felder werden im Frontend aktuell nicht angezeigt.
+
+#### Auswirkungen
+
+* Benutzer sehen keine Richtungsangaben zu Ereignissen
+* Detailinformationen wie Länge der Baustelle oder Geschwindigkeitsbegrenzung sind nicht zugänglich
+
+#### Mögliche Verbesserung
+
+Erweiterung der `TrafficView`-Komponente um eine Detailansicht, die `subtitle` und `description` darstellt.
+
+#### Priorität
+
+Mittel
+
+---
+
 ### TS-05 Fehlende Audit-Protokollierung
 
 #### Beschreibung
