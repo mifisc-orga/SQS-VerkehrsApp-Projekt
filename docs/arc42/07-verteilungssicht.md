@@ -12,30 +12,7 @@ Die SQS Verkehrsapp ist als Spring-Boot-Anwendung konzipiert und wird als eigens
 
 ### Deployment-Diagramm
 
-```mermaid
-C4Deployment
-title Deployment Diagram - SQS Verkehrsapp
-
-Deployment_Node(clientDevice, "Client-Gerät", "Browser des Benutzers") {
-    Container(frontend, "React Frontend", "React, TypeScript, Vite", "Benutzeroberfläche der SQS Verkehrsapp")
-}
-
-Deployment_Node(applicationServer, "Application Server", "Spring Boot Runtime") {
-    Container(backend, "SQS Verkehrsapp Backend", "Java 21, Spring Boot", "REST API, Fachlogik, Security und Caching")
-}
-
-Deployment_Node(databaseServer, "Database Server", "Relationale Datenbank") {
-    ContainerDb(database, "Datenbank", "PostgreSQL / H2", "Speichert Benutzer, Favoriten, Verkehrsdaten-Cache und Autobahn-Cache")
-}
-
-Deployment_Node(externalSystem, "Externes System", "Autobahn API") {
-    System_Ext(autobahnApi, "Autobahn API", "Liefert Verkehrsdaten, Baustellen, Warnungen und Sperrungen")
-}
-
-Rel(frontend, backend, "REST-Aufrufe", "HTTPS / JSON")
-Rel(backend, database, "Persistenzzugriffe", "JPA / JDBC")
-Rel(backend, autobahnApi, "Verkehrsdaten abrufen", "HTTP / JSON")
-```
+![Deployment Diagram](diagrams/Deployment.png)
 
 ---
 

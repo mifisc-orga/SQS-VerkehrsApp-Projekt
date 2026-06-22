@@ -15,26 +15,7 @@ Enthält:
 - Teamscale
 - SonarCloud
 
-```mermaid
-C4Context
-title Systemkontextdiagramm - SQS Verkehrsapp
-
-Person(user, "Benutzer", "Ruft Verkehrsdaten ab, verwaltet Favoriten und nutzt das Dashboard")
-
-System(sqsApp, "SQS Verkehrsapp", "Webbasierte Anwendung zur Anzeige und Bewertung von Verkehrsinformationen")
-
-System_Ext(autobahnApi, "Autobahn API", "Externe Quelle für Verkehrsdaten deutscher Autobahnen")
-System_Ext(database, "Relationale Datenbank", "Speichert Benutzer, Favoriten und Cache-Daten")
-System_Ext(githubActions, "GitHub Actions", "Führt CI-Pipelines, Tests und Analysen aus")
-System_Ext(teamscale, "Teamscale", "Testwise Coverage und Qualitätsüberwachung")
-System_Ext(sonarcloud, "SonarCloud", "Statische Codeanalyse und Quality Gate")
-
-Rel(user, sqsApp, "Nutzt", "HTTPS")
-Rel(sqsApp, autobahnApi, "Lädt Verkehrsdaten", "HTTP/JSON")
-Rel(sqsApp, database, "Speichert und liest Daten", "JPA/JDBC")
-Rel(githubActions, teamscale, "Übermittelt Test- und Coverage-Daten")
-Rel(githubActions, sonarcloud, "Startet statische Analyse")
-```
+![System Context Diagram](diagrams/SystemContext.png)
 
 ### Fachlicher Kontext
 
