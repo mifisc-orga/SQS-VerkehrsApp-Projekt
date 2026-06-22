@@ -1139,7 +1139,7 @@ QualityDashboard --> Developer
 
 #### Überwachte Qualitätsmerkmale
 
-Teamscale analysiert automatisiert Backend (JaCoCo) und Frontend (LCOV):
+Teamscale analysiert automatisiert Backend (JaCoCo, Testwise) und Frontend (LCOV):
 
 * Testabdeckung
 * Code Smells
