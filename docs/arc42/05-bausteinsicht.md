@@ -634,45 +634,7 @@ Enthält:
 - Service-Schicht
 - Utility-Funktionen
 
-```mermaid
-C4Component
-title Komponentendiagramm - Frontend
-
-Container_Boundary(frontend, "React + TypeScript Frontend") {
-
-    Component(app, "App", "Root-Komponente", "Koordiniert Header, Modals und Hauptinhalt")
-
-    Component(appHeader, "AppHeader", "Layout", "Navigation und Login/Logout-Button")
-    Component(appMain, "AppMain", "Layout", "Hauptinhalt: Selektor und Verkehrsansicht")
-    Component(appModals, "AppModals", "Layout", "Auth-Modal und Logout-Bestätigung")
-    Component(pageHero, "PageHero", "Layout", "Hero-Bereich mit Titel und Status")
-
-    Component(autobahnSelector, "AutobahnSelector", "Selektor", "Auswahl von Autobahnen per Chip")
-    Component(selectorCard, "SelectorCard", "Selektor", "Einzelner auswählbarer Autobahn-Chip")
-
-    Component(trafficView, "TrafficView", "Traffic", "Anzeige von Verkehrsereignissen")
-    Component(incidentMap, "IncidentMap", "Traffic", "Kartenansicht der Ereignisse")
-    Component(riskBadge, "RiskBadge", "Traffic", "Farbige Risikostufen-Anzeige")
-
-    Component(dashboard, "Dashboard", "Dashboard", "Übersicht gespeicherter Autobahnen")
-    Component(dashboardRoadCard, "DashboardRoadCard", "Dashboard", "Einzelne Autobahn-Karte")
-
-    Component(authModal, "AuthModal", "Modals", "Login- und Registrierungsformular")
-    Component(confirmModal, "ConfirmModal", "Modals", "Logout-Bestätigungsdialog")
-
-    Component(useApp, "useApp", "Hook", "Zentraler App-State-Koordinator")
-    Component(useAuth, "useAuth", "Hook", "Authentifizierungszustand und -aktionen")
-    Component(useTraffic, "useTraffic", "Hook", "Verkehrsdaten und Straßenauswahl")
-    Component(useAutobahnSelector, "useAutobahnSelector", "Hook", "Verfügbare Autobahnen laden")
-    Component(useDashboard, "useDashboard", "Hook", "Dashboard-Daten laden")
-
-    Component(trafficService, "trafficService", "Service", "Alle REST-API-Aufrufe zum Backend")
-
-    Component(validateAuthForm, "validateAuthForm", "Util", "Formularvalidierung")
-    Component(formatCachedAt, "formatCachedAt", "Util", "Formatierung des Cache-Zeitstempels")
-    Component(buildSavedMessage, "buildSavedMessage", "Util", "Statusmeldung nach Favoriten-Speicherung")
-}
-```
+![Frontend Component Diagram](diagrams/FrontendComponents.svg)
 
 ### Abhängigkeiten Frontend
 
