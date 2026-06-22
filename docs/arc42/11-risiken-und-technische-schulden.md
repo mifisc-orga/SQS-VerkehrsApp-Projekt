@@ -375,6 +375,69 @@ Kubernetes Secrets
 
 ---
 
+### TS-06 Kein persistierter Frontend-Zustand
+
+#### Beschreibung
+
+Der Zustand des Frontends (ausgewählte Autobahnen, Auth-Token) wird ausschließlich im Arbeitsspeicher gehalten und geht beim Schließen des Browsers verloren.
+
+#### Auswirkungen
+
+* Benutzer müssen sich nach jedem Seitenstart erneut anmelden
+* Autobahnauswahl wird nicht gespeichert
+
+#### Mögliche Verbesserung
+
+Persistierung des JWT-Tokens und der Autobahnauswahl über `localStorage` oder `sessionStorage`.
+
+#### Priorität
+
+Niedrig
+
+---
+
+### TS-07 Fehlende Ladezustandsanzeige im Frontend
+
+#### Beschreibung
+
+Beim Laden von Verkehrsdaten oder Dashboard-Daten wird kein Ladezustand (Spinner, Skeleton) angezeigt.
+
+#### Auswirkungen
+
+* kurzzeitig leere Ansicht beim Start
+* schlechtere Benutzererfahrung bei langsamer Verbindung
+
+#### Mögliche Verbesserung
+
+Einführung von Ladezustandsvariablen in den Custom Hooks und entsprechenden UI-Komponenten.
+
+#### Priorität
+
+Niedrig
+
+---
+
+### TS-08 Nicht alle API-Felder werden im Frontend angezeigt
+
+#### Beschreibung
+
+Das Backend liefert für jedes Verkehrsereignis die Felder `subtitle` (Fahrtrichtung) und `description` (detaillierte Informationen wie Länge, Höchstgeschwindigkeit, Durchfahrtsbreite und Zeiträume). Diese Felder werden im Frontend aktuell nicht angezeigt.
+
+#### Auswirkungen
+
+* Benutzer sehen keine Richtungsangaben zu Ereignissen
+* Detailinformationen wie Länge der Baustelle oder Geschwindigkeitsbegrenzung sind nicht zugänglich
+
+#### Mögliche Verbesserung
+
+Erweiterung der `TrafficView`-Komponente um eine Detailansicht, die `subtitle` und `description` darstellt.
+
+#### Priorität
+
+Mittel
+
+---
+
 ### TS-05 Fehlende Audit-Protokollierung
 
 #### Beschreibung
@@ -402,7 +465,7 @@ Zur frühzeitigen Erkennung von Qualitätsproblemen wurden automatisierte Prüfm
 
 Die Anwendung wird durch mehrere Testebenen abgesichert:
 
-#### Unit Tests
+#### Backend: Unit-Tests
 
 Prüfung einzelner Komponenten und Fachlogik.
 
@@ -414,7 +477,7 @@ Beispiele:
 - RiskScoreCalculator
 - Exception-Klassen
 
-#### Integrationstests
+#### Backend: Integrationstests
 
 Prüfung des Zusammenspiels mehrerer Komponenten.
 
@@ -426,7 +489,7 @@ Abgedeckte Bereiche:
 - Externe API-Integration
 - Spring Application Context
 
-#### Architekturtests
+#### Backend: Architekturtests
 
 Architekturtests prüfen die Einhaltung der definierten Hexagonalen Architektur.
 
@@ -435,6 +498,28 @@ Insbesondere werden kontrolliert:
 - Schichtentrennung
 - Paketabhängigkeiten
 - Architekturregeln
+
+#### Frontend: Unit-Tests (Vitest)
+
+Prüfung von Hooks, Komponenten und Utility-Funktionen isoliert.
+
+Beispiele:
+
+- useApp, useAuth, useTraffic
+- validateAuthForm, formatCachedAt
+- RiskBadge, AutobahnSelector
+
+#### Frontend: End-to-End-Tests (Playwright)
+
+Prüfung zentraler Nutzerworkflows im Browser mit gemockten API-Antworten.
+
+Abgedeckte Bereiche:
+
+- Login und Registrierung
+- Autobahnauswahl
+- Dashboard
+- Favoriten speichern und löschen
+- Kartenansicht
 
 ### Kontinuierliche Qualitätsüberwachung
 

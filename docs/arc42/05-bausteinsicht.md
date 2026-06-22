@@ -622,7 +622,86 @@ AvailableRoadsCacheAdapter --> AvailableRoadRepository
 
 ---
 
-## 5.4 Zusammenfassung
+## 5.4 Komponentendiagramm Frontend
+
+Zeigt die interne Struktur des React-TypeScript-Frontends.
+
+Enthält:
+
+- Root-Komponente und Layout-Komponenten
+- Feature-Komponenten (Traffic, Selector, Dashboard, Modals)
+- Custom Hooks
+- Service-Schicht
+- Utility-Funktionen
+
+![Frontend Component Diagram](diagrams/FrontendComponents.svg)
+
+### Abhängigkeiten Frontend
+
+```mermaid
+flowchart LR
+
+App --> useApp
+App --> AppHeader
+App --> AppMain
+App --> AppModals
+
+useApp --> useAuth
+useApp --> useTraffic
+useApp --> validateAuthForm
+useApp --> buildSavedMessage
+useApp --> trafficService
+
+AppMain --> AutobahnSelector
+AppMain --> TrafficView
+AppMain --> Dashboard
+AppMain --> PageHero
+
+AutobahnSelector --> useAutobahnSelector
+AutobahnSelector --> SelectorCard
+TrafficView --> RiskBadge
+TrafficView --> IncidentMap
+Dashboard --> DashboardRoadCard
+
+useAutobahnSelector --> trafficService
+useTraffic --> trafficService
+useDashboard --> trafficService
+useAuth --> trafficService
+
+AppModals --> AuthModal
+AppModals --> ConfirmModal
+AuthModal --> validateAuthForm
+```
+
+### Ebene 2 – Hooks
+
+| Hook                   | Verantwortung                                                         |
+| ---------------------- | --------------------------------------------------------------------- |
+| `useApp`               | Zentraler Koordinator: verbindet Auth, Traffic und Modal-Zustand      |
+| `useAuth`              | JWT-Token verwalten, Login, Registrierung, Logout                     |
+| `useTraffic`           | Verkehrsdaten laden, Straßenauswahl, Live/Cache-Status                |
+| `useAutobahnSelector`  | Verfügbare Autobahnen vom Backend laden                               |
+| `useDashboard`         | Dashboard-Daten für gespeicherte Autobahnen laden                     |
+
+### Ebene 2 – Service
+
+`trafficService` kapselt alle HTTP-Kommunikation mit dem Backend:
+
+```text
+GET  /api/traffic               → fetchAvailableRoads, fetchTrafficEvents
+GET  /api/traffic/{roadId}      → fetchTrafficEvents(roadId)
+POST /api/auth/login            → login
+POST /api/auth/register         → register
+POST /api/auth/logout           → logout
+GET  /api/saved-roads           → fetchSavedRoads
+POST /api/saved-roads           → saveFavourite
+DELETE /api/saved-roads/{id}    → deleteFavourite
+GET  /api/dashboard/saved-road-traffic → fetchDashboardTraffic
+```
+
+---
+
+## 5.5 Zusammenfassung
 
 Die Bausteinsicht zeigt die konsequente Umsetzung der Hexagonalen Architektur.
 

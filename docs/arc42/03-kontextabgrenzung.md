@@ -101,7 +101,21 @@ Backend -->|HTTP / JSON| AutobahnAPI
 
 ---
 
-## 3.2 Externe Systeme
+## 3.2 Frontend
+
+Das Frontend ist eine React/TypeScript-Anwendung, die im Browser des Benutzers ausgeführt wird.
+
+Es kommuniziert ausschließlich über die REST-API des Backends und stellt folgende Funktionen bereit:
+
+* Anzeige verfügbarer Autobahnen und Verkehrsereignisse
+* Registrierung und Anmeldung
+* Verwaltung gespeicherter Autobahnen
+* Dashboard-Ansicht für Favoriten
+* Anzeige des Cache-Status bei API-Ausfall
+
+---
+
+## 3.3 Externe Systeme
 
 ### Autobahn API
 
@@ -143,13 +157,14 @@ Die Datenbank wird für folgende Informationen genutzt:
 
 ---
 
-## 3.3 Systemgrenze
+## 3.4 Systemgrenze
 
-Die Systemgrenze der Anwendung umfasst sämtliche Komponenten innerhalb der Spring-Boot-Anwendung.
+Die Systemgrenze umfasst das Frontend und das Backend als gemeinsam entwickelte und deployete Einheit.
 
 ### Innerhalb der Systemgrenze
 
 ```text
+Frontend (React/TypeScript)
 Controller
 Use Cases
 Services
@@ -164,15 +179,14 @@ Cache
 ### Außerhalb der Systemgrenze
 
 ```text
-Benutzer
-Frontend
+Benutzer (Browser)
 Autobahn API
 Datenbankserver
 ```
 
 ---
 
-## 3.4 Kommunikationsbeziehungen
+## 3.5 Kommunikationsbeziehungen
 
 ### Eingehende Kommunikation
 
@@ -191,7 +205,7 @@ Datenbankserver
 
 ---
 
-## 3.5 Sicherheitsrelevante Schnittstellen
+## 3.6 Sicherheitsrelevante Schnittstellen
 
 ### Öffentliche Endpunkte
 
@@ -217,7 +231,7 @@ Die folgenden Bereiche benötigen ein gültiges JWT:
 
 ---
 
-## 3.6 Kontextbezogene Qualitätsanforderungen
+## 3.7 Kontextbezogene Qualitätsanforderungen
 
 Die Kontextabgrenzung wird insbesondere durch folgende Anforderungen beeinflusst:
 
@@ -241,7 +255,7 @@ Dies wird durch die Verwendung von Ports und Adaptern sichergestellt.
 
 ---
 
-## 3.7 Zusammenfassung
+## 3.8 Zusammenfassung
 
 Die SQS Verkehrsapp befindet sich zwischen Benutzern und einer externen Autobahn-API. Sie erweitert die bereitgestellten Verkehrsdaten um zusätzliche Fachlogik, Risikobewertungen, Benutzerverwaltung und Caching-Funktionalitäten.
 

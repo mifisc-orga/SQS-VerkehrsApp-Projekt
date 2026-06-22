@@ -4,7 +4,7 @@
 
 Die Verteilungssicht beschreibt die physische Verteilung der Softwarekomponenten auf Laufzeitumgebungen sowie die technischen Kommunikationsbeziehungen zwischen den beteiligten Systemen.
 
-Die SQS Verkehrsapp ist als Spring-Boot-Anwendung konzipiert und wird als eigenständiger Backend-Service betrieben. Sie kommuniziert sowohl mit einer relationalen Datenbank als auch mit einer externen Autobahn-API.
+Die SQS Verkehrsapp besteht aus einem React/TypeScript-Frontend und einem Spring-Boot-Backend. Das Backend wird als eigenständiger Service betrieben und kommuniziert mit einer relationalen Datenbank sowie einer externen Autobahn-API. Das Frontend wird als statische Anwendung über nginx ausgeliefert und läuft im Browser des Benutzers.
 
 ---
 
@@ -29,16 +29,23 @@ Die SQS Verkehrsapp ist als Spring-Boot-Anwendung konzipiert und wird als eigens
 
 ## 7.3 Client-Knoten
 
-### Browser / Frontend
+### React Frontend
 
-Der Client dient ausschließlich der Interaktion mit der REST-API.
+Das Frontend ist eine React/TypeScript-Anwendung, die im Browser des Benutzers ausgeführt wird. Im Produktivbetrieb wird sie als statisches Build-Artefakt über nginx ausgeliefert.
 
 ### Aufgaben
 
-* Benutzeranmeldung
+* Anzeige verfügbarer Autobahnen und Verkehrsereignisse
+* Benutzeranmeldung und Registrierung
 * Verwaltung gespeicherter Autobahnen
-* Anzeige von Verkehrsinformationen
 * Dashboard-Darstellung
+* Anzeige des Cache-Status bei API-Ausfall
+
+### Technologien
+
+```text
+React 19, TypeScript, Vite (Build), nginx (Auslieferung)
+```
 
 ### Kommunikationsprotokoll
 
@@ -405,8 +412,8 @@ JWT
 Mögliche lokale Ausführung:
 
 ```text
-Spring Boot
-H2
+Backend:  Spring Boot, H2
+Frontend: Vite Dev Server (localhost:5173)
 ```
 
 ---
@@ -416,9 +423,8 @@ H2
 Mögliche Testkonfiguration:
 
 ```text
-Spring Test
-JUnit
-Mockito
+Backend:  Spring Test, JUnit, Mockito, H2
+Frontend: Vitest (Unit-Tests), Playwright (E2E), gemockte API-Antworten
 ```
 
 ---
@@ -428,9 +434,8 @@ Mockito
 Mögliche Produktivkonfiguration:
 
 ```text
-Spring Boot
-PostgreSQL
-HTTPS Reverse Proxy
+Backend:  Spring Boot, PostgreSQL, HTTPS Reverse Proxy
+Frontend: Vite Build → nginx (Docker Container)
 ```
 
 ---
@@ -441,9 +446,10 @@ Die Verteilungssicht zeigt die physische Struktur der Anwendung.
 
 Wesentliche Eigenschaften:
 
-* Eigenständige Spring-Boot-Anwendung
-* REST-basierte Kommunikation
-* Relationale Datenbank
+* React/TypeScript-Frontend, ausgeliefert über nginx
+* Eigenständige Spring-Boot-Backend-Anwendung
+* REST-basierte Kommunikation zwischen Frontend und Backend
+* Relationale Datenbank (PostgreSQL)
 * Externe Autobahn-API
 * Datenbankgestützter Cache
 * JWT-basierte Sicherheit

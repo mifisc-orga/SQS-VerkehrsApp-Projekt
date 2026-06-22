@@ -2,19 +2,22 @@
 
 ## 2.1 Technische Randbedingungen
 
-Die SQS Verkehrsapp wurde auf Basis moderner Java- und Spring-Technologien entwickelt. Die Architektur orientiert sich an bewährten Enterprise-Entwicklungsmustern und berücksichtigt Anforderungen hinsichtlich Wartbarkeit, Testbarkeit und Erweiterbarkeit.
+Die SQS Verkehrsapp besteht aus einem Java/Spring-Backend und einem React/TypeScript-Frontend. Die Architektur orientiert sich an bewährten Entwicklungsmustern und berücksichtigt Anforderungen hinsichtlich Wartbarkeit, Testbarkeit und Erweiterbarkeit.
 
-### Programmiersprache
+### Programmiersprachen
 
-| Technologie | Version |
-| ----------- | ------- |
-| Java        | 21      |
+| Technologie | Version | Verwendung  |
+| ----------- | ------- | ----------- |
+| Java        | 21      | Backend     |
+| TypeScript  | 5       | Frontend    |
 
-Java bildet die Grundlage der gesamten Anwendung und ermöglicht die Nutzung moderner Sprachfeatures sowie eines umfangreichen Ökosystems.
+Java bildet die Grundlage des Backends. TypeScript wird im Frontend eingesetzt und ermöglicht statische Typsicherheit in der React-Anwendung.
 
 ---
 
 ### Frameworks und Bibliotheken
+
+#### Backend
 
 | Technologie              | Verwendungszweck                       |
 | ------------------------ | -------------------------------------- |
@@ -26,6 +29,14 @@ Java bildet die Grundlage der gesamten Anwendung und ermöglicht die Nutzung mod
 | Resilience4j             | Retry- und Circuit-Breaker-Mechanismen |
 | Lombok                   | Reduzierung von Boilerplate-Code       |
 | JWT (jjwt)               | Token-basierte Authentifizierung       |
+
+#### Frontend
+
+| Technologie | Verwendungszweck                          |
+| ----------- | ----------------------------------------- |
+| React 19    | UI-Framework                              |
+| Vite        | Build-Tool und Entwicklungsserver         |
+| nginx       | Auslieferung der statischen Frontend-Dateien |
 
 ---
 
@@ -153,12 +164,19 @@ Dadurch entsteht keine direkte Abhängigkeit zu:
 
 Jede Komponente besitzt eine klar definierte Verantwortung.
 
-Beispiele:
+Beispiele Backend:
 
 * Controller übernehmen ausschließlich HTTP-bezogene Aufgaben.
 * Services enthalten Fachlogik.
 * Adapter kapseln Infrastrukturzugriffe.
 * Mapper transformieren externe Datenmodelle.
+
+Beispiele Frontend:
+
+* React-Komponenten sind zustandslos und übernehmen ausschließlich die Darstellung.
+* Custom Hooks kapseln Datenzugriff und Zustandsverwaltung.
+* Der Service (`trafficService`) kapselt die gesamte HTTP-Kommunikation.
+* Utility-Funktionen übernehmen isolierte Hilfsaufgaben wie Validierung und Formatierung.
 
 ---
 
@@ -211,20 +229,39 @@ Dieser Kompromiss wird zugunsten einer höheren Verfügbarkeit akzeptiert.
 
 Zur Sicherstellung der Softwarequalität werden folgende Werkzeuge eingesetzt:
 
-| Werkzeug    | Zweck                 |
-| ----------- | --------------------- |
-| JUnit 5     | Unit-Tests            |
-| Mockito     | Mocking               |
-| Spring Test | Integrations-Tests    |
-| SonarQube   | Statische Codeanalyse |
-| Maven       | Build-Management      |
-| Git         | Versionsverwaltung    |
+#### Backend
+
+| Werkzeug                  | Zweck                 |
+|---------------------------| --------------------- |
+| JUnit 5                   | Unit-Tests            |
+| Mockito                   | Mocking               |
+| Spring Test               | Integrationstests     |
+| ArchUnit                  | Architekturtests      |
+| JaCoCo, Testwise Coverage | Test-Coverage         |
+| Maven                     | Build-Management      |
+
+#### Frontend
+
+| Werkzeug   | Zweck                 |
+| ---------- | --------------------- |
+| Vitest     | Unit-Tests            |
+| Playwright | End-to-End-Tests      |
+| ESLint     | Statische Codeanalyse |
+| LCOV       | Test-Coverage         |
+
+#### Allgemein
+
+| Werkzeug   | Zweck                              |
+| ---------- | ---------------------------------- |
+| SonarCloud | Statische Codeanalyse (Backend + Frontend) |
+| Teamscale  | Qualitätsüberwachung (Backend + Frontend)  |
+| Git        | Versionsverwaltung                 |
 
 ---
 
 ## 2.7 Zusammenfassung
 
-Die SQS Verkehrsapp basiert auf einer modernen Java- und Spring-Architektur mit besonderem Fokus auf:
+Die SQS Verkehrsapp basiert auf einer modernen Java/Spring-Backend- und React/TypeScript-Frontend-Architektur mit besonderem Fokus auf:
 
 * Wartbarkeit
 * Testbarkeit

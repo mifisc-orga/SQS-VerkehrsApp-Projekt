@@ -65,18 +65,22 @@ Ziel ist ein einheitliches Verständnis aller Begriffe für Entwickler, Architek
 
 ## 12.5 Architekturbegriffe
 
-| Begriff                | Beschreibung                                                    |
-| ---------------------- | --------------------------------------------------------------- |
-| Hexagonale Architektur | Architekturansatz zur Trennung von Fachlogik und Infrastruktur. |
-| Ports & Adapters       | Architekturprinzip der Hexagonalen Architektur.                 |
-| Input Port             | Schnittstelle für fachliche Anwendungsfälle.                    |
-| Output Port            | Schnittstelle zu externen Systemen.                             |
-| Adapter                | Implementierung eines Ports.                                    |
-| Use Case               | Fachlicher Anwendungsfall der Anwendung.                        |
-| Service                | Implementierung eines Use Cases.                                |
-| Domäne                 | Fachlicher Kern der Anwendung.                                  |
-| Inbound Adapter        | Eingehende Schnittstelle, beispielsweise REST-Controller.       |
-| Outbound Adapter       | Ausgehende Infrastrukturkomponente.                             |
+| Begriff                | Beschreibung                                                                              |
+| ---------------------- | ----------------------------------------------------------------------------------------- |
+| Hexagonale Architektur | Architekturansatz zur Trennung von Fachlogik und Infrastruktur (Backend).                 |
+| Ports & Adapters       | Architekturprinzip der Hexagonalen Architektur.                                           |
+| Input Port             | Schnittstelle für fachliche Anwendungsfälle.                                              |
+| Output Port            | Schnittstelle zu externen Systemen.                                                       |
+| Adapter                | Implementierung eines Ports.                                                              |
+| Use Case               | Fachlicher Anwendungsfall der Anwendung.                                                  |
+| Service                | Implementierung eines Use Cases.                                                          |
+| Domäne                 | Fachlicher Kern der Anwendung.                                                            |
+| Inbound Adapter        | Eingehende Schnittstelle, beispielsweise REST-Controller.                                 |
+| Outbound Adapter       | Ausgehende Infrastrukturkomponente.                                                       |
+| SPA                    | Single Page Application — browserbasierte Anwendung ohne Seitenneuladung (Frontend).     |
+| React Component        | Zustandslose UI-Einheit, die ausschließlich für die Darstellung verantwortlich ist.       |
+| Custom Hook            | React-Funktion zur Kapselung von Zustandsverwaltung und Datenzugriff (z. B. `useTraffic`). |
+| Hook/Component-Trennung | Architekturprinzip: Komponenten sind zustandslos, Hooks kapseln die Logik (Frontend).   |
 
 ---
 
@@ -114,6 +118,44 @@ Ziel ist ein einheitliches Verständnis aller Begriffe für Entwickler, Architek
 | AutobahnApiPort        | Zugriff auf Verkehrsdaten.           |
 | RoadEventCachePort     | Verwaltung des Verkehrsdaten-Caches. |
 | AvailableRoadCachePort | Verwaltung des Autobahn-Caches.      |
+
+---
+
+### Frontend-Komponenten
+
+| Komponente          | Beschreibung                                                              |
+| ------------------- | ------------------------------------------------------------------------- |
+| App                 | Root-Komponente, koordiniert Header, Modals und Hauptinhalt.              |
+| AppHeader           | Navigationsleiste mit Login/Logout-Button.                                |
+| AppMain             | Hauptbereich mit Autobahnauswahl und Verkehrsansicht.                     |
+| AppModals           | Enthält Auth-Modal und Logout-Bestätigungsdialog.                         |
+| AutobahnSelector    | Chip-basierte Auswahl verfügbarer Autobahnen.                             |
+| TrafficView         | Anzeige von Verkehrsereignissen mit Risikobadge und Karte.                |
+| Dashboard           | Übersicht der gespeicherten Autobahnen mit Verkehrsdaten.                 |
+| RiskBadge           | Farbige Anzeige der Risikostufe (LOW / MEDIUM / HIGH).                    |
+
+---
+
+### Frontend-Hooks
+
+| Hook                  | Beschreibung                                                         |
+| --------------------- | -------------------------------------------------------------------- |
+| useApp                | Zentraler Koordinator für App-Zustand, Auth und Traffic.             |
+| useAuth               | Verwaltung von JWT-Token, Login, Registrierung und Logout.           |
+| useTraffic            | Laden der Verkehrsdaten und Verwaltung der Straßenauswahl.           |
+| useAutobahnSelector   | Laden der verfügbaren Autobahnen vom Backend.                        |
+| useDashboard          | Laden der Dashboard-Daten für gespeicherte Autobahnen.               |
+
+---
+
+### Frontend-Service und Utilities
+
+| Komponente        | Beschreibung                                                          |
+| ----------------- | --------------------------------------------------------------------- |
+| trafficService    | Kapselt alle HTTP-Aufrufe an das Backend.                             |
+| validateAuthForm  | Validiert Benutzername und Passwort vor dem Absenden des Formulars.   |
+| formatCachedAt    | Formatiert den Cache-Zeitstempel für die Anzeige im UI.               |
+| buildSavedMessage | Erstellt die Statusmeldung nach dem Speichern von Favoriten.          |
 
 ---
 
