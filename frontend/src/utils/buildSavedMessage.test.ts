@@ -6,7 +6,7 @@ const REJECTED = { status: 'rejected' as const, reason: 'error' };
 
 describe('buildSavedMessage', () => {
   test('returns saved message when all results are fulfilled', () => {
-    expect(buildSavedMessage([FULFILLED, FULFILLED])).toBe('Favouriten gespeichert!');
+    expect(buildSavedMessage([FULFILLED, FULFILLED])).toBe('Favoriten gespeichert!');
   });
 
   test('returns mixed message when some are fulfilled and some rejected', () => {
@@ -14,14 +14,14 @@ describe('buildSavedMessage', () => {
   });
 
   test('returns already-exists message when all results are rejected', () => {
-    expect(buildSavedMessage([REJECTED, REJECTED])).toBe('Alle Autobahnen sind bereits in deinen Favouriten.');
+    expect(buildSavedMessage([REJECTED, REJECTED])).toBe('Alle Autobahnen sind bereits in deinen Favoriten.');
   });
 
   test('handles single fulfilled result', () => {
-    expect(buildSavedMessage([FULFILLED])).toBe('Favouriten gespeichert!');
+    expect(buildSavedMessage([FULFILLED])).toBe('Favoriten gespeichert!');
   });
 
   test('handles empty results array', () => {
-    expect(buildSavedMessage([])).toBe('Alle Autobahnen sind bereits in deinen Favouriten.');
+    expect(buildSavedMessage([])).toBe('Alle Autobahnen sind bereits in deinen Favoriten.');
   });
 });
