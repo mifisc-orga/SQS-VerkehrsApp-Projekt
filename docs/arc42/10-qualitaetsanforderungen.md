@@ -140,7 +140,7 @@ Geschützte Ressourcen dürfen ausschließlich authentifizierten Benutzern zugä
 
 ---
 
-## QZ-4 Verfügbarkeit
+### QZ-4 Verfügbarkeit
 
 #### Priorität
 

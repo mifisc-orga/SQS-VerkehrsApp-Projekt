@@ -522,7 +522,7 @@ Verantwortlich für:
 
 ---
 
-## 5.2 Ebene 3 – Persistenzmodell
+## 5.4 Ebene 3 – Persistenzmodell
 
 ### Entity-Struktur
 
@@ -587,7 +587,7 @@ UserEntity "1" --> "*" SavedRoadEntity
 
 ---
 
-## 5.3 Bausteinabhängigkeiten
+## 5.5 Bausteinabhängigkeiten
 
 ### Vollständige Komponentenübersicht
 
@@ -622,7 +622,7 @@ AvailableRoadsCacheAdapter --> AvailableRoadRepository
 
 ---
 
-## 5.4 Komponentendiagramm Frontend
+## 5.6 Komponentendiagramm Frontend
 
 Zeigt die interne Struktur des React-TypeScript-Frontends.
 
@@ -701,7 +701,7 @@ GET  /api/dashboard/saved-road-traffic → fetchDashboardTraffic
 
 ---
 
-## 5.5 Zusammenfassung
+## 5.7 Zusammenfassung
 
 Die Bausteinsicht zeigt die konsequente Umsetzung der Hexagonalen Architektur.
 

@@ -1037,9 +1037,6 @@ Für lokale Entwicklungs- und Demonstrationsszenarien existiert ein Testnutzer:
 
 * Benutzername: `testuser`
 * Passwort: `test123`
-* gespeicherte Autobahnen:
-    * `A3`
-    * `A92`
 ---
 
 ## 8.14 Frontend-Validierung und Fehlerbehandlung
