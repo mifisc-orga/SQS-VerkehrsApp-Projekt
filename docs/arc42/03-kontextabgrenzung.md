@@ -15,7 +15,7 @@ Enthält:
 - Teamscale
 - SonarCloud
 
-![System Context Diagram](diagrams/SystemContext.png)
+![System Context Diagram](diagrams/SystemContext.svg)
 
 ### Fachlicher Kontext
 

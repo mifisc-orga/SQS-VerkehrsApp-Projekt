@@ -20,7 +20,7 @@ Die Fachlogik bildet den Mittelpunkt des Systems und ist vollständig von techni
 
 ### Systemübersicht
 
-![Container Diagram](diagrams/Container.png)
+![Container Diagram](diagrams/Container.svg)
 
 ---
 
@@ -50,7 +50,7 @@ Enthält:
 - externe API
 - Cache
 
-![Backend Component Diagram](diagrams/BackendComponents.png)
+![Backend Component Diagram](diagrams/BackendComponents.svg)
 
 ### Ebene 2 – Inbound Adapter
 

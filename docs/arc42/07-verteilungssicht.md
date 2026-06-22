@@ -12,7 +12,7 @@ Die SQS Verkehrsapp ist als Spring-Boot-Anwendung konzipiert und wird als eigens
 
 ### Deployment-Diagramm
 
-![Deployment Diagram](diagrams/Deployment.png)
+![Deployment Diagram](diagrams/Deployment.svg)
 
 ---
 
