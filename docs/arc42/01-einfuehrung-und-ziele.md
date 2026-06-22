@@ -2,7 +2,7 @@
 
 ## 1.1 Aufgabenstellung
 
-Die SQS Verkehrsapp ist eine webbasierte Anwendung zur Bereitstellung und Verwaltung von Verkehrsinformationen für deutsche Autobahnen. Die Anwendung integriert Verkehrsdaten einer externen Autobahn-API und stellt diese Benutzern über eine REST-basierte Schnittstelle zur Verfügung.
+Die SQS Verkehrsapp ist eine webbasierte Anwendung zur Bereitstellung und Verwaltung von Verkehrsinformationen für deutsche Autobahnen. Die Anwendung besteht aus einem React/TypeScript-Frontend und einem Spring-Boot-Backend, das Verkehrsdaten einer externen Autobahn-API integriert und über eine REST-Schnittstelle bereitstellt.
 
 Neben dem Abruf aktueller Verkehrsmeldungen ermöglicht die Anwendung registrierten Benutzern das Speichern favorisierter Autobahnen sowie die Anzeige verkehrsrelevanter Informationen in einem personalisierten Dashboard.
 
@@ -104,6 +104,7 @@ Anfragen sollen mit möglichst geringer Latenz beantwortet werden. Wiederkehrend
 
 Die SQS Verkehrsapp besteht aus den folgenden Hauptbestandteilen:
 
+* React/TypeScript-Frontend als browserbasierte Benutzeroberfläche
 * REST-basierte API
 * Authentifizierung mittels JSON Web Token (JWT)
 * Fachlogik zur Verarbeitung von Verkehrsdaten

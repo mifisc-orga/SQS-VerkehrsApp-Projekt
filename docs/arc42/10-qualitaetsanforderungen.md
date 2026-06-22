@@ -57,10 +57,17 @@ Die Architektur soll Änderungen und Erweiterungen mit minimalem Aufwand ermögl
 
 #### Unterstützende Maßnahmen
 
+Backend:
+
 * Hexagonale Architektur
 * Ports & Adapters
 * DTO-Mapping
 * Single Responsibility Principle
+
+Frontend:
+
+* Hook/Component-Trennung (zustandslose Komponenten)
+* Zentraler `trafficService` für alle HTTP-Aufrufe
 
 #### Bewertung
 
@@ -80,10 +87,18 @@ Fachlogik soll unabhängig von technischen Abhängigkeiten testbar sein.
 
 #### Unterstützende Maßnahmen
 
+Backend:
+
 * Input Ports
 * Output Ports
 * Dependency Injection
 * Mocking von Ports
+
+Frontend:
+
+* Vitest für Unit-Tests von Hooks, Komponenten und Utilities
+* Playwright für End-to-End-Tests der Nutzerworkflows
+* Gemockte API-Antworten über Playwright-Routing
 
 #### Bewertung
 
@@ -107,10 +122,17 @@ Benutzerbezogene Funktionen müssen vor unbefugtem Zugriff geschützt werden.
 
 #### Unterstützende Maßnahmen
 
+Backend:
+
 * JWT-Authentifizierung
 * Spring Security
 * BCrypt
 * Security Filter
+
+Frontend:
+
+* Formularvalidierung vor dem Senden (`validateAuthForm`)
+* Fehlermeldungen bei ungültigen Eingaben
 
 #### Bewertung
 
@@ -130,10 +152,17 @@ Die Anwendung soll auch bei Störungen externer Systeme möglichst verfügbar bl
 
 #### Unterstützende Maßnahmen
 
+Backend:
+
 * Retry
 * Circuit Breaker
 * Cache Fallback
 * Datenbankgestützter Cache
+
+Frontend:
+
+* Graceful Error Handling in Hooks (kein Absturz bei Ladefehlern)
+* Cache-Status-Anzeige ("Gecacht · HH:MM") bei API-Ausfall
 
 #### Bewertung
 
@@ -153,9 +182,16 @@ Neue Funktionen sollen ohne umfangreiche Architekturänderungen integrierbar sei
 
 #### Unterstützende Maßnahmen
 
+Backend:
+
 * Ports
 * Adapter
 * Entkopplung von Infrastruktur
+
+Frontend:
+
+* Zentraler `trafficService` — neue Endpunkte an einer Stelle ergänzbar
+* Zustandslose Komponenten — neue UI-Elemente ohne Seiteneffekte integrierbar
 
 #### Bewertung
 
@@ -175,9 +211,16 @@ Antwortzeiten sollen auch bei häufigen Anfragen niedrig bleiben.
 
 #### Unterstützende Maßnahmen
 
+Backend:
+
 * Lokaler Cache
 * Asynchrones Schreiben
 * Reduzierte API-Aufrufe
+
+Frontend:
+
+* Einmaliges Laden beim Start (kein wiederholtes Fetching)
+* Cache-Anzeige statt Fehlermeldung bei API-Ausfall
 
 #### Bewertung
 
@@ -247,9 +290,17 @@ Soll die Berechnung ohne Datenbank oder externe API getestet werden können.
 
 Die Testbarkeit wird anhand folgender Kriterien bewertet:
 
-* Automatisierte Unit Tests
+Backend:
+
+* Automatisierte Unit-Tests
 * Automatisierte Integrationstests
 * Architekturtests mittels ArchUnit
+* Testausführung innerhalb der CI-Pipeline
+
+Frontend:
+
+* Vitest Unit-Tests für Hooks, Komponenten und Utilities
+* Playwright End-to-End-Tests für Nutzerworkflows
 * Testausführung innerhalb der CI-Pipeline
 
 Ziel ist die frühzeitige Erkennung funktionaler und architektonischer Fehler.
@@ -417,6 +468,61 @@ Sollen nur die Domänenlogik und die Risikobewertung angepasst werden.
 
 ---
 
+### QS-09 Frontend-Formularvalidierung
+
+#### Qualitätsmerkmal
+
+Sicherheit
+
+#### Szenario
+
+**Gegeben**
+
+Ein Benutzer gibt einen zu kurzen Benutzernamen ein.
+
+**Wenn**
+
+Er auf „Anmelden" klickt.
+
+**Dann**
+
+Soll eine Fehlermeldung angezeigt werden, ohne dass eine HTTP-Anfrage gesendet wird.
+
+#### Architekturunterstützung
+
+* `validateAuthForm`
+* `useApp` (handleLoginSubmit)
+
+---
+
+### QS-10 Frontend-Cache-Anzeige
+
+#### Qualitätsmerkmal
+
+Verfügbarkeit
+
+#### Szenario
+
+**Gegeben**
+
+Die Autobahn API ist nicht erreichbar und das Backend liefert gecachte Daten.
+
+**Wenn**
+
+Der Benutzer die Seite öffnet.
+
+**Dann**
+
+Soll das Frontend die Daten anzeigen und den Cache-Zeitpunkt sichtbar machen.
+
+#### Architekturunterstützung
+
+* `useTraffic` (isLive, cachedAt)
+* `PageHero` (Cache-Status-Anzeige)
+* `formatCachedAt`
+
+---
+
 ## 10.5 Qualitätsszenario-Matrix
 
 | Szenario | Wartbarkeit | Testbarkeit | Sicherheit | Verfügbarkeit | Erweiterbarkeit | Performance |
@@ -429,12 +535,14 @@ Sollen nur die Domänenlogik und die Risikobewertung angepasst werden.
 | QS-06    |             |             |            | X             |                 |             |
 | QS-07    |             |             |            |               |                 | X           |
 | QS-08    | X           |             |            |               | X               |             |
+| QS-09    |             |             | X          |               |                 |             |
+| QS-10    |             |             |            | X             |                 |             |
 
 ---
 
 ## 10.6 Qualitätsmaßnahmen
 
-### Architekturmaßnahmen
+### Backend-Architekturmaßnahmen
 
 #### Hexagonale Architektur
 
@@ -482,6 +590,52 @@ Verbessert:
 
 ---
 
+### Frontend-Architekturmaßnahmen
+
+#### Hook/Component-Trennung
+
+Verbessert:
+
+* Wartbarkeit
+* Testbarkeit
+
+---
+
+#### Zentraler trafficService
+
+Verbessert:
+
+* Wartbarkeit
+* Erweiterbarkeit
+
+---
+
+#### validateAuthForm
+
+Verbessert:
+
+* Sicherheit
+* Benutzererfahrung
+
+---
+
+#### Graceful Error Handling in Hooks
+
+Verbessert:
+
+* Verfügbarkeit
+* Benutzererfahrung
+
+---
+
+#### Vitest und Playwright
+
+Verbessern:
+
+* Testbarkeit
+
+---
+
 ## 10.7 Risiken bezüglich der Qualitätsziele
 
 ### Sicherheit
@@ -516,12 +670,21 @@ Die Architektur der SQS Verkehrsapp wurde gezielt zur Unterstützung der prioris
 
 Besonders stark adressiert werden:
 
+Backend:
+
 * Wartbarkeit durch Hexagonale Architektur
 * Testbarkeit durch Ports und Adapter
 * Sicherheit durch JWT und Spring Security
 * Verfügbarkeit durch Retry, Circuit Breaker und Cache-Fallback
 * Erweiterbarkeit durch klare Schnittstellen
 * Performance durch Caching und asynchrone Verarbeitung
+
+Frontend:
+
+* Wartbarkeit durch Hook/Component-Trennung
+* Testbarkeit durch Vitest und Playwright
+* Sicherheit durch Formularvalidierung
+* Verfügbarkeit durch Graceful Error Handling und Cache-Anzeige
 
 Die definierten Qualitätsszenarien dienen als Grundlage für die Bewertung und Weiterentwicklung der Systemarchitektur.
 

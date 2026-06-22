@@ -157,6 +157,61 @@ JwtAuthenticationFilter
 
 ---
 
+### Frontend
+
+Das Frontend folgt ebenfalls dem Single Responsibility Principle mit klarer Trennung zwischen Darstellung, Zustandsverwaltung und Datenzugriff.
+
+#### Komponenten
+
+Verantwortlich für:
+
+* Darstellung der Benutzeroberfläche
+* Benutzerinteraktion
+
+Zustandslos — kein eigener Datenzugriff.
+
+```text
+AppHeader, AppMain, AppModals, PageHero
+AutobahnSelector, SelectorCard
+TrafficView, IncidentMap, RiskBadge
+Dashboard, DashboardRoadCard
+AuthModal, ConfirmModal
+```
+
+#### Custom Hooks
+
+Verantwortlich für:
+
+* Datenzugriff
+* Zustandsverwaltung
+* Geschäftslogik der UI
+
+```text
+useApp, useAuth, useTraffic, useAutobahnSelector, useDashboard
+```
+
+#### Service
+
+Verantwortlich für:
+
+* gesamte HTTP-Kommunikation mit dem Backend
+
+```text
+trafficService
+```
+
+#### Utilities
+
+Verantwortlich für:
+
+* isolierte Hilfsaufgaben
+
+```text
+validateAuthForm, formatCachedAt, buildSavedMessage
+```
+
+---
+
 ## 4.4 Port-and-Adapter-Konzept
 
 ### Input Ports
@@ -324,14 +379,14 @@ Die Fachlogik besitzt keinen direkten Datenbankzugriff.
 
 Die Architektur wurde gezielt zur Unterstützung der priorisierten Qualitätsziele entwickelt.
 
-| Qualitätsziel     | Architekturmaßnahme           |
-| ----------------- | ----------------------------- |
-| Wartbarkeit       | Hexagonale Architektur        |
-| Testbarkeit       | Ports und Adapter             |
-| Sicherheit        | JWT + Spring Security         |
-| Ausfallsicherheit | Retry, Circuit Breaker, Cache |
-| Erweiterbarkeit   | Entkoppelte Schnittstellen    |
-| Performance       | Lokale Cache-Strategie        |
+| Qualitätsziel     | Backend                       | Frontend                              |
+| ----------------- | ----------------------------- | ------------------------------------- |
+| Wartbarkeit       | Hexagonale Architektur        | Hook/Component-Trennung               |
+| Testbarkeit       | Ports und Adapter             | Playwright E2E, gemockte API-Antworten |
+| Sicherheit        | JWT + Spring Security         | Formularvalidierung (validateAuthForm) |
+| Ausfallsicherheit | Retry, Circuit Breaker, Cache | Graceful Error Handling in Hooks      |
+| Erweiterbarkeit   | Entkoppelte Schnittstellen    | Zentraler trafficService              |
+| Performance       | Lokale Cache-Strategie        | Cache-Status-Anzeige im UI            |
 
 ---
 
@@ -383,7 +438,7 @@ Datenbankgestützter Cache.
 
 ## 4.11 Zusammenfassung
 
-Die Architektur der SQS Verkehrsapp basiert auf einer klaren Trennung von Fachlogik und Infrastruktur. Die Kombination aus Hexagonaler Architektur, JWT-Sicherheit, Resilience-Mechanismen und Datenbank-Caching ermöglicht eine wartbare, testbare und robuste Lösung für die Verarbeitung von Verkehrsdaten.
+Die Architektur der SQS Verkehrsapp basiert auf einer klaren Trennung von Fachlogik und Infrastruktur im Backend sowie einer konsequenten Hook/Component-Trennung im Frontend. Die Kombination aus Hexagonaler Architektur, JWT-Sicherheit, Resilience-Mechanismen und Datenbank-Caching im Backend sowie einem zustandslosen React-Frontend mit zentralem Service ermöglicht eine wartbare, testbare und robuste Lösung für die Verarbeitung und Darstellung von Verkehrsdaten.
 
 Die folgenden Kapitel beschreiben die einzelnen Bausteine und deren Zusammenarbeit im Detail.
 

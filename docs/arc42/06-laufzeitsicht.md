@@ -416,7 +416,126 @@ GlobalExceptionHandler-->>Client: ApiErrorResponse
 
 ---
 
-## 6.13 Laufzeitverhalten im Überblick
+## 6.13 Frontend – Seitenstart und Datenladen
+
+### Ziel
+
+Der Benutzer öffnet die Anwendung. Das Frontend lädt alle Autobahnen und Verkehrsdaten automatisch beim Start.
+
+### Ablauf
+
+```mermaid
+sequenceDiagram
+
+actor User
+participant Browser
+participant useAutobahnSelector
+participant useTraffic
+participant trafficService
+participant Backend
+
+User->>Browser: Seite öffnen
+
+Browser->>useAutobahnSelector: mount → fetchAvailableRoads()
+Browser->>useTraffic: mount → fetchTrafficEvents()
+
+useAutobahnSelector->>trafficService: fetchAvailableRoads()
+trafficService->>Backend: GET /api/traffic
+
+useTraffic->>trafficService: fetchTrafficEvents()
+trafficService->>Backend: GET /api/traffic
+
+Backend-->>trafficService: TrafficEventsResult (live/cached)
+trafficService-->>useAutobahnSelector: string[] (Autobahnliste)
+trafficService-->>useTraffic: events, live, cachedAt
+
+useAutobahnSelector-->>Browser: verfügbare Autobahnen anzeigen
+useTraffic-->>Browser: erste 3 Autobahnen vorauswählen, Ereignisse anzeigen
+```
+
+---
+
+## 6.14 Frontend – Benutzeranmeldung
+
+### Ziel
+
+Ein Benutzer meldet sich über das Auth-Modal an.
+
+### Ablauf
+
+```mermaid
+sequenceDiagram
+
+actor User
+participant AuthModal
+participant useApp
+participant useAuth
+participant trafficService
+participant Backend
+
+User->>AuthModal: Login-Button klicken
+AuthModal-->>User: Modal öffnen (showLogin = true)
+
+User->>AuthModal: Benutzername und Passwort eingeben
+User->>AuthModal: Anmelden klicken
+
+AuthModal->>useApp: handleLoginSubmit()
+useApp->>useApp: validateAuthForm() → kein Fehler
+
+useApp->>useAuth: handleLogin(username, password)
+useAuth->>trafficService: login(username, password)
+trafficService->>Backend: POST /api/auth/login
+
+alt Anmeldung erfolgreich
+    Backend-->>trafficService: JWT Token
+    trafficService-->>useAuth: { token }
+    useAuth-->>useApp: true
+    useApp-->>AuthModal: Modal schließen
+else Anmeldung fehlgeschlagen
+    Backend-->>trafficService: 401
+    trafficService-->>useAuth: Fehler
+    useAuth-->>useApp: false
+    useApp-->>AuthModal: Modal offen lassen, Fehlermeldung anzeigen
+end
+```
+
+---
+
+## 6.15 Frontend – Cache-Anzeige bei API-Ausfall
+
+### Ziel
+
+Das Backend liefert gecachte Daten. Das Frontend zeigt einen Cache-Indikator an.
+
+### Ablauf
+
+```mermaid
+sequenceDiagram
+
+participant useTraffic
+participant trafficService
+participant Backend
+participant PageHero
+participant RiskBadge
+
+useTraffic->>trafficService: fetchTrafficEvents()
+trafficService->>Backend: GET /api/traffic
+
+Note over Backend: Autobahn-API nicht erreichbar → Cache-Fallback
+
+Backend-->>trafficService: { events, live: false, cachedAt: "2026-06-22T19:38:00" }
+trafficService-->>useTraffic: { events, live: false, cachedAt }
+
+useTraffic-->>PageHero: isLive=false, cachedAt übergeben
+PageHero-->>User: "Gecacht · 19:38" anzeigen
+
+useTraffic-->>RiskBadge: riskLevel (kann null sein bei gecachten Daten)
+RiskBadge-->>User: Risikostufe anzeigen (Fallback: "low")
+```
+
+---
+
+## 6.16 Laufzeitverhalten im Überblick
 
 ```mermaid
 flowchart LR
@@ -440,7 +559,7 @@ Adapter --> Cache
 
 ---
 
-## 6.14 Zusammenfassung
+## 6.17 Zusammenfassung
 
 Die Laufzeitsicht zeigt die wichtigsten Interaktionen innerhalb der Anwendung.
 

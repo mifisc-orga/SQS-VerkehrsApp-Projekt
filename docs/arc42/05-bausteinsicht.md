@@ -728,7 +728,124 @@ AvailableRoadsCacheAdapter --> AvailableRoadRepository
 
 ---
 
-## 5.4 Zusammenfassung
+## 5.4 Komponentendiagramm Frontend
+
+Zeigt die interne Struktur des React-TypeScript-Frontends.
+
+Enthält:
+
+- Root-Komponente und Layout-Komponenten
+- Feature-Komponenten (Traffic, Selector, Dashboard, Modals)
+- Custom Hooks
+- Service-Schicht
+- Utility-Funktionen
+
+```mermaid
+C4Component
+title Komponentendiagramm - Frontend
+
+Container_Boundary(frontend, "React + TypeScript Frontend") {
+
+    Component(app, "App", "Root-Komponente", "Koordiniert Header, Modals und Hauptinhalt")
+
+    Component(appHeader, "AppHeader", "Layout", "Navigation und Login/Logout-Button")
+    Component(appMain, "AppMain", "Layout", "Hauptinhalt: Selektor und Verkehrsansicht")
+    Component(appModals, "AppModals", "Layout", "Auth-Modal und Logout-Bestätigung")
+    Component(pageHero, "PageHero", "Layout", "Hero-Bereich mit Titel und Status")
+
+    Component(autobahnSelector, "AutobahnSelector", "Selektor", "Auswahl von Autobahnen per Chip")
+    Component(selectorCard, "SelectorCard", "Selektor", "Einzelner auswählbarer Autobahn-Chip")
+
+    Component(trafficView, "TrafficView", "Traffic", "Anzeige von Verkehrsereignissen")
+    Component(incidentMap, "IncidentMap", "Traffic", "Kartenansicht der Ereignisse")
+    Component(riskBadge, "RiskBadge", "Traffic", "Farbige Risikostufen-Anzeige")
+
+    Component(dashboard, "Dashboard", "Dashboard", "Übersicht gespeicherter Autobahnen")
+    Component(dashboardRoadCard, "DashboardRoadCard", "Dashboard", "Einzelne Autobahn-Karte")
+
+    Component(authModal, "AuthModal", "Modals", "Login- und Registrierungsformular")
+    Component(confirmModal, "ConfirmModal", "Modals", "Logout-Bestätigungsdialog")
+
+    Component(useApp, "useApp", "Hook", "Zentraler App-State-Koordinator")
+    Component(useAuth, "useAuth", "Hook", "Authentifizierungszustand und -aktionen")
+    Component(useTraffic, "useTraffic", "Hook", "Verkehrsdaten und Straßenauswahl")
+    Component(useAutobahnSelector, "useAutobahnSelector", "Hook", "Verfügbare Autobahnen laden")
+    Component(useDashboard, "useDashboard", "Hook", "Dashboard-Daten laden")
+
+    Component(trafficService, "trafficService", "Service", "Alle REST-API-Aufrufe zum Backend")
+
+    Component(validateAuthForm, "validateAuthForm", "Util", "Formularvalidierung")
+    Component(formatCachedAt, "formatCachedAt", "Util", "Formatierung des Cache-Zeitstempels")
+    Component(buildSavedMessage, "buildSavedMessage", "Util", "Statusmeldung nach Favoriten-Speicherung")
+}
+```
+
+### Abhängigkeiten Frontend
+
+```mermaid
+flowchart LR
+
+App --> useApp
+App --> AppHeader
+App --> AppMain
+App --> AppModals
+
+useApp --> useAuth
+useApp --> useTraffic
+useApp --> validateAuthForm
+useApp --> buildSavedMessage
+useApp --> trafficService
+
+AppMain --> AutobahnSelector
+AppMain --> TrafficView
+AppMain --> Dashboard
+AppMain --> PageHero
+
+AutobahnSelector --> useAutobahnSelector
+AutobahnSelector --> SelectorCard
+TrafficView --> RiskBadge
+TrafficView --> IncidentMap
+Dashboard --> DashboardRoadCard
+
+useAutobahnSelector --> trafficService
+useTraffic --> trafficService
+useDashboard --> trafficService
+useAuth --> trafficService
+
+AppModals --> AuthModal
+AppModals --> ConfirmModal
+AuthModal --> validateAuthForm
+```
+
+### Ebene 2 – Hooks
+
+| Hook                   | Verantwortung                                                         |
+| ---------------------- | --------------------------------------------------------------------- |
+| `useApp`               | Zentraler Koordinator: verbindet Auth, Traffic und Modal-Zustand      |
+| `useAuth`              | JWT-Token verwalten, Login, Registrierung, Logout                     |
+| `useTraffic`           | Verkehrsdaten laden, Straßenauswahl, Live/Cache-Status                |
+| `useAutobahnSelector`  | Verfügbare Autobahnen vom Backend laden                               |
+| `useDashboard`         | Dashboard-Daten für gespeicherte Autobahnen laden                     |
+
+### Ebene 2 – Service
+
+`trafficService` kapselt alle HTTP-Kommunikation mit dem Backend:
+
+```text
+GET  /api/traffic               → fetchAvailableRoads, fetchTrafficEvents
+GET  /api/traffic/{roadId}      → fetchTrafficEvents(roadId)
+POST /api/auth/login            → login
+POST /api/auth/register         → register
+POST /api/auth/logout           → logout
+GET  /api/saved-roads           → fetchSavedRoads
+POST /api/saved-roads           → saveFavourite
+DELETE /api/saved-roads/{id}    → deleteFavourite
+GET  /api/dashboard/saved-road-traffic → fetchDashboardTraffic
+```
+
+---
+
+## 5.5 Zusammenfassung
 
 Die Bausteinsicht zeigt die konsequente Umsetzung der Hexagonalen Architektur.
 

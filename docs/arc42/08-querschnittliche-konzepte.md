@@ -584,11 +584,12 @@ Das Projekt verwendet eine mehrstufige Teststrategie.
 
 | Ebene | Ziel | Beispiele im Projekt |
 |---------|---------|---------|
-| Unit-Tests | Einzelne Klassen und Funktionen isoliert prüfen | Risiko-Score, Services, Mapper, Exception-Klassen |
+| Backend Unit-Tests | Einzelne Klassen und Funktionen isoliert prüfen | Risiko-Score, Services, Mapper, Exception-Klassen |
 | Controller-/Adapter-Tests | Web- und Infrastrukturadapter prüfen | Auth-, Traffic-, Saved-Road- und Dashboard-Controller |
 | Integrationstests | Zusammenspiel mehrerer Komponenten prüfen | Authentifizierung, Persistenz, Security, REST-Endpunkte |
 | Architekturtests | Architekturregeln automatisch prüfen | ArchUnit-Regeln für Domain, Application, Adapter und Ports |
-| Frontend-End-to-End-Tests | Nutzerworkflows im Browser prüfen | Login, Dashboard, Favoriten, Karte, Autobahnauswahl |
+| Frontend Unit-Tests | Hooks, Komponenten und Utilities isoliert prüfen | useApp, useAuth, useTraffic, validateAuthForm, RiskBadge |
+| Frontend End-to-End-Tests | Nutzerworkflows im Browser prüfen | Login, Dashboard, Favoriten, Karte, Autobahnauswahl |
 | Qualitäts- und Coverage-Analyse | Testabdeckung und Codequalität sichtbar machen | JaCoCo, LCOV, Teamscale, SonarCloud |
 
 ### Backend-Tests
@@ -808,20 +809,38 @@ Das Frontend befindet sich unter:
 frontend
 ```
 
-Die Tests befinden sich unter:
+Die Unit-Tests liegen direkt neben den Quelldateien:
+
+```text
+frontend/src/**/*.test.ts
+frontend/src/**/*.test.tsx
+```
+
+Die End-to-End-Tests befinden sich unter:
 
 ```text
 frontend/tests
 ```
 
-Das Frontend wird mit:
+Das Frontend wird mit folgenden Testwerkzeugen getestet:
 
-* React
-* TypeScript
-* Vite
-* Playwright
+* Vitest (Unit-Tests)
+* Playwright (End-to-End-Tests)
 
-getestet.
+#### Unit-Tests mit Vitest
+
+Die Vitest-Tests prüfen Hooks, Komponenten und Utility-Funktionen isoliert.
+
+Geprüft werden unter anderem:
+
+* Custom Hooks (`useApp`, `useAuth`, `useTraffic`, `useAutobahnSelector`, `useDashboard`)
+* UI-Komponenten (`RiskBadge`, `AutobahnSelector`, `Dashboard` u. a.)
+* Utility-Funktionen (`validateAuthForm`, `formatCachedAt`, `buildSavedMessage`)
+* Service-Schicht (`trafficService`)
+
+Die Tests verwenden gemockte Abhängigkeiten über `vi.mock`.
+
+---
 
 #### End-to-End-Tests mit Playwright
 
@@ -1023,11 +1042,66 @@ Für lokale Entwicklungs- und Demonstrationsszenarien existiert ein Testnutzer:
     * `A92`
 ---
 
-## 8.14 Zusammenfassung
+## 8.14 Frontend-Validierung und Fehlerbehandlung
+
+### Formularvalidierung
+
+Das Frontend validiert Benutzereingaben vor dem Senden an das Backend.
+
+#### Verantwortliche Komponente
+
+```text
+validateAuthForm (frontend/src/utils/validateAuthForm.ts)
+```
+
+#### Geprüfte Regeln
+
+| Regel | Fehlermeldung |
+|---|---|
+| Benutzername und Passwort dürfen nicht leer sein | Bitte Benutzername und Passwort eingeben. |
+| Benutzername mindestens 3 Zeichen | Benutzername muss mindestens 3 Zeichen lang sein. |
+| Benutzername nur `[a-zA-Z0-9_-]` | Benutzername darf nur Buchstaben, Ziffern, _ und - enthalten. |
+| Passwort mindestens 6 Zeichen | Passwort muss mindestens 6 Zeichen lang sein. |
+
+#### Integration
+
+`validateAuthForm` wird von `useApp` vor jedem Login- und Registrierungsversuch aufgerufen. Nur bei `null` (kein Fehler) wird die HTTP-Anfrage ausgelöst.
+
+```mermaid
+flowchart LR
+
+useApp --> validateAuthForm
+validateAuthForm --> |null| useAuth
+validateAuthForm --> |Fehlermeldung| AuthModal
+```
+
+---
+
+### Frontend-Fehlerbehandlung
+
+Das Frontend behandelt Ladefehler in Hooks durch stille Fehlerbehandlung.
+
+#### Prinzip
+
+Schlägt ein API-Aufruf fehl, zeigt die Anwendung entweder eine Fehlermeldung an oder bleibt im letzten gültigen Zustand — die Anwendung bricht nicht ab.
+
+#### Beispiele
+
+| Fehlerfall | Verhalten |
+|---|---|
+| Autobahnen nicht ladbar | Fehlermeldung "Autobahnen konnten nicht geladen werden" |
+| Verkehrsdaten nicht ladbar | Ereignisliste bleibt leer, kein Absturz |
+| Login fehlgeschlagen | Modal bleibt offen, Fehlermeldung im `authError`-Zustand |
+
+---
+
+## 8.15 Zusammenfassung
 
 Die querschnittlichen Konzepte bilden das technische Fundament der Anwendung.
 
 Besonders wichtige Konzepte sind:
+
+Backend:
 
 * JWT-basierte Sicherheit
 * zentrale Fehlerbehandlung
@@ -1037,9 +1111,15 @@ Besonders wichtige Konzepte sind:
 * Spring Data JPA
 * Domänengetriebene Risikobewertung
 
+Frontend:
+
+* Formularvalidierung (validateAuthForm)
+* Graceful Error Handling in Hooks
+* Hook/Component-Trennung nach SRP
+
 Diese Konzepte unterstützen die Erreichung der definierten Qualitätsziele hinsichtlich Wartbarkeit, Sicherheit, Testbarkeit und Verfügbarkeit.
 
-### 8.15 Kontinuierliche Softwarequalitätsüberwachung
+## 8.16 Kontinuierliche Softwarequalitätsüberwachung
 
 Zur kontinuierlichen Überwachung der Softwarequalität wurde Teamscale in den Entwicklungsprozess integriert.
 
@@ -1059,7 +1139,7 @@ QualityDashboard --> Developer
 
 #### Überwachte Qualitätsmerkmale
 
-Teamscale analysiert automatisiert:
+Teamscale analysiert automatisiert Backend (JaCoCo) und Frontend (LCOV):
 
 * Testabdeckung
 * Code Smells
