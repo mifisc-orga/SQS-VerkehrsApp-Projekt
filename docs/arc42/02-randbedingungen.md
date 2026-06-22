@@ -231,14 +231,14 @@ Zur Sicherstellung der Softwarequalität werden folgende Werkzeuge eingesetzt:
 
 #### Backend
 
-| Werkzeug    | Zweck                 |
-| ----------- | --------------------- |
-| JUnit 5     | Unit-Tests            |
-| Mockito     | Mocking               |
-| Spring Test | Integrationstests     |
-| ArchUnit    | Architekturtests      |
-| JaCoCo      | Test-Coverage         |
-| Maven       | Build-Management      |
+| Werkzeug                  | Zweck                 |
+|---------------------------| --------------------- |
+| JUnit 5                   | Unit-Tests            |
+| Mockito                   | Mocking               |
+| Spring Test               | Integrationstests     |
+| ArchUnit                  | Architekturtests      |
+| JaCoCo, Testwise Coverage | Test-Coverage         |
+| Maven                     | Build-Management      |
 
 #### Frontend
 
