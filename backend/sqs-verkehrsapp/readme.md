@@ -122,12 +122,6 @@ username: testuser
 password: test123
 ```
 
-Dem Testbenutzer sind folgende Autobahnen hinterlegt:
-
-```text
-A3, A92
-```
-
 ---
 
 ## Beispielhafte Nutzung
