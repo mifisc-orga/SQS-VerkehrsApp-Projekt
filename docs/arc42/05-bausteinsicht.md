@@ -20,61 +20,7 @@ Die Fachlogik bildet den Mittelpunkt des Systems und ist vollständig von techni
 
 ### Systemübersicht
 
-```mermaid
-flowchart TB
-
-subgraph Inbound Adapter
-Controllers
-end
-
-subgraph Application Layer
-UseCases
-Services
-end
-
-subgraph Domain Layer
-Domain
-end
-
-subgraph Outbound Ports
-Ports
-end
-
-subgraph Infrastructure Layer
-Adapters
-Repositories
-ExternalSystems
-end
-
-Controllers --> UseCases
-UseCases --> Services
-Services --> Domain
-Services --> Ports
-Ports --> Adapters
-
-Adapters --> Repositories
-Adapters --> ExternalSystems
-```
-
-```mermaid
-C4Container
-title Container Diagram - SQS Verkehrsapp
-
-Person(user, "Benutzer")
-
-Container(frontend, "Frontend", "React + TypeScript", "Browserbasierte Benutzeroberfläche")
-
-Container(backend, "Backend", "Spring Boot", "REST API und Fachlogik")
-
-ContainerDb(database, "Datenbank", "PostgreSQL / H2", "Persistenz und Cache")
-
-System_Ext(autobahnApi, "Autobahn API", "Verkehrsdaten")
-
-Rel(user, frontend, "Verwendet")
-Rel(frontend, backend, "REST API", "HTTPS/JSON")
-Rel(backend, database, "JPA")
-Rel(backend, autobahnApi, "HTTP/JSON")
-```
+![Container Diagram](diagrams/Container.svg)
 
 ---
 
@@ -104,59 +50,7 @@ Enthält:
 - externe API
 - Cache
 
-```mermaid
-C4Component
-title Komponentendiagramm - Backend
-
-Container_Boundary(backend, "Spring Boot Backend") {
-
-    Component(authController, "AuthController", "REST Controller", "Registrierung und Login")
-    Component(trafficController, "TrafficController", "REST Controller", "Verkehrsdaten-Endpunkte")
-    Component(savedRoadController, "SavedRoadController", "REST Controller", "Favoritenverwaltung")
-    Component(dashboardController, "DashboardController", "REST Controller", "Dashboard-Daten")
-
-    Component(authService, "AuthService", "Application Service", "Benutzerregistrierung und Anmeldung")
-    Component(trafficService, "TrafficService", "Application Service", "Verarbeitung von Verkehrsdaten")
-    Component(savedRoadService, "SavedRoadService", "Application Service", "Speichern und Löschen von Favoriten")
-    Component(dashboardService, "DashboardTrafficService", "Application Service", "Aggregiert Dashboard-Daten")
-
-    Component(domain, "Domain Model", "Domain Layer", "AppUser, SavedRoad, RoadEvent, TrafficEventsResult")
-    Component(riskCalculator, "RiskScoreCalculator", "Domain Service", "Berechnet Risikoscore")
-
-    Component(userPort, "UserPort", "Output Port")
-    Component(savedRoadPort, "SavedRoadPort", "Output Port")
-    Component(apiPort, "AutobahnApiPort", "Output Port")
-    Component(cachePort, "RoadEventCachePort", "Output Port")
-
-    Component(userAdapter, "UserAdapter", "Persistence Adapter")
-    Component(savedRoadAdapter, "SavedRoadAdapter", "Persistence Adapter")
-    Component(cacheAdapter, "RoadEventCacheAdapter", "Cache Adapter")
-    Component(apiAdapter, "ResilientAutobahnApiAdapter", "API Adapter", "Retry, Circuit Breaker, Fallback")
-
-    Component(jwtFilter, "JwtAuthenticationFilter", "Security")
-    Component(jwtService, "JwtService", "Security")
-}
-
-Rel(authController, authService, "uses")
-Rel(trafficController, trafficService, "uses")
-Rel(savedRoadController, savedRoadService, "uses")
-Rel(dashboardController, dashboardService, "uses")
-
-Rel(authService, userPort, "uses")
-Rel(trafficService, apiPort, "uses")
-Rel(trafficService, riskCalculator, "uses")
-Rel(savedRoadService, savedRoadPort, "uses")
-Rel(dashboardService, savedRoadPort, "uses")
-Rel(dashboardService, apiPort, "uses")
-
-Rel(userPort, userAdapter, "implemented by")
-Rel(savedRoadPort, savedRoadAdapter, "implemented by")
-Rel(cachePort, cacheAdapter, "implemented by")
-Rel(apiPort, apiAdapter, "implemented by")
-
-Rel(jwtFilter, jwtService, "validates token with")
-Rel(authController, jwtService, "generates JWT with")
-```
+![Backend Component Diagram](diagrams/BackendComponents.svg)
 
 ### Ebene 2 – Inbound Adapter
 
