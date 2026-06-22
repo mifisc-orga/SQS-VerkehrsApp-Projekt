@@ -9,7 +9,7 @@ export function buildSavedMessage(results: PromiseSettledResult<unknown>[]): str
     if (already > 0) {
       return `${saved} gespeichert, ${already} bereits vorhanden.`;
     }
-    return 'Favouriten gespeichert!';
+    return 'Favoriten gespeichert!';
   }
-  return 'Alle Autobahnen sind bereits in deinen Favouriten.';
+  return 'Alle Autobahnen sind bereits in deinen Favoriten.';
 }
